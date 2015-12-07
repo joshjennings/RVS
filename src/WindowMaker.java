@@ -14,6 +14,7 @@ import static java.lang.System.*;
 public class WindowMaker {
 
     public static void main(String[] args) {
+        //out.println("TEST");
         //TODO: add new method to create splash screen
 
         //TODO: pre-load product data -> models, descriptions, prices
@@ -21,7 +22,7 @@ public class WindowMaker {
         //TODO: update the splash screen with loading status
 
         //TODO: move primary window to another class
-        PrimaryWindow primaryWindow = new PrimaryWindow();
+        PrimaryWindow primaryWindow = new PrimaryWindow(args);
     }
 
 }

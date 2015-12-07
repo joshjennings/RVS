@@ -16,8 +16,8 @@ public class PrimaryWindow extends Application {
     TreeView<String> hierarchyTree;
     TreeItem<String> root;
 
-    public PrimaryWindow() {
-        launch();
+    public PrimaryWindow(String[] args) {
+        launch(args);
     }
 
     @Override public void start(Stage primaryStage) {
