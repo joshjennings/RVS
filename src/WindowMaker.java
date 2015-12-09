@@ -3,6 +3,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -14,7 +15,7 @@ import static java.lang.System.*;
  */
 public class WindowMaker extends Application {
 
-	TreeItem<String> root;
+
 	Region spacer;
 
     public static void main(String[] args) {
@@ -47,6 +48,7 @@ public class WindowMaker extends Application {
 
 	    //create primaryPane
         //TODO: add main pane controls (TableView)
+	    Node centerPane = centerPane();
 
 	    //create bottomPane
 	    Node bottomPane = bottomPane();
@@ -55,7 +57,7 @@ public class WindowMaker extends Application {
         BorderPane rootPane = new BorderPane();
         rootPane.setTop(topPane);
         rootPane.setLeft(leftPane);
-        //TODO:rootPane.setCenter(primaryPane);
+        rootPane.setCenter(centerPane);
         rootPane.setBottom(bottomPane);
 
         //create scene
@@ -93,9 +95,10 @@ public class WindowMaker extends Application {
 	 */
     private Node leftPane() {
         out.println("Adding left pane.");
-
-        root = new TreeItem<>("root");
+	    TreeItem<String> root = new TreeItem<>("root");
         root.setExpanded(true);
+	    //TODO: find a way to set the TreeView width
+
         makeTreeItem("Liquid Feed Assembly", root);
         makeTreeItem("Coil", root);
         TreeItem<String> pumps = makeTreeItem("Pumps", root);
@@ -107,6 +110,37 @@ public class WindowMaker extends Application {
 
 	    return hierarchyTree;
     }
+
+	/**
+	 * This method will create the centerPane of the root BorderPane layout.
+	 * @return Returns the Node that will be displayed in the centerPane.
+	 */
+	private Node centerPane() {
+		//create TableView
+		TableView<ProductList> centerPane = new TableView<>();
+		//add items to the table
+		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",12345));
+		centerPane.getItems().add(new ProductList("MVI-48V","Vertical intercooler package",12345));
+		centerPane.getItems().add(new ProductList("HOP-10","Horizontal oil pot",12345));
+
+		//CREATE TABLE COLUMNS
+		//model column
+		TableColumn<ProductList,String> columnModel = new TableColumn<>("Model");
+		columnModel.setMinWidth(200);
+		columnModel.setCellValueFactory(new PropertyValueFactory<ProductList, String>("Model"));
+		//description column
+		TableColumn<ProductList,String> columnDesc = new TableColumn<>("Description");
+		columnDesc.setMinWidth(300);
+		columnDesc.setCellValueFactory(new PropertyValueFactory<ProductList, String>("Description"));
+		//price column
+		TableColumn<ProductList, Double> columnListPrice = new TableColumn<>("List Price");
+		columnListPrice.setMinWidth(100);
+		columnListPrice.setCellValueFactory(new PropertyValueFactory<ProductList, Double>("List Price"));
+
+		centerPane.getColumns().addAll(columnModel,columnDesc,columnListPrice);
+
+		return centerPane;
+	}
 
 	/**
 	 * This method will create the bottomPane of the root BorderPane layout.

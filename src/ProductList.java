@@ -1,3 +1,6 @@
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 /**
  * Created by Josh on 12/6/15.
  */
@@ -17,5 +20,7 @@ public class ProductList {
         this.priceList = priceList;
     }
 
-    //public void
+    //public ObservableList<ProductList> loadData() {
+		//ObservableList<ProductList> data = new FXCollections.observableArrayList();
+    //}
 }
