@@ -2,11 +2,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Created by Josh on 12/6/15.
+ * This class defines what a list of products should look like: model, description, and price.
+ * @author Josh Jennings
  */
 public class ProductList {
     String model, description;
-    double priceList;
+    Double priceList;
 
     public ProductList() {
         model = "";
@@ -19,6 +20,18 @@ public class ProductList {
         this.description = description;
         this.priceList = priceList;
     }
+
+	public String getModel() {
+        return this.model;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+	public Double getPriceList() {
+		return this.priceList;
+	}
 
     //public ObservableList<ProductList> loadData() {
 		//ObservableList<ProductList> data = new FXCollections.observableArrayList();

@@ -47,7 +47,6 @@ public class WindowMaker extends Application {
         Node leftPane = leftPane();
 
 	    //create primaryPane
-        //TODO: add main pane controls (TableView)
 	    Node centerPane = centerPane();
 
 	    //create bottomPane
@@ -76,6 +75,8 @@ public class WindowMaker extends Application {
 	 * @return Returns the Node that will be displayed in the topPane.
 	 */
 	private Node topPane() {
+        out.println("Adding top pane.");
+
 		TextField salesPerson = new TextField();
 		salesPerson.setEditable(true);
 		salesPerson.setMaxWidth(400);
@@ -95,6 +96,7 @@ public class WindowMaker extends Application {
 	 */
     private Node leftPane() {
         out.println("Adding left pane.");
+
 	    TreeItem<String> root = new TreeItem<>("root");
         root.setExpanded(true);
 	    //TODO: find a way to set the TreeView width
@@ -116,6 +118,7 @@ public class WindowMaker extends Application {
 	 * @return Returns the Node that will be displayed in the centerPane.
 	 */
 	private Node centerPane() {
+        out.println("Adding center pane.");
 		//create TableView
 		TableView<ProductList> centerPane = new TableView<>();
 		//add items to the table
@@ -147,6 +150,7 @@ public class WindowMaker extends Application {
 	 * @return Returns the Node that will be displayed in the bottomPane.
 	 */
 	private Node bottomPane() {
+        out.println("Adding bottom pane.");
 		//create control buttons
 		Button buttonOK = new Button("OK");
 		Button buttonCancel = new Button("Cancel");
