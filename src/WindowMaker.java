@@ -7,7 +7,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import static java.lang.System.*;
+import java.util.Currency;
+
+import com.Josh.Message;
 
 /**
  * This primary (main) class instantiates a window for data entry and creation.
@@ -33,7 +35,7 @@ public class WindowMaker extends Application {
 	}
 
 	@Override public void start(Stage primaryStage) {
-		out.println("Window creation beginning.");
+		Message.consoleMessage("Window creation beginning.");
 
 		//define horizontal spacer that will grow with the window
 		spacer = new Region();
@@ -64,9 +66,9 @@ public class WindowMaker extends Application {
 		//create stage
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Window Tester");
-		out.println("Showing window.");
+		Message.consoleMessage("Showing window.");
 		primaryStage.show();
-		out.println("Window displayed.");
+		Message.consoleMessage("Window displayed.");
 	}
 
 	/**
@@ -74,7 +76,7 @@ public class WindowMaker extends Application {
 	 * @return Returns the Node that will be displayed in the topPane.
 	 */
 	private Node topPane() {
-		out.println("Adding top pane.");
+		Message.consoleMessage("Adding top pane.");
 
 		TextField salesPerson = new TextField();
 		salesPerson.setEditable(true);
@@ -94,7 +96,7 @@ public class WindowMaker extends Application {
 	 * @return Returns the Node that will be displayed in the leftPane.
 	 */
 	private Node leftPane() {
-		out.println("Adding left pane.");
+		Message.consoleMessage("Adding left pane.");
 
 		TreeItem<String> root = new TreeItem<>("root");
 		root.setExpanded(true);
@@ -117,13 +119,13 @@ public class WindowMaker extends Application {
 	 * @return Returns the Node that will be displayed in the centerPane.
 	 */
 	private Node centerPane() {
-		out.println("Adding center pane.");
+		Message.consoleMessage("Adding center pane.");
 		//create TableView
 		TableView<ProductList> centerPane = new TableView<>();
 		//add items to the table
-		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",12345));
-		centerPane.getItems().add(new ProductList("MVI-48V","Vertical intercooler package",12345));
-		centerPane.getItems().add(new ProductList("HOP-10","Horizontal oil pot",12345));
+		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",12345.0));
+		centerPane.getItems().add(new ProductList("MVI-48V","Vertical intercooler package",12345.0));
+		centerPane.getItems().add(new ProductList("HOP-10","Horizontal oil pot",12345.0));
 
 		//CREATE TABLE COLUMNS
 		//model column
@@ -137,10 +139,10 @@ public class WindowMaker extends Application {
 		columnDesc.setPrefWidth(300);
 		columnDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
 		//price column
-		TableColumn<ProductList, Double> columnListPrice = new TableColumn<>("List Price");
+		TableColumn<ProductList, Currency> columnListPrice = new TableColumn<>("List Price");
 		columnListPrice.setMinWidth(100);
 		columnListPrice.setPrefWidth(150);
-		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceList"));
+		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceListFormat"));
 
 		//noinspection unchecked
 		centerPane.getColumns().addAll(columnModel,columnDesc,columnListPrice);
@@ -153,7 +155,7 @@ public class WindowMaker extends Application {
 	 * @return Returns the Node that will be displayed in the bottomPane.
 	 */
 	private Node bottomPane() {
-		out.println("Adding bottom pane.");
+		Message.consoleMessage("Adding bottom pane.");
 		//create control buttons
 		Button buttonOK = new Button("OK");
 		Button buttonCancel = new Button("Cancel");
@@ -191,5 +193,7 @@ public class WindowMaker extends Application {
 		parent.getChildren().add(newItem);
 		return newItem;
 	}
+
+
 
 }
