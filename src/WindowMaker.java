@@ -15,67 +15,66 @@ import static java.lang.System.*;
  */
 public class WindowMaker extends Application {
 
-
 	Region spacer;
 
-    public static void main(String[] args) {
-        //out.println("TEST");
-        //TODO: add new method to create splash screen
+	public static void main(String[] args) {
+		//out.println("TEST");
+		//TODO: add new method to create splash screen
 
-        //TODO: pre-load product data -> models, descriptions, prices
+		//TODO: pre-load product data -> models, descriptions, prices
 
-        //TODO: update the splash screen with loading status
+		//TODO: update the splash screen with loading status
 
-        //TODO: move primary window to another class
-        //PrimaryWindow primaryWindow = new PrimaryWindow(args);
-	    //according to http://stackoverflow.com/questions/31173540/exception-in-thread-main-java-lang-runtimeexception-unable-to-construct-appli
-	    //   the launch() method must be in the main method. launch() does not return until window is closed. Maybe a new thread?
-	    launch(args);
-    }
+		//TODO: move primary window to another class
+		//PrimaryWindow primaryWindow = new PrimaryWindow(args);
+		//according to http://stackoverflow.com/questions/31173540/exception-in-thread-main-java-lang-runtimeexception-unable-to-construct-appli
+		//   the launch() method must be in the main method. launch() does not return until window is closed. Maybe a new thread?
+		launch(args);
+	}
 
-    @Override public void start(Stage primaryStage) {
-        out.println("Window creation beginning.");
+	@Override public void start(Stage primaryStage) {
+		out.println("Window creation beginning.");
 
-	    //define horizontal spacer that will grow with the window
-	    spacer = new Region();
-	    HBox.setHgrow(spacer, Priority.ALWAYS);
+		//define horizontal spacer that will grow with the window
+		spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        //create topPane
-        Node topPane = topPane();
+		//create topPane
+		Node topPane = topPane();
 
-        //create leftPane
-        Node leftPane = leftPane();
+		//create leftPane
+		Node leftPane = leftPane();
 
-	    //create primaryPane
-	    Node centerPane = centerPane();
+		//create primaryPane
+		Node centerPane = centerPane();
 
-	    //create bottomPane
-	    Node bottomPane = bottomPane();
+		//create bottomPane
+		Node bottomPane = bottomPane();
 
-        //create BorderPane (root)
-        BorderPane rootPane = new BorderPane();
-        rootPane.setTop(topPane);
-        rootPane.setLeft(leftPane);
-        rootPane.setCenter(centerPane);
-        rootPane.setBottom(bottomPane);
+		//create BorderPane (root)
+		BorderPane rootPane = new BorderPane();
+		rootPane.setTop(topPane);
+		rootPane.setLeft(leftPane);
+		rootPane.setCenter(centerPane);
+		rootPane.setBottom(bottomPane);
 
-        //create scene
-        Scene scene = new Scene(rootPane);
+		//create scene
+		Scene scene = new Scene(rootPane);
 
-        //create stage
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Window Tester");
-        out.println("Showing window.");
-        primaryStage.show();
-        out.println("Window displayed.");
-    }
+		//create stage
+		primaryStage.setScene(scene);
+		primaryStage.setTitle("Window Tester");
+		out.println("Showing window.");
+		primaryStage.show();
+		out.println("Window displayed.");
+	}
 
 	/**
 	 * This method will create the topPane of the root BorderPane layout.
 	 * @return Returns the Node that will be displayed in the topPane.
 	 */
 	private Node topPane() {
-        out.println("Adding top pane.");
+		out.println("Adding top pane.");
 
 		TextField salesPerson = new TextField();
 		salesPerson.setEditable(true);
@@ -94,31 +93,31 @@ public class WindowMaker extends Application {
 	 * This method will create the leftPane of the root BorderPane layout.
 	 * @return Returns the Node that will be displayed in the leftPane.
 	 */
-    private Node leftPane() {
-        out.println("Adding left pane.");
+	private Node leftPane() {
+		out.println("Adding left pane.");
 
-	    TreeItem<String> root = new TreeItem<>("root");
-        root.setExpanded(true);
-	    //TODO: find a way to set the TreeView width
+		TreeItem<String> root = new TreeItem<>("root");
+		root.setExpanded(true);
+		//TODO: find a way to set the TreeView width
 
-        makeTreeItem("Liquid Feed Assembly", root);
-        makeTreeItem("Coil", root);
-        TreeItem<String> pumps = makeTreeItem("Pumps", root);
-        makeTreeItem("Teikoku", pumps);
-        makeTreeItem("Cornell", pumps);
+		makeTreeItem("Liquid Feed Assembly", root);
+		makeTreeItem("Coil", root);
+		TreeItem<String> pumps = makeTreeItem("Pumps", root);
+		makeTreeItem("Teikoku", pumps);
+		makeTreeItem("Cornell", pumps);
 
-	    TreeView<String> hierarchyTree = new TreeView<>(root);
-        hierarchyTree.setShowRoot(false);
+		TreeView<String> hierarchyTree = new TreeView<>(root);
+		hierarchyTree.setShowRoot(false);
 
-	    return hierarchyTree;
-    }
+		return hierarchyTree;
+	}
 
 	/**
 	 * This method will create the centerPane of the root BorderPane layout.
 	 * @return Returns the Node that will be displayed in the centerPane.
 	 */
 	private Node centerPane() {
-        out.println("Adding center pane.");
+		out.println("Adding center pane.");
 		//create TableView
 		TableView<ProductList> centerPane = new TableView<>();
 		//add items to the table
@@ -129,17 +128,21 @@ public class WindowMaker extends Application {
 		//CREATE TABLE COLUMNS
 		//model column
 		TableColumn<ProductList,String> columnModel = new TableColumn<>("Model");
-		columnModel.setMinWidth(200);
-		columnModel.setCellValueFactory(new PropertyValueFactory<ProductList, String>("Model"));
+		columnModel.setMinWidth(100);
+		columnModel.setPrefWidth(150);
+		columnModel.setCellValueFactory(new PropertyValueFactory<>("model"));
 		//description column
 		TableColumn<ProductList,String> columnDesc = new TableColumn<>("Description");
-		columnDesc.setMinWidth(300);
-		columnDesc.setCellValueFactory(new PropertyValueFactory<ProductList, String>("Description"));
+		columnDesc.setMinWidth(200);
+		columnDesc.setPrefWidth(300);
+		columnDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
 		//price column
 		TableColumn<ProductList, Double> columnListPrice = new TableColumn<>("List Price");
 		columnListPrice.setMinWidth(100);
-		columnListPrice.setCellValueFactory(new PropertyValueFactory<ProductList, Double>("List Price"));
+		columnListPrice.setPrefWidth(150);
+		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceList"));
 
+		//noinspection unchecked
 		centerPane.getColumns().addAll(columnModel,columnDesc,columnListPrice);
 
 		return centerPane;
@@ -150,7 +153,7 @@ public class WindowMaker extends Application {
 	 * @return Returns the Node that will be displayed in the bottomPane.
 	 */
 	private Node bottomPane() {
-        out.println("Adding bottom pane.");
+		out.println("Adding bottom pane.");
 		//create control buttons
 		Button buttonOK = new Button("OK");
 		Button buttonCancel = new Button("Cancel");
@@ -176,17 +179,17 @@ public class WindowMaker extends Application {
 		return bottomPane;
 	}
 
-    /**
-     * This class will construct new items for a TreeView.
-     * @param title Title of the new node/leaf item.
-     * @param parent Parent of the new node/leaf item.
-     * @return Returns the new TreeItem created in this method. Returned object can be used to create sub-nodes.
-     */
-    private TreeItem<String> makeTreeItem(String title, TreeItem<String> parent) {
-        TreeItem<String> newItem = new TreeItem<>(title);
-        newItem.setExpanded(true);
-        parent.getChildren().add(newItem);
-        return newItem;
-    }
+	/**
+	 * This class will construct new items for a TreeView.
+	 * @param title Title of the new node/leaf item.
+	 * @param parent Parent of the new node/leaf item.
+	 * @return Returns the new TreeItem created in this method. Returned object can be used to create sub-nodes.
+	 */
+	private TreeItem<String> makeTreeItem(String title, TreeItem<String> parent) {
+		TreeItem<String> newItem = new TreeItem<>(title);
+		newItem.setExpanded(true);
+		parent.getChildren().add(newItem);
+		return newItem;
+	}
 
 }
