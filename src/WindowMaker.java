@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 
 import com.Josh.Message;
 
+import java.math.BigDecimal;
+
 /**
  * This primary (main) class instantiates a window for data entry and creation.
  * @author Josh Jennings
@@ -106,10 +108,16 @@ public class WindowMaker extends Application {
 		makeTreeItem("Teikoku", pumps);
 		makeTreeItem("Cornell", pumps);
 
-		TreeView<String> hierarchyTree = new TreeView<>(root);
-		hierarchyTree.setShowRoot(false);
+		TreeView<String> treeView = new TreeView<>(root);
+		treeView.setShowRoot(false);
 
-		return hierarchyTree;
+		//buttonBar contains buttons for adding new nodes to TreeView
+		HBox buttonBar = new HBox();
+		//TODO: add new buttons to create new TreeView nodes
+
+		VBox leftPane = new VBox(treeView);
+
+		return leftPane;
 	}
 
 	/**
@@ -121,9 +129,9 @@ public class WindowMaker extends Application {
 		//create TableView
 		TableView<ProductList> centerPane = new TableView<>();
 		//add items to the table
-		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",(double)43528));
-		centerPane.getItems().add(new ProductList("MVI-48V","Vertical intercooler package",(double)32978));
-		centerPane.getItems().add(new ProductList("HOP-10","Horizontal oil pot",(double)1823));
+		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",new BigDecimal(43528)));
+		centerPane.getItems().add(new ProductList("MVI-48V","Vertical intercooler package",new BigDecimal(32978)));
+		centerPane.getItems().add(new ProductList("HOP-10","Horizontal oil pot",new BigDecimal(1823)));
 
 		//CREATE TABLE COLUMNS
 		//model column
@@ -140,7 +148,7 @@ public class WindowMaker extends Application {
 		TableColumn<ProductList, String> columnListPrice = new TableColumn<>("List Price");
 		columnListPrice.setMinWidth(100);
 		columnListPrice.setPrefWidth(150);
-		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceList"));
+		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceListFormatted"));
 
 		//noinspection unchecked
 		centerPane.getColumns().addAll(columnModel,columnDesc,columnListPrice);
@@ -186,6 +194,7 @@ public class WindowMaker extends Application {
 	 * @return Returns the new TreeItem created in this method. Returned object can be used to create sub-nodes.
 	 */
 	private TreeItem<String> makeTreeItem(String title, TreeItem<String> parent) {
+		Message.consoleMessage("Adding TreeView item. Item: " + title + " | ChildTo: " + parent.toString());
 		TreeItem<String> newItem = new TreeItem<>(title);
 		newItem.setExpanded(true);
 		parent.getChildren().add(newItem);

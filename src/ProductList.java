@@ -1,10 +1,5 @@
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Currency;
 import java.util.Locale;
 
 import com.Josh.Message;
@@ -16,42 +11,51 @@ import com.Josh.Message;
 public class ProductList {
 	String model, description;
 	BigDecimal priceList;
-	DecimalFormat priceListFormat;
 
-	public ProductList() {
-		Message.consoleMessage("ProductList instance instantiated. Empty.");
-		model = "";
-		description = "";
-		priceList = new BigDecimal(0.0);
-	}
+//	public ProductList() {
+//		Message.consoleMessage("ProductList instance instantiated. Empty.");
+//		model = "";
+//		description = "";
+//		priceList = new BigDecimal(0.0);
+//	}
 
-	public ProductList(String model, String description, Double priceList) {
+	public ProductList(String model, String description, BigDecimal priceList) {
 		Message.consoleMessage("ProductList instance instantiated. Model:" + model + " | Desc: " + description +  " | Price: " + priceList);
 		this.model = model;
 		this.description = description;
-		this.priceList = new BigDecimal(priceList);
+		this.priceList = priceList;
 	}
 
+	@SuppressWarnings("unused")
 	public String getModel() {
 		Message.consoleMessage("Collecting product model: " + this.model);
 		return this.model;
 	}
 
+	@SuppressWarnings("unused")
 	public String getDescription() {
 		Message.consoleMessage("Collecting product description: " + this.description);
 		return this.description;
 	}
 
-	public String getPriceList() {
+	@SuppressWarnings("unused")
+	public BigDecimal getPriceList() {
+		Message.consoleMessage("Collecting product price: " + this.priceList.toString());
+		return this.priceList;
+	}
+
+	@SuppressWarnings("unused")
+	/**
+	 * This method is built solely for the TableColumn such that the price is correctly formatted.
+	 * @return Returns a string that is formatted with the current locale's currency symbol and commas.
+	 */
+	public String getPriceListFormatted() {
 		//Set locale and number formatter object
 		Locale currentLocale = new Locale("en","US");
 		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(currentLocale);
-		//
+		//output to console
 		Message.consoleMessage("Collecting product price: " + currencyFormatter.format(this.priceList));
+		//return formatted price
 		return currencyFormatter.format(this.priceList);
 	}
-
-	//public ObservableList<ProductList> loadData() {
-		//ObservableList<ProductList> data = new FXCollections.observableArrayList();
-	//}
 }
