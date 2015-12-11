@@ -7,8 +7,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.util.Currency;
-
 import com.Josh.Message;
 
 /**
@@ -123,9 +121,9 @@ public class WindowMaker extends Application {
 		//create TableView
 		TableView<ProductList> centerPane = new TableView<>();
 		//add items to the table
-		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",12345.0));
-		centerPane.getItems().add(new ProductList("MVI-48V","Vertical intercooler package",12345.0));
-		centerPane.getItems().add(new ProductList("HOP-10","Horizontal oil pot",12345.0));
+		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",(double)43528));
+		centerPane.getItems().add(new ProductList("MVI-48V","Vertical intercooler package",(double)32978));
+		centerPane.getItems().add(new ProductList("HOP-10","Horizontal oil pot",(double)1823));
 
 		//CREATE TABLE COLUMNS
 		//model column
@@ -139,10 +137,10 @@ public class WindowMaker extends Application {
 		columnDesc.setPrefWidth(300);
 		columnDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
 		//price column
-		TableColumn<ProductList, Currency> columnListPrice = new TableColumn<>("List Price");
+		TableColumn<ProductList, String> columnListPrice = new TableColumn<>("List Price");
 		columnListPrice.setMinWidth(100);
 		columnListPrice.setPrefWidth(150);
-		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceListFormat"));
+		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceList"));
 
 		//noinspection unchecked
 		centerPane.getColumns().addAll(columnModel,columnDesc,columnListPrice);
