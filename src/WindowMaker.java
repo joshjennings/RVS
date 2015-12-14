@@ -1,4 +1,8 @@
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -18,6 +22,7 @@ import java.math.BigDecimal;
 public class WindowMaker extends Application {
 
 	Region spacer;
+	TreeView<String> treeView;
 
 	public static void main(String[] args) {
 		//out.println("TEST");
@@ -108,14 +113,28 @@ public class WindowMaker extends Application {
 		makeTreeItem("Teikoku", pumps);
 		makeTreeItem("Cornell", pumps);
 
-		TreeView<String> treeView = new TreeView<>(root);
+		treeView = new TreeView<>(root);
 		treeView.setShowRoot(false);
 
 		//buttonBar contains buttons for adding new nodes to TreeView
 		HBox buttonBar = new HBox();
+		Button buttonAddProduct = new Button("Add Product");
+		Button buttonAddFeature = new Button("Add Feature");
+		Button buttonSubNode = new Button("Remove Item");
+		buttonAddProduct.setMinWidth(50);
+		buttonAddProduct.setPrefWidth(100);
+		buttonAddFeature.setMinWidth(50);
+		buttonAddFeature.setPrefWidth(100);
+		buttonSubNode.setMinWidth(50);
+		buttonSubNode.setPrefWidth(100);
+		buttonBar.getChildren().addAll(buttonAddProduct,buttonAddFeature,buttonSubNode);
 		//TODO: add new buttons to create new TreeView nodes
 
-		VBox leftPane = new VBox(treeView);
+		buttonAddProduct.setOnAction(event -> addProduct());
+		buttonAddFeature.setOnAction(event -> addFeature());
+
+		VBox leftPane = new VBox(treeView,buttonBar);
+		leftPane.setVgrow(treeView,Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
 
 		return leftPane;
 	}
@@ -201,6 +220,26 @@ public class WindowMaker extends Application {
 		return newItem;
 	}
 
+	private void addProduct() {
+		try {
+			TreeItem<String> selectedItem = treeView.getRoot();
+			makeTreeItem("Test", selectedItem);
+		} catch (Exception e) {
+			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
+			//TODO: add pop up box notifying user to select an item.
+			Message.messageBox("Please select an item in the list.","Notification");
+		}
+	}
 
+	private void addFeature() {
+		try {
+			TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
+			makeTreeItem("Test", selectedItem);
+		} catch (Exception e) {
+			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
+			//TODO: add pop up box notifying user to select an item.
+			Message.messageBox("Please select an item in the list.","Notification");
+		}
+	}
 
 }
