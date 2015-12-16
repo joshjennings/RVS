@@ -1,3 +1,5 @@
+package com.RVS.Accessories;
+
 /**
  * This class defines a pump object.
  * @author Josh Jennings

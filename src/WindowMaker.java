@@ -1,8 +1,5 @@
+import com.RVS.Products.ProductList;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -14,6 +11,7 @@ import javafx.stage.Stage;
 import com.Josh.Message;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * This primary (main) class instantiates a window for data entry and creation.
@@ -224,9 +222,8 @@ public class WindowMaker extends Application {
 		try {
 			TreeItem<String> selectedItem = treeView.getRoot();
 			String nameProduct = Message.inputBox("Please enter the product name.", "Product Name");
-			if (nameProduct == "DONOTENTERanyNewPRODUCTinHERErightNOW") {} else {
-				makeTreeItem(nameProduct, selectedItem);
-			}
+			//if the two strings do not equal each other, make the TreeItem
+			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {makeTreeItem(nameProduct, selectedItem);}
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
 			//TODO: add pop up box notifying user to select an item.
