@@ -223,7 +223,10 @@ public class WindowMaker extends Application {
 	private void addProduct() {
 		try {
 			TreeItem<String> selectedItem = treeView.getRoot();
-			makeTreeItem("Test", selectedItem);
+			String nameProduct = Message.inputBox("Please enter the product name.", "Product Name");
+			if (nameProduct == "DONOTENTERanyNewPRODUCTinHERErightNOW") {} else {
+				makeTreeItem(nameProduct, selectedItem);
+			}
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
 			//TODO: add pop up box notifying user to select an item.

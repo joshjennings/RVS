@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -22,6 +23,8 @@ import static java.lang.System.out;
  * @author Josh Jennings
  */
 public class Message {
+	static Stage stage;
+	static boolean btnYesClicked;
 
 	/**
 	 * This method simply adds a date to the console output.
@@ -32,9 +35,8 @@ public class Message {
 	}
 
 	@SuppressWarnings("unused")
-	public static void messageBox(String message, String title)
-	{
-		Stage stage = new Stage();
+	public static void messageBox(String message, String title) {
+		stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle(title);
 		stage.setMinWidth(250);
@@ -62,13 +64,10 @@ public class Message {
 		stage.showAndWait();
 	}
 
-	static Stage stage;
-	static boolean btnYesClicked;
-
 	@SuppressWarnings("unused")
 	public static boolean confirmationBox(String message, String title, String textYes, String textNo) {
 		btnYesClicked = false;
-		stage = new Stage();
+		Stage stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle(title);
 		stage.setMinWidth(250);
@@ -104,5 +103,46 @@ public class Message {
 	private static void btnNo_Clicked() {
 		stage.close();
 		btnYesClicked = false;
+	}
+
+	static String input;
+
+	public static String inputBox(String message, String title) {
+		stage = new Stage();
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle(title);
+		stage.setMinWidth(400);
+		stage.setMinHeight(200);
+
+		Label lbl = new Label(message);
+
+		TextField textField = new TextField();
+
+		Button buttonEnter = new Button("Enter");
+		buttonEnter.setOnAction(e -> buttonEnterClicked(textField) );
+
+		Button buttonCancel = new Button("Cancel");
+		buttonCancel.setOnAction(e -> buttonCancelClicked() );
+
+		HBox paneBtn = new HBox(20);
+		paneBtn.getChildren().addAll(buttonEnter, buttonCancel);
+		VBox pane = new VBox(20);
+		pane.getChildren().addAll(lbl,textField,paneBtn);
+		pane.setAlignment(Pos.CENTER);
+		Scene scene = new Scene(pane);
+		stage.setScene(scene);
+		stage.showAndWait();
+
+		return input;
+	}
+
+	private static void buttonEnterClicked(TextField textField) {
+		stage.close();
+		input = textField.getText();
+	}
+
+	private static void buttonCancelClicked() {
+		stage.close();
+		input = "DONOTENTERanyNewPRODUCTinHERErightNOW";
 	}
 }
