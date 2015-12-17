@@ -1,5 +1,6 @@
-import com.RVS.Products.ProductList;
+import com.RVS.Products.Product;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -10,7 +11,6 @@ import javafx.stage.Stage;
 
 import com.Josh.Message;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -21,6 +21,7 @@ public class WindowMaker extends Application {
 
 	Region spacer;
 	TreeView<String> treeView;
+	ObservableList<Product> productList;
 
 	public static void main(String[] args) {
 		//out.println("TEST");
@@ -38,6 +39,8 @@ public class WindowMaker extends Application {
 	}
 
 	@Override public void start(Stage primaryStage) {
+		productList = Product.constructListOfStandardProducts();
+
 		Message.consoleMessage("Window creation beginning.");
 
 		//define horizontal spacer that will grow with the window
@@ -105,11 +108,11 @@ public class WindowMaker extends Application {
 		root.setExpanded(true);
 		//TODO: find a way to set the TreeView width
 
-		makeTreeItem("Liquid Feed Assembly", root);
-		makeTreeItem("Coil", root);
-		TreeItem<String> pumps = makeTreeItem("Pumps", root);
-		makeTreeItem("Teikoku", pumps);
-		makeTreeItem("Cornell", pumps);
+//		makeTreeItem("Liquid Feed Assembly", root);
+//		makeTreeItem("Coil", root);
+//		TreeItem<String> pumps = makeTreeItem("Pumps", root);
+//		makeTreeItem("Teikoku", pumps);
+//		makeTreeItem("Cornell", pumps);
 
 		treeView = new TreeView<>(root);
 		treeView.setShowRoot(false);
@@ -132,7 +135,7 @@ public class WindowMaker extends Application {
 		buttonAddFeature.setOnAction(event -> addFeature());
 
 		VBox leftPane = new VBox(treeView,buttonBar);
-		leftPane.setVgrow(treeView,Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
+		VBox.setVgrow(treeView,Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
 
 		return leftPane;
 	}
@@ -144,25 +147,26 @@ public class WindowMaker extends Application {
 	private Node centerPane() {
 		Message.consoleMessage("Adding center pane.");
 		//create TableView
-		TableView<ProductList> centerPane = new TableView<>();
+		TableView<Product> centerPane = new TableView<>();
 		//add items to the table
-		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",new BigDecimal(43528)));
-		centerPane.getItems().add(new ProductList("MVI-48V","Vertical intercooler package",new BigDecimal(32978)));
-		centerPane.getItems().add(new ProductList("HOP-10","Horizontal oil pot",new BigDecimal(1823)));
+//		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",new BigDecimal(43528)));
+//		centerPane.getItems().add(new ProductList("MVI-48V","Vertical intercooler package",new BigDecimal(32978)));
+//		centerPane.getItems().add(new ProductList("HOP-10","Horizontal oil pot",new BigDecimal(1823)));
+//		centerPane.getItems().add(new Product("MRP", 48, 171.0, Product.Orient.VERTICAL, new BigDecimal(12345), Product.Material.CARBON));
 
 		//CREATE TABLE COLUMNS
 		//model column
-		TableColumn<ProductList,String> columnModel = new TableColumn<>("Model");
+		TableColumn<Product,String> columnModel = new TableColumn<>("Model");
 		columnModel.setMinWidth(100);
 		columnModel.setPrefWidth(150);
 		columnModel.setCellValueFactory(new PropertyValueFactory<>("model"));
 		//description column
-		TableColumn<ProductList,String> columnDesc = new TableColumn<>("Description");
+		TableColumn<Product,String> columnDesc = new TableColumn<>("Description");
 		columnDesc.setMinWidth(200);
 		columnDesc.setPrefWidth(300);
 		columnDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
 		//price column
-		TableColumn<ProductList, String> columnListPrice = new TableColumn<>("List Price");
+		TableColumn<Product,String> columnListPrice = new TableColumn<>("List Price");
 		columnListPrice.setMinWidth(100);
 		columnListPrice.setPrefWidth(150);
 		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceListFormatted"));
@@ -221,7 +225,7 @@ public class WindowMaker extends Application {
 	private void addProduct() {
 		try {
 			TreeItem<String> selectedItem = treeView.getRoot();
-			String nameProduct = Message.inputBox("Please enter the product name.", "Product Name");
+			String nameProduct = Message.selectProduct("Please enter the product name.", "Product Name");
 			//if the two strings do not equal each other, make the TreeItem
 			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {makeTreeItem(nameProduct, selectedItem);}
 		} catch (Exception e) {

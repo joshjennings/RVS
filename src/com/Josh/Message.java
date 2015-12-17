@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -107,6 +108,7 @@ public class Message {
 
 	static String input;
 
+	@SuppressWarnings("unused")
 	public static String inputBox(String message, String title) {
 		stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
@@ -119,7 +121,7 @@ public class Message {
 		TextField textField = new TextField();
 
 		Button buttonEnter = new Button("Enter");
-		buttonEnter.setOnAction(e -> buttonEnterClicked(textField) );
+		buttonEnter.setOnAction(e -> buttonEnterClicked(textField.getText()) );
 
 		Button buttonCancel = new Button("Cancel");
 		buttonCancel.setOnAction(e -> buttonCancelClicked() );
@@ -136,13 +138,44 @@ public class Message {
 		return input;
 	}
 
-	private static void buttonEnterClicked(TextField textField) {
+	private static void buttonEnterClicked(String text) {
 		stage.close();
-		input = textField.getText();
+		input = text;
 	}
 
 	private static void buttonCancelClicked() {
 		stage.close();
 		input = "DONOTENTERanyNewPRODUCTinHERErightNOW";
+	}
+
+	public static String selectProduct(String message, String title) {
+		stage = new Stage();
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle(title);
+		stage.setMinWidth(400);
+		stage.setMinHeight(200);
+
+		Label lbl = new Label(message);
+
+		//TextField textField = new TextField();
+		ComboBox<String> productBox = new ComboBox<>();
+		productBox.getItems().addAll("MRP", "MPC", "MVI", "VI", "HR", "TS");
+
+		Button buttonEnter = new Button("Enter");
+		buttonEnter.setOnAction(e -> buttonEnterClicked(productBox.getValue()) );
+
+		Button buttonCancel = new Button("Cancel");
+		buttonCancel.setOnAction(e -> buttonCancelClicked() );
+
+		HBox paneBtn = new HBox(20);
+		paneBtn.getChildren().addAll(buttonEnter, buttonCancel);
+		VBox pane = new VBox(20);
+		pane.getChildren().addAll(lbl,productBox,paneBtn);
+		pane.setAlignment(Pos.CENTER);
+		Scene scene = new Scene(pane);
+		stage.setScene(scene);
+		stage.showAndWait();
+
+		return input;
 	}
 }
