@@ -225,7 +225,7 @@ public class WindowMaker extends Application {
 	private void addProduct() {
 		try {
 			TreeItem<String> selectedItem = treeView.getRoot();
-			String nameProduct = Message.selectProduct("Please enter the product name.", "Product Name");
+			String nameProduct = Message.selectProduct("Please enter the product name.", "Product Name", productList);
 			//if the two strings do not equal each other, make the TreeItem
 			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {makeTreeItem(nameProduct, selectedItem);}
 		} catch (Exception e) {

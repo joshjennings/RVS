@@ -1,5 +1,8 @@
 package com.Josh;
 
+import com.RVS.Products.Product;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,7 +18,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.System.out;
 
@@ -148,7 +155,7 @@ public class Message {
 		input = "DONOTENTERanyNewPRODUCTinHERErightNOW";
 	}
 
-	public static String selectProduct(String message, String title) {
+	public static String selectProduct(String message, String title, ObservableList<Product> list) {
 		stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle(title);
@@ -157,9 +164,13 @@ public class Message {
 
 		Label lbl = new Label(message);
 
+		//use String model parameter in Product class to build ObservableList<String>
+		List<String> productList = list.stream().map(Product::getModel).collect(Collectors.toList());
+		ObservableList<String> productListString = FXCollections.observableList(productList);
+
 		//TextField textField = new TextField();
-		ComboBox<String> productBox = new ComboBox<>();
-		productBox.getItems().addAll("MRP", "MPC", "MVI", "VI", "HR", "TS");
+		ComboBox<String> productBox = new ComboBox<>(productListString);
+		productBox.getItems().addAll();
 
 		Button buttonEnter = new Button("Enter");
 		buttonEnter.setOnAction(e -> buttonEnterClicked(productBox.getValue()) );

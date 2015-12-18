@@ -35,6 +35,11 @@ public class Product {
 		this.material = Material.CARBON;
 	}
 
+	public Product(String model) {
+		this.model = model;
+	}
+
+	@SuppressWarnings("unused")
 	public Product(String model, int diameter, Orient orientation) {
 		this.model = model;
 		this.diameter = diameter;
@@ -120,10 +125,33 @@ public class Product {
 	@SuppressWarnings("unused")
 	public static ObservableList<Product> constructListOfStandardProducts() {
 		List<Product> productList = new ArrayList<>();
-		productList.add(new Product("MRP",48,Orient.VERTICAL));
-		productList.add(new Product("MRP",72,Orient.VERTICAL));
-		productList.add(new Product("MPC",24,Orient.HORIZONTAL));
+
+		productList.add(Product.createNewBareMRP());
+		productList.add(Product.createNewBareMPC());
+		productList.add(Product.createNewBareMVI());
+		productList.add(Product.createNewBareHPR());
 
 		return FXCollections.observableList(productList);
+	}
+
+	public static String[] createStandardModels() {
+		List<String> listModels = new ArrayList<>();
+		listModels.addAll("MRP","MPC","MVI","HPR","TSR","Recirc","IC","Acc","SD","OP");
+	}
+
+	public static Product createNewBareMRP() {
+		return new Product("MRP");
+	}
+
+	public static Product createNewBareMPC() {
+		return new Product("MPC");
+	}
+
+	public static Product createNewBareMVI() {
+		return new Product("MVI");
+	}
+
+	public static Product createNewBareHPR() {
+		return new Product("HPR");
 	}
 }
