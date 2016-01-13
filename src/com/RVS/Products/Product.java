@@ -130,13 +130,32 @@ public class Product {
 		productList.add(Product.createNewBareMPC());
 		productList.add(Product.createNewBareMVI());
 		productList.add(Product.createNewBareHPR());
+		productList.add(Product.createNewBareTSR());
+		productList.add(Product.createNewBareRecirculator());
+		productList.add(Product.createNewBareIntercooler());
+		productList.add(Product.createNewBareAccumulator());
+		productList.add(Product.createNewBareSD());
+		productList.add(Product.createNewBareOP());
 
 		return FXCollections.observableList(productList);
 	}
 
-	public static String[] createStandardModels() {
+	@SuppressWarnings("unused")
+	public static List<String> createStandardModels() {
 		List<String> listModels = new ArrayList<>();
-		listModels.addAll("MRP","MPC","MVI","HPR","TSR","Recirc","IC","Acc","SD","OP");
+//		listModels.addAll("MRP","MPC","MVI","HPR","TSR","Recirc","IC","Acc","SD","OP");
+		listModels.add("MRP");
+		listModels.add("MPC");
+		listModels.add("MVI");
+		listModels.add("HPR");
+		listModels.add("TSR");
+		listModels.add("Recirc");
+		listModels.add("IC");
+		listModels.add("Acc");
+		listModels.add("SD");
+		listModels.add("OP");
+
+		return listModels;
 	}
 
 	public static Product createNewBareMRP() {
@@ -153,5 +172,29 @@ public class Product {
 
 	public static Product createNewBareHPR() {
 		return new Product("HPR");
+	}
+
+	public static Product createNewBareTSR() {
+		return new Product("TSR");
+	}
+
+	public static Product createNewBareRecirculator() {
+		return new Product("Recirculator");
+	}
+
+	public static Product createNewBareIntercooler() {
+		return new Product("Intercooler");
+	}
+
+	public static Product createNewBareAccumulator() {
+		return new Product("Accumulator");
+	}
+
+	public static Product createNewBareSD() {
+		return new Product("Surge Drum");
+	}
+
+	public static Product createNewBareOP() {
+		return new Product("Oil Pot");
 	}
 }

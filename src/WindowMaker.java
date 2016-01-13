@@ -1,11 +1,13 @@
 import com.RVS.Products.Product;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -22,6 +24,7 @@ public class WindowMaker extends Application {
 	Region spacer;
 	TreeView<String> treeView;
 	ObservableList<Product> productList;
+	Button buttonEditItem = new Button("Edit Item");
 
 	public static void main(String[] args) {
 		//out.println("TEST");
@@ -116,23 +119,42 @@ public class WindowMaker extends Application {
 
 		treeView = new TreeView<>(root);
 		treeView.setShowRoot(false);
+		treeView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				//if the selected item is not null, try to set the button to enabled
+				//otherwise, don't do anything (but log it on the console
+				try {
+					if (!treeView.getSelectionModel().getSelectedItem().equals(null)) {
+						buttonEditItem.setDisable(false);
+					}
+				} catch (Exception e) {
+					Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
+				}
+			}
+		});
 
 		//buttonBar contains buttons for adding new nodes to TreeView
 		HBox buttonBar = new HBox();
 		Button buttonAddProduct = new Button("Add Product");
 		Button buttonAddFeature = new Button("Add Feature");
 		Button buttonSubNode = new Button("Remove Item");
+		//buttonEditItem ("Edit Item") is instantiated in the preamble
 		buttonAddProduct.setMinWidth(50);
 		buttonAddProduct.setPrefWidth(100);
 		buttonAddFeature.setMinWidth(50);
 		buttonAddFeature.setPrefWidth(100);
 		buttonSubNode.setMinWidth(50);
 		buttonSubNode.setPrefWidth(100);
-		buttonBar.getChildren().addAll(buttonAddProduct,buttonAddFeature,buttonSubNode);
-		//TODO: add new buttons to create new TreeView nodes
+		buttonEditItem.setMinWidth(50);
+		buttonEditItem.setPrefWidth(100);
+		buttonEditItem.setDisable(true);
+		buttonBar.getChildren().addAll(buttonAddProduct,buttonAddFeature,buttonSubNode,buttonEditItem);
 
+		//TODO: add new buttons to create new TreeView nodes
 		buttonAddProduct.setOnAction(event -> addProduct());
 		buttonAddFeature.setOnAction(event -> addFeature());
+		buttonEditItem.setOnAction(event -> editItem());
 
 		VBox leftPane = new VBox(treeView,buttonBar);
 		VBox.setVgrow(treeView,Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
@@ -243,6 +265,14 @@ public class WindowMaker extends Application {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
 			//TODO: add pop up box notifying user to select an item.
 			Message.messageBox("Please select an item in the list.","Notification");
+		}
+	}
+
+	private void editItem() {
+		try {
+
+		} catch (Exception e) {
+
 		}
 	}
 
