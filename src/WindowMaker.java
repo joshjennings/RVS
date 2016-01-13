@@ -1,13 +1,11 @@
 import com.RVS.Products.Product;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -22,7 +20,7 @@ import java.util.Objects;
 public class WindowMaker extends Application {
 
 	Region spacer;
-	TreeView<String> treeView;
+	TreeView<Product> treeView;
 	ObservableList<Product> productList;
 	Button buttonEditItem = new Button("Edit Item");
 
@@ -74,7 +72,7 @@ public class WindowMaker extends Application {
 
 		//create stage
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Window Tester");
+		primaryStage.setTitle("RVS Pricing Program");
 		Message.consoleMessage("Showing window.");
 		primaryStage.show();
 		Message.consoleMessage("Window displayed.");
@@ -107,7 +105,7 @@ public class WindowMaker extends Application {
 	private Node leftPane() {
 		Message.consoleMessage("Adding left pane.");
 
-		TreeItem<String> root = new TreeItem<>("root");
+		TreeItem<Product> root = new TreeItem<>(new Product("root"));
 		root.setExpanded(true);
 		//TODO: find a way to set the TreeView width
 
@@ -119,41 +117,39 @@ public class WindowMaker extends Application {
 
 		treeView = new TreeView<>(root);
 		treeView.setShowRoot(false);
-		treeView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				//if the selected item is not null, try to set the button to enabled
-				//otherwise, don't do anything (but log it on the console
-				try {
-					if (!treeView.getSelectionModel().getSelectedItem().equals(null)) {
-						buttonEditItem.setDisable(false);
-					}
-				} catch (Exception e) {
-					Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
+		treeView.setOnMouseClicked(event -> {
+			//if the selected item is not null, try to set the button to enabled
+			//otherwise, don't do anything (but log it on the console
+			try {
+				if (!(treeView.getSelectionModel().getSelectedItem() == null)) {
+					buttonEditItem.setDisable(false);
 				}
+			} catch (Exception e) {
+				Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
 			}
 		});
 
-		//buttonBar contains buttons for adding new nodes to TreeView
+		//buttonBar contains buttons for controlling nodes in TreeView
 		HBox buttonBar = new HBox();
 		Button buttonAddProduct = new Button("Add Product");
 		Button buttonAddFeature = new Button("Add Feature");
-		Button buttonSubNode = new Button("Remove Item");
+		Button buttonDeleteItem = new Button("Remove Item");
 		//buttonEditItem ("Edit Item") is instantiated in the preamble
 		buttonAddProduct.setMinWidth(50);
 		buttonAddProduct.setPrefWidth(100);
 		buttonAddFeature.setMinWidth(50);
 		buttonAddFeature.setPrefWidth(100);
-		buttonSubNode.setMinWidth(50);
-		buttonSubNode.setPrefWidth(100);
+		buttonDeleteItem.setMinWidth(50);
+		buttonDeleteItem.setPrefWidth(100);
 		buttonEditItem.setMinWidth(50);
 		buttonEditItem.setPrefWidth(100);
 		buttonEditItem.setDisable(true);
-		buttonBar.getChildren().addAll(buttonAddProduct,buttonAddFeature,buttonSubNode,buttonEditItem);
+		buttonBar.getChildren().addAll(buttonAddProduct,buttonAddFeature,buttonDeleteItem,buttonEditItem);
 
 		//TODO: add new buttons to create new TreeView nodes
 		buttonAddProduct.setOnAction(event -> addProduct());
 		buttonAddFeature.setOnAction(event -> addFeature());
+		buttonDeleteItem.setOnAction(event -> deleteItem());
 		buttonEditItem.setOnAction(event -> editItem());
 
 		VBox leftPane = new VBox(treeView,buttonBar);
@@ -236,9 +232,9 @@ public class WindowMaker extends Application {
 	 * @param parent Parent of the new node/leaf item.
 	 * @return Returns the new TreeItem created in this method. Returned object can be used to create sub-nodes.
 	 */
-	private TreeItem<String> makeTreeItem(String title, TreeItem<String> parent) {
+	private TreeItem<Product> makeTreeItem(String title, TreeItem<Product> parent) {
 		Message.consoleMessage("Adding TreeView item. Item: " + title + " | ChildTo: " + parent.toString());
-		TreeItem<String> newItem = new TreeItem<>(title);
+		TreeItem<Product> newItem = new TreeItem<>(new Product(title));
 		newItem.setExpanded(true);
 		parent.getChildren().add(newItem);
 		return newItem;
@@ -246,10 +242,10 @@ public class WindowMaker extends Application {
 
 	private void addProduct() {
 		try {
-			TreeItem<String> selectedItem = treeView.getRoot();
+			//TreeItem<Product> selectedItem = treeView.getRoot();
 			String nameProduct = Message.selectProduct("Please enter the product name.", "Product Name", productList);
 			//if the two strings do not equal each other, make the TreeItem
-			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {makeTreeItem(nameProduct, selectedItem);}
+			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {makeTreeItem(nameProduct, treeView.getRoot());}
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
 			//TODO: add pop up box notifying user to select an item.
@@ -259,7 +255,7 @@ public class WindowMaker extends Application {
 
 	private void addFeature() {
 		try {
-			TreeItem<String> selectedItem = treeView.getSelectionModel().getSelectedItem();
+			TreeItem<Product> selectedItem = treeView.getSelectionModel().getSelectedItem();
 			makeTreeItem("Test", selectedItem);
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
@@ -268,12 +264,16 @@ public class WindowMaker extends Application {
 		}
 	}
 
+	private void deleteItem() {
+		String selectedItem = treeView.getSelectionModel().getSelectedItem().getValue().getModel();
+		Message.consoleMessage("Removing item from TreeView: " + selectedItem);
+		treeView.getSelectionModel().getSelectedItem().getParent().getChildren().remove(treeView.getSelectionModel().getSelectedItem());
+	}
+
 	private void editItem() {
-		try {
+		Message.consoleMessage("Displaying item edit pane for item: " + treeView.getSelectionModel().getSelectedItem().getValue().getModel());
 
-		} catch (Exception e) {
 
-		}
 	}
 
 }

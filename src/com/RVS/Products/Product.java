@@ -140,23 +140,23 @@ public class Product {
 		return FXCollections.observableList(productList);
 	}
 
-	@SuppressWarnings("unused")
-	public static List<String> createStandardModels() {
-		List<String> listModels = new ArrayList<>();
-//		listModels.addAll("MRP","MPC","MVI","HPR","TSR","Recirc","IC","Acc","SD","OP");
-		listModels.add("MRP");
-		listModels.add("MPC");
-		listModels.add("MVI");
-		listModels.add("HPR");
-		listModels.add("TSR");
-		listModels.add("Recirc");
-		listModels.add("IC");
-		listModels.add("Acc");
-		listModels.add("SD");
-		listModels.add("OP");
-
-		return listModels;
-	}
+//	@SuppressWarnings("unused")
+//	public static List<String> createStandardModels() {
+//		List<String> listModels = new ArrayList<>();
+////		listModels.addAll("MRP","MPC","MVI","HPR","TSR","Recirc","IC","Acc","SD","OP");
+//		listModels.add("MRP");
+//		listModels.add("MPC");
+//		listModels.add("MVI");
+//		listModels.add("HPR");
+//		listModels.add("TSR");
+//		listModels.add("Recirc");
+//		listModels.add("IC");
+//		listModels.add("Acc");
+//		listModels.add("SD");
+//		listModels.add("OP");
+//
+//		return listModels;
+//	}
 
 	public static Product createNewBareMRP() {
 		return new Product("MRP");
