@@ -42,6 +42,10 @@ public class WindowMaker extends Application {
 	@Override public void start(Stage primaryStage) {
 		productList = Product.constructListOfStandardProducts();
 
+		//initialize everything
+		Message.initialize();
+
+		//notify of window creation commencing
 		Message.consoleMessage("Window creation beginning.");
 
 		//define horizontal spacer that will grow with the window
@@ -117,6 +121,7 @@ public class WindowMaker extends Application {
 
 		treeView = new TreeView<>(root);
 		treeView.setShowRoot(false);
+		//treeView.cellPropertyFactory - or something like that...
 		treeView.setOnMouseClicked(event -> {
 			//if the selected item is not null, try to set the button to enabled
 			//otherwise, don't do anything (but log it on the console
@@ -219,8 +224,8 @@ public class WindowMaker extends Application {
 		TitledPane dropDownBox = new TitledPane("Numbers", selectionBox);
 		dropDownBox.setCollapsible(true);
 
-		//create bottom pane
-		HBox bottomPane = new HBox(10, dropDownBox, spacer, buttonOK, buttonCancel);
+		//create bottom pane - removed dropdown selection box
+		HBox bottomPane = new HBox(10, spacer, buttonOK, buttonCancel);
 		bottomPane.setPadding(new Insets(10));
 
 		return bottomPane;
@@ -233,23 +238,25 @@ public class WindowMaker extends Application {
 	 * @return Returns the new TreeItem created in this method. Returned object can be used to create sub-nodes.
 	 */
 	private TreeItem<Product> makeTreeItem(String title, TreeItem<Product> parent) {
-		Message.consoleMessage("Adding TreeView item. Item: " + title + " | ChildTo: " + parent.toString());
+		Message.consoleMessage("Adding TreeView item. Item: " + title + " | ChildTo: " + parent.getValue().getModel());
 		TreeItem<Product> newItem = new TreeItem<>(new Product(title));
 		newItem.setExpanded(true);
 		parent.getChildren().add(newItem);
+		Message.consoleMessage("TreeItem Product count: " + parent.getChildren().size());
 		return newItem;
 	}
 
 	private void addProduct() {
 		try {
-			//TreeItem<Product> selectedItem = treeView.getRoot();
+			//display message box to select proper product
 			String nameProduct = Message.selectProduct("Please enter the product name.", "Product Name", productList);
+			Message.consoleMessage("Product:::: " + nameProduct);
 			//if the two strings do not equal each other, make the TreeItem
 			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {makeTreeItem(nameProduct, treeView.getRoot());}
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
 			//TODO: add pop up box notifying user to select an item.
-			Message.messageBox("Please select an item in the list.","Notification");
+			Message.messageBox("There was an error in creating the window.","Notification");
 		}
 	}
 

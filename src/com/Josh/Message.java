@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -33,6 +35,12 @@ import static java.lang.System.out;
 public class Message {
 	static Stage stage;
 	static boolean btnYesClicked;
+	static Region spacer;
+
+	public static void initialize() {
+		spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);
+	}
 
 	/**
 	 * This method simply adds a date to the console output.
@@ -146,6 +154,7 @@ public class Message {
 	}
 
 	private static void buttonEnterClicked(String text) {
+		Message.consoleMessage(text);
 		stage.close();
 		input = text;
 	}
@@ -179,6 +188,7 @@ public class Message {
 		buttonCancel.setOnAction(e -> buttonCancelClicked() );
 
 		HBox paneBtn = new HBox(20);
+		//paneBtn.getChildren().addAll(spacer, buttonEnter, buttonCancel, spacer);
 		paneBtn.getChildren().addAll(buttonEnter, buttonCancel);
 		VBox pane = new VBox(20);
 		pane.getChildren().addAll(lbl,productBox,paneBtn);
