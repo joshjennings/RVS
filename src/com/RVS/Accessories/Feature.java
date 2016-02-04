@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by manufacturing9 on 2/4/2016.
+ * This class is initiated during startup and pre-loads the standard products into a list.
+ *
+ * @author Josh Jennings
  */
 public class Feature {
 	String model;
@@ -21,17 +23,23 @@ public class Feature {
 
 		productList.add("Pump");
 		productList.add("Control Panel");
+		productList.add("Level Column");
 
 		return FXCollections.observableList(productList);
 	}
 
+	@SuppressWarnings("unused")
 	public static Feature createNewPump() { return new Feature("Pump"); }
 
+	@SuppressWarnings("unused")
 	public static Feature createNewLFA() { return new Feature("LFA"); }
 
+	@SuppressWarnings("unused")
 	public static Feature createNewLevelColumn() { return new Feature("Level Column"); }
 
+	@SuppressWarnings("unused")
 	public static Feature createNewControlPanel() { return new Feature("Pump"); }
 
+	@SuppressWarnings("unused")
 	public static Feature createNew() { return new Feature("Pump"); }
 }

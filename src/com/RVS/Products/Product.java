@@ -126,41 +126,43 @@ public class Product {
 		return currencyFormatter.format(this.priceList);
 	}
 
-	@SuppressWarnings("unused")
-	public static ObservableList<Product> constructListOfStandardProducts() {
-		List<Product> productList = new ArrayList<>();
+//	@SuppressWarnings("unused")
+//	public static ObservableList<Product> constructListOfStandardProducts() {
+//		List<Product> productList = new ArrayList<>();
+//
+//		productList.add(Product.createNewBareMRP());
+//		productList.add(Product.createNewBareMPC());
+//		productList.add(Product.createNewBareMVI());
+//		productList.add(Product.createNewBareHPR());
+//		productList.add(Product.createNewBareTSR());
+//		productList.add(Product.createNewBareRecirculator());
+//		productList.add(Product.createNewBareIntercooler());
+//		productList.add(Product.createNewBareAccumulator());
+//		productList.add(Product.createNewBareSD());
+//		productList.add(Product.createNewBareOP());
+//
+//		return FXCollections.observableList(productList);
+//	}
 
-		productList.add(Product.createNewBareMRP());
-		productList.add(Product.createNewBareMPC());
-		productList.add(Product.createNewBareMVI());
-		productList.add(Product.createNewBareHPR());
-		productList.add(Product.createNewBareTSR());
-		productList.add(Product.createNewBareRecirculator());
-		productList.add(Product.createNewBareIntercooler());
-		productList.add(Product.createNewBareAccumulator());
-		productList.add(Product.createNewBareSD());
-		productList.add(Product.createNewBareOP());
+	@SuppressWarnings("unused")
+	public static ObservableList<String> constructListOfStandardProducts() {
+		List<String> productList = new ArrayList<>();
+
+		productList.add("MRP");
+		productList.add("MPC");
+		productList.add("MVI");
+		productList.add("HPR");
+		productList.add("TSR");
+		productList.add("Recirculator");
+		productList.add("Intercooler");
+		productList.add("Accumulator");
+		productList.add("Surge Drum");
+		productList.add("Oil Pot");
 
 		return FXCollections.observableList(productList);
 	}
 
-//	@SuppressWarnings("unused")
-//	public static List<String> createStandardModels() {
-//		List<String> listModels = new ArrayList<>();
-////		listModels.addAll("MRP","MPC","MVI","HPR","TSR","Recirc","IC","Acc","SD","OP");
-//		listModels.add("MRP");
-//		listModels.add("MPC");
-//		listModels.add("MVI");
-//		listModels.add("HPR");
-//		listModels.add("TSR");
-//		listModels.add("Recirc");
-//		listModels.add("IC");
-//		listModels.add("Acc");
-//		listModels.add("SD");
-//		listModels.add("OP");
-//
-//		return listModels;
-//	}
+
 
 	public static Product createNewBareMRP() {
 		return new Product("MRP");
@@ -201,4 +203,6 @@ public class Product {
 	public static Product createNewBareOP() {
 		return new Product("Oil Pot");
 	}
+
+
 }

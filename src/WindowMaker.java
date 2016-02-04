@@ -3,6 +3,7 @@ import com.RVS.Accessories.Feature;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -55,7 +56,7 @@ public class WindowMaker extends Application {
 		Node topPane = topPane();
 
 		//create leftPane
-		Node leftPane = leftPane();
+		//Node leftPane = leftPane();
 
 		//create primaryPane
 		Node centerPane = centerPane();
@@ -66,7 +67,7 @@ public class WindowMaker extends Application {
 		//create BorderPane (root)
 		BorderPane rootPane = new BorderPane();
 		rootPane.setTop(topPane);
-		rootPane.setLeft(leftPane);
+		//rootPane.setLeft(leftPane);
 		rootPane.setCenter(centerPane);
 		rootPane.setBottom(bottomPane);
 
@@ -116,7 +117,7 @@ public class WindowMaker extends Application {
 	 * This method will create the leftPane of the root BorderPane layout.
 	 * @return Returns the Node that will be displayed in the leftPane.
 	 */
-	private Node leftPane() {
+	/*private Node leftPane() {
 		Message.consoleMessage("Adding left pane.");
 
 		TreeItem<Product> root = new TreeItem<>(new Product("root"));
@@ -144,8 +145,8 @@ public class WindowMaker extends Application {
 		buttonDeleteItem = new Button("Remove Item");
 		buttonEditItem = new Button("Edit Item");
 		//buttonEditItem ("Edit Item") is instantiated in the preamble
-		buttonAddProduct.setMinWidth(50);
-		buttonAddProduct.setPrefWidth(100);
+		//buttonAddProduct.setMinWidth(50);
+		//buttonAddProduct.setPrefWidth(100);
 		buttonAddFeature.setMinWidth(50);
 		buttonAddFeature.setPrefWidth(100);
 		buttonAddFeature.setDisable(true);
@@ -167,7 +168,7 @@ public class WindowMaker extends Application {
 		VBox.setVgrow(treeView,Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
 
 		return leftPane;
-	}
+	}*/
 
 	/**
 	 * This method will create the centerPane of the root BorderPane layout.
@@ -175,7 +176,59 @@ public class WindowMaker extends Application {
 	 */
 	private Node centerPane() {
 		Message.consoleMessage("Adding center pane.");
-		//create TableView
+
+		//CREATE TREEVIEW
+		TreeItem<Product> root = new TreeItem<>(new Product("root"));
+		root.setExpanded(true);
+		//TODO: find a way to set the TreeView width
+
+		treeView = new TreeView<>(root);
+		treeView.setShowRoot(false);
+		treeView.setMinWidth(340);
+		treeView.setOnMouseClicked(event -> {
+			//if a TreeView item is selected, enable the Edit button
+			//otherwise, don't do anything (but log it on the console)
+			try {
+				if (treeView.getSelectionModel().getSelectedItem() != null) {
+					buttonEditItem.setDisable(false);
+				}
+			} catch (Exception e) {
+				Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
+			}
+		});
+
+		//buttonBar contains buttons for controlling nodes in TreeView
+		HBox buttonBar = new HBox();
+		buttonAddProduct = new Button("Add Product");
+		buttonAddFeature = new Button("Add Feature");
+		buttonDeleteItem = new Button("Remove Item");
+		buttonEditItem = new Button("Edit Item");
+		//buttonEditItem ("Edit Item") is instantiated in the preamble
+		buttonAddProduct.setMinWidth(85);
+		buttonAddProduct.setPrefWidth(100);
+		buttonAddFeature.setMinWidth(85);
+		buttonAddFeature.setPrefWidth(100);
+		buttonAddFeature.setDisable(true);
+		buttonDeleteItem.setMinWidth(90);
+		buttonDeleteItem.setPrefWidth(100);
+		buttonDeleteItem.setDisable(true);
+		buttonEditItem.setMinWidth(80);
+		buttonEditItem.setPrefWidth(100);
+		buttonEditItem.setDisable(true);
+		buttonBar.getChildren().addAll(buttonAddProduct,buttonAddFeature,buttonDeleteItem,buttonEditItem);
+		buttonBar.setPrefWidth(400);
+		buttonBar.setMaxWidth(800);
+
+		//set actions for each button
+		buttonAddProduct.setOnAction(event -> addProduct());
+		buttonAddFeature.setOnAction(event -> addFeature());
+		buttonDeleteItem.setOnAction(event -> deleteItem());
+		buttonEditItem.setOnAction(event -> editItem());
+
+		VBox leftPane = new VBox(treeView,buttonBar);
+		VBox.setVgrow(treeView,Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
+
+		//CREATE TABLEVIEW
 		TableView<Product> centerPane = new TableView<>();
 		//add items to the table
 //		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",new BigDecimal(43528)));
@@ -203,7 +256,12 @@ public class WindowMaker extends Application {
 		//noinspection unchecked
 		centerPane.getColumns().addAll(columnModel,columnDesc,columnListPrice);
 
-		return centerPane;
+		//ADD BOTH PANES TO THE SPLITPANE
+		SplitPane splitPane = new SplitPane(leftPane,centerPane);
+		splitPane.setOrientation(Orientation.HORIZONTAL);
+		splitPane.setDividerPosition(0,0.2f);
+
+		return splitPane;
 	}
 
 	/**
