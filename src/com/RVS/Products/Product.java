@@ -73,6 +73,10 @@ public class Product {
 		this.material = material;
 	}
 
+	@Override public String toString() {
+		return this.model;
+	}
+
 	@SuppressWarnings("unused")
 	public enum Material {
 		CARBON, STAINLESS, COMBINATION

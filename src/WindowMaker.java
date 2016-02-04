@@ -22,7 +22,7 @@ public class WindowMaker extends Application {
 	Region spacer;
 	TreeView<Product> treeView;
 	ObservableList<Product> productList;
-	Button buttonEditItem = new Button("Edit Item");
+	Button buttonAddProduct, buttonAddFeature, buttonDeleteItem, buttonEditItem;
 
 	public static void main(String[] args) {
 		//out.println("TEST");
@@ -42,7 +42,7 @@ public class WindowMaker extends Application {
 	@Override public void start(Stage primaryStage) {
 		productList = Product.constructListOfStandardProducts();
 
-		Message.consoleMessage("Window creation beginning.");
+		Message.consoleMessage("Window initialization beginning.");
 
 		//define horizontal spacer that will grow with the window
 		spacer = new Region();
@@ -109,19 +109,13 @@ public class WindowMaker extends Application {
 		root.setExpanded(true);
 		//TODO: find a way to set the TreeView width
 
-//		makeTreeItem("Liquid Feed Assembly", root);
-//		makeTreeItem("Coil", root);
-//		TreeItem<String> pumps = makeTreeItem("Pumps", root);
-//		makeTreeItem("Teikoku", pumps);
-//		makeTreeItem("Cornell", pumps);
-
 		treeView = new TreeView<>(root);
 		treeView.setShowRoot(false);
 		treeView.setOnMouseClicked(event -> {
-			//if the selected item is not null, try to set the button to enabled
-			//otherwise, don't do anything (but log it on the console
+			//if a TreeView item is selected, enable the Edit button
+			//otherwise, don't do anything (but log it on the console)
 			try {
-				if (!(treeView.getSelectionModel().getSelectedItem() == null)) {
+				if (treeView.getSelectionModel().getSelectedItem() != null) {
 					buttonEditItem.setDisable(false);
 				}
 			} catch (Exception e) {
@@ -131,16 +125,19 @@ public class WindowMaker extends Application {
 
 		//buttonBar contains buttons for controlling nodes in TreeView
 		HBox buttonBar = new HBox();
-		Button buttonAddProduct = new Button("Add Product");
-		Button buttonAddFeature = new Button("Add Feature");
-		Button buttonDeleteItem = new Button("Remove Item");
+		buttonAddProduct = new Button("Add Product");
+		buttonAddFeature = new Button("Add Feature");
+		buttonDeleteItem = new Button("Remove Item");
+		buttonEditItem = new Button("Edit Item");
 		//buttonEditItem ("Edit Item") is instantiated in the preamble
 		buttonAddProduct.setMinWidth(50);
 		buttonAddProduct.setPrefWidth(100);
 		buttonAddFeature.setMinWidth(50);
 		buttonAddFeature.setPrefWidth(100);
+		buttonAddFeature.setDisable(true);
 		buttonDeleteItem.setMinWidth(50);
 		buttonDeleteItem.setPrefWidth(100);
+		buttonDeleteItem.setDisable(true);
 		buttonEditItem.setMinWidth(50);
 		buttonEditItem.setPrefWidth(100);
 		buttonEditItem.setDisable(true);
@@ -251,6 +248,12 @@ public class WindowMaker extends Application {
 			//TODO: add pop up box notifying user to select an item.
 			Message.messageBox("Please select an item in the list.","Notification");
 		}
+
+		if (!treeView.getRoot().isLeaf()) {
+			buttonAddFeature.setDisable(false);
+			buttonDeleteItem.setDisable(false);
+			buttonEditItem.setDisable(false);
+		}
 	}
 
 	private void addFeature() {
@@ -268,6 +271,15 @@ public class WindowMaker extends Application {
 		String selectedItem = treeView.getSelectionModel().getSelectedItem().getValue().getModel();
 		Message.consoleMessage("Removing item from TreeView: " + selectedItem);
 		treeView.getSelectionModel().getSelectedItem().getParent().getChildren().remove(treeView.getSelectionModel().getSelectedItem());
+
+		if (treeView.getRoot().isLeaf()) {
+			Message.consoleMessage("Empty product list. Disabling Feature, Delete, and Edit buttons.");
+			buttonAddFeature.setDisable(true);
+			buttonDeleteItem.setDisable(true);
+			buttonEditItem.setDisable(true);
+		}
+
+		treeView.getSelectionModel().clearSelection();
 	}
 
 	private void editItem() {

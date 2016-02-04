@@ -156,6 +156,7 @@ public class Message {
 	}
 
 	public static String selectProduct(String message, String title, ObservableList<Product> list) {
+		//TODO: Center the Enter and Cancel buttons
 		stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle(title);
