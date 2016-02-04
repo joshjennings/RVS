@@ -43,7 +43,8 @@ public class Message {
 	}
 
 	/**
-	 * This method simply adds a date to the console output.
+	 * This method displays a message in the console formatted with the time stamp.
+	 * @param message The String message that one wants displayed in the console.
 	 */
 	public static void consoleMessage(String message) {
 		String timeStamp = new SimpleDateFormat("[yyyy/MM/dd|HH:mm:ss.SSS] ").format(Calendar.getInstance().getTime());
@@ -164,7 +165,7 @@ public class Message {
 		input = "DONOTENTERanyNewPRODUCTinHERErightNOW";
 	}
 
-	public static String selectProduct(String message, String title, ObservableList<Product> list) {
+	public static String selectProduct(String message, String title, ObservableList<String> list) {
 		//TODO: Center the Enter and Cancel buttons
 		stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
@@ -174,12 +175,12 @@ public class Message {
 
 		Label lbl = new Label(message);
 
-		//use String model parameter in Product class to build ObservableList<String>
-		List<String> productList = list.stream().map(Product::getModel).collect(Collectors.toList());
-		ObservableList<String> productListString = FXCollections.observableList(productList);
+//		//use String model parameter in Product class to build ObservableList<String>
+//		List<String> productList = list.stream().map(Product::getModel).collect(Collectors.toList());
+//		ObservableList<String> productListString = FXCollections.observableList(productList);
 
 		//TextField textField = new TextField();
-		ComboBox<String> productBox = new ComboBox<>(productListString);
+		ComboBox<String> productBox = new ComboBox<>(list);
 		productBox.getItems().addAll();
 
 		Button buttonEnter = new Button("Enter");

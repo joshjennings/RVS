@@ -1,4 +1,5 @@
 import com.RVS.Products.Product;
+import com.RVS.Accessories.Feature;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -6,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -21,7 +23,8 @@ public class WindowMaker extends Application {
 
 	Region spacer;
 	TreeView<Product> treeView;
-	ObservableList<Product> productList;
+	ObservableList<String> productList;
+	ObservableList<String> featureList;
 	Button buttonAddProduct, buttonAddFeature, buttonDeleteItem, buttonEditItem;
 
 	public static void main(String[] args) {
@@ -40,17 +43,13 @@ public class WindowMaker extends Application {
 	}
 
 	@Override public void start(Stage primaryStage) {
-		productList = Product.constructListOfStandardProducts();
+		//initialize everything
+		Message.consoleMessage("Initializing data.");
+		initialize();
+		Message.initialize();
 
 		//notify of window creation commencing
 		Message.consoleMessage("Window initialization beginning.");
-
-		//initialize everything
-		Message.initialize();
-
-		//define horizontal spacer that will grow with the window
-		spacer = new Region();
-		HBox.setHgrow(spacer, Priority.ALWAYS);
 
 		//create topPane
 		Node topPane = topPane();
@@ -77,9 +76,20 @@ public class WindowMaker extends Application {
 		//create stage
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("RVS Pricing Program");
+		primaryStage.getIcons().add(new Image("java.png"));
 		Message.consoleMessage("Showing window.");
 		primaryStage.show();
 		Message.consoleMessage("Window displayed.");
+	}
+
+	private void initialize() {
+		//define horizontal spacer that will grow with the window
+		spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);
+
+		//populate data lists
+		productList = Product.constructListOfStandardProducts();
+		featureList = Feature.constructListOfStandardFeatures();
 	}
 
 	/**
@@ -245,7 +255,7 @@ public class WindowMaker extends Application {
 	private void addProduct() {
 		try {
 			//display message box to select proper product
-			String nameProduct = Message.selectProduct("Please enter the product name.", "Product Name", productList);
+			String nameProduct = Message.selectProduct("Please enter the product name.", "Product Selection", productList);
 			//if the two strings do not equal each other, make the TreeItem
 			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {makeTreeItem(nameProduct, treeView.getRoot());}
 		} catch (Exception e) {
@@ -262,14 +272,21 @@ public class WindowMaker extends Application {
 	}
 
 	private void addFeature() {
+		//attempt to collect the selected TreeItem
 		try {
+			//attempt to collect selection
 			TreeItem<Product> selectedItem = treeView.getSelectionModel().getSelectedItem();
-			makeTreeItem("Test", selectedItem);
+			//display window with Feature selection list
+			String nameOfFeature = Message.selectProduct("Please select the feature to add.", "Feature Selection", featureList);
+			//add Feature to selected Product
+			makeTreeItem(nameOfFeature, selectedItem);
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
 			//TODO: add pop up box notifying user to select an item.
 			Message.messageBox("Please select an item in the list.","Notification");
 		}
+
+
 	}
 
 	private void deleteItem() {
