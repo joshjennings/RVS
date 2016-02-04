@@ -42,7 +42,11 @@ public class WindowMaker extends Application {
 	@Override public void start(Stage primaryStage) {
 		productList = Product.constructListOfStandardProducts();
 
+		//notify of window creation commencing
 		Message.consoleMessage("Window initialization beginning.");
+
+		//initialize everything
+		Message.initialize();
 
 		//define horizontal spacer that will grow with the window
 		spacer = new Region();
@@ -216,8 +220,8 @@ public class WindowMaker extends Application {
 		TitledPane dropDownBox = new TitledPane("Numbers", selectionBox);
 		dropDownBox.setCollapsible(true);
 
-		//create bottom pane
-		HBox bottomPane = new HBox(10, dropDownBox, spacer, buttonOK, buttonCancel);
+		//create bottom pane - removed dropdown selection box
+		HBox bottomPane = new HBox(10, spacer, buttonOK, buttonCancel);
 		bottomPane.setPadding(new Insets(10));
 
 		return bottomPane;
@@ -230,16 +234,17 @@ public class WindowMaker extends Application {
 	 * @return Returns the new TreeItem created in this method. Returned object can be used to create sub-nodes.
 	 */
 	private TreeItem<Product> makeTreeItem(String title, TreeItem<Product> parent) {
-		Message.consoleMessage("Adding TreeView item. Item: " + title + " | ChildTo: " + parent.toString());
+		Message.consoleMessage("Adding TreeView item. Item: " + title + " | ChildTo: " + parent.getValue().getModel());
 		TreeItem<Product> newItem = new TreeItem<>(new Product(title));
 		newItem.setExpanded(true);
 		parent.getChildren().add(newItem);
+		Message.consoleMessage("TreeItem Product count: " + parent.getChildren().size());
 		return newItem;
 	}
 
 	private void addProduct() {
 		try {
-			//TreeItem<Product> selectedItem = treeView.getRoot();
+			//display message box to select proper product
 			String nameProduct = Message.selectProduct("Please enter the product name.", "Product Name", productList);
 			//if the two strings do not equal each other, make the TreeItem
 			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {makeTreeItem(nameProduct, treeView.getRoot());}
