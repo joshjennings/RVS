@@ -126,24 +126,6 @@ public class Product {
 		return currencyFormatter.format(this.priceList);
 	}
 
-//	@SuppressWarnings("unused")
-//	public static ObservableList<Product> constructListOfStandardProducts() {
-//		List<Product> productList = new ArrayList<>();
-//
-//		productList.add(Product.createNewBareMRP());
-//		productList.add(Product.createNewBareMPC());
-//		productList.add(Product.createNewBareMVI());
-//		productList.add(Product.createNewBareHPR());
-//		productList.add(Product.createNewBareTSR());
-//		productList.add(Product.createNewBareRecirculator());
-//		productList.add(Product.createNewBareIntercooler());
-//		productList.add(Product.createNewBareAccumulator());
-//		productList.add(Product.createNewBareSD());
-//		productList.add(Product.createNewBareOP());
-//
-//		return FXCollections.observableList(productList);
-//	}
-
 	@SuppressWarnings("unused")
 	public static ObservableList<String> constructListOfStandardProducts() {
 		List<String> productList = new ArrayList<>();

@@ -27,9 +27,16 @@ public class WindowMaker extends Application {
 	ObservableList<String> productList;
 	ObservableList<String> featureList;
 	Button buttonAddProduct, buttonAddFeature, buttonDeleteItem, buttonEditItem;
+	BorderPane rootPane;
 
 	public static void main(String[] args) {
-		//out.println("TEST");
+		Message.consoleMessage("Program launch arguments: ");
+//		int counter = 1;
+//		for (String arg : args) {
+//			Message.consoleMessage("   " + counter + ".) " + arg);
+//			counter++;
+//		}
+		for (int counter = 0; counter < args.length; counter++) {Message.consoleMessage("   " + (counter+1) + ".) " + args[counter]);}
 		//TODO: add new method to create splash screen
 
 		//TODO: pre-load product data -> models, descriptions, prices
@@ -52,24 +59,11 @@ public class WindowMaker extends Application {
 		//notify of window creation commencing
 		Message.consoleMessage("Window initialization beginning.");
 
-		//create topPane
-		Node topPane = topPane();
-
-		//create leftPane
-		//Node leftPane = leftPane();
-
-		//create primaryPane
-		Node centerPane = centerPane();
-
-		//create bottomPane
-		Node bottomPane = bottomPane();
-
 		//create BorderPane (root)
-		BorderPane rootPane = new BorderPane();
-		rootPane.setTop(topPane);
-		//rootPane.setLeft(leftPane);
-		rootPane.setCenter(centerPane);
-		rootPane.setBottom(bottomPane);
+		rootPane = new BorderPane();
+		rootPane.setTop(topPane());
+		rootPane.setCenter(centerPane());
+		rootPane.setBottom(bottomPane());
 
 		//create scene
 		Scene scene = new Scene(rootPane);
@@ -112,63 +106,6 @@ public class WindowMaker extends Application {
 
 		return topPane;
 	}
-
-	/**
-	 * This method will create the leftPane of the root BorderPane layout.
-	 * @return Returns the Node that will be displayed in the leftPane.
-	 */
-	/*private Node leftPane() {
-		Message.consoleMessage("Adding left pane.");
-
-		TreeItem<Product> root = new TreeItem<>(new Product("root"));
-		root.setExpanded(true);
-		//TODO: find a way to set the TreeView width
-
-		treeView = new TreeView<>(root);
-		treeView.setShowRoot(false);
-		treeView.setOnMouseClicked(event -> {
-			//if a TreeView item is selected, enable the Edit button
-			//otherwise, don't do anything (but log it on the console)
-			try {
-				if (treeView.getSelectionModel().getSelectedItem() != null) {
-					buttonEditItem.setDisable(false);
-				}
-			} catch (Exception e) {
-				Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
-			}
-		});
-
-		//buttonBar contains buttons for controlling nodes in TreeView
-		HBox buttonBar = new HBox();
-		buttonAddProduct = new Button("Add Product");
-		buttonAddFeature = new Button("Add Feature");
-		buttonDeleteItem = new Button("Remove Item");
-		buttonEditItem = new Button("Edit Item");
-		//buttonEditItem ("Edit Item") is instantiated in the preamble
-		//buttonAddProduct.setMinWidth(50);
-		//buttonAddProduct.setPrefWidth(100);
-		buttonAddFeature.setMinWidth(50);
-		buttonAddFeature.setPrefWidth(100);
-		buttonAddFeature.setDisable(true);
-		buttonDeleteItem.setMinWidth(50);
-		buttonDeleteItem.setPrefWidth(100);
-		buttonDeleteItem.setDisable(true);
-		buttonEditItem.setMinWidth(50);
-		buttonEditItem.setPrefWidth(100);
-		buttonEditItem.setDisable(true);
-		buttonBar.getChildren().addAll(buttonAddProduct,buttonAddFeature,buttonDeleteItem,buttonEditItem);
-
-		//TODO: add new buttons to create new TreeView nodes
-		buttonAddProduct.setOnAction(event -> addProduct());
-		buttonAddFeature.setOnAction(event -> addFeature());
-		buttonDeleteItem.setOnAction(event -> deleteItem());
-		buttonEditItem.setOnAction(event -> editItem());
-
-		VBox leftPane = new VBox(treeView,buttonBar);
-		VBox.setVgrow(treeView,Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
-
-		return leftPane;
-	}*/
 
 	/**
 	 * This method will create the centerPane of the root BorderPane layout.
@@ -264,6 +201,12 @@ public class WindowMaker extends Application {
 		return splitPane;
 	}
 
+	private Node editPane() {
+		Label sampleLabel = new Label("TEST");
+
+		return sampleLabel;
+	}
+
 	/**
 	 * This method will create the bottomPane of the root BorderPane layout.
 	 * @return Returns the Node that will be displayed in the bottomPane.
@@ -343,8 +286,6 @@ public class WindowMaker extends Application {
 			//TODO: add pop up box notifying user to select an item.
 			Message.messageBox("Please select an item in the list.","Notification");
 		}
-
-
 	}
 
 	private void deleteItem() {
@@ -365,7 +306,7 @@ public class WindowMaker extends Application {
 	private void editItem() {
 		Message.consoleMessage("Displaying item edit pane for item: " + treeView.getSelectionModel().getSelectedItem().getValue().getModel());
 
-
+		//rootPane.setCenter();
 	}
 
 }
