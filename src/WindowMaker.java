@@ -29,14 +29,19 @@ public class WindowMaker extends Application {
 	Button buttonAddProduct, buttonAddFeature, buttonDeleteItem, buttonEditItem;
 	BorderPane rootPane;
 
+	//centerPane
+	TreeItem<Product> root;
+	TableView<Product> centerPane;
+	Pane genericPaneWrapper;
+
 	public static void main(String[] args) {
 		Message.consoleMessage("Program launch arguments: ");
-//		int counter = 1;
-//		for (String arg : args) {
-//			Message.consoleMessage("   " + counter + ".) " + arg);
-//			counter++;
-//		}
-		for (int counter = 0; counter < args.length; counter++) {Message.consoleMessage("   " + (counter+1) + ".) " + args[counter]);}
+		if (args.length == 0) {Message.consoleMessage("   <None>");}
+		else {
+			for (int counter = 0; counter < args.length; counter++) {
+				Message.consoleMessage("   " + (counter+1) + ".) " + args[counter]);
+			}
+		}
 		//TODO: add new method to create splash screen
 
 		//TODO: pre-load product data -> models, descriptions, prices
@@ -45,8 +50,9 @@ public class WindowMaker extends Application {
 
 		//TODO: move primary window to another class
 		//PrimaryWindow primaryWindow = new PrimaryWindow(args);
-		//according to http://stackoverflow.com/questions/31173540/exception-in-thread-main-java-lang-runtimeexception-unable-to-construct-appli
-		//   the launch() method must be in the main method. launch() does not return until window is closed. Maybe a new thread?
+		//according to 'http://stackoverflow.com/questions/31173540/exception-in-thread-main-java-lang-
+		// runtimeexception-unable-to-construct-appli' the launch() method must be in the main method.
+		// launch() does not return until window is closed. Maybe a new thread?
 		launch(args);
 	}
 
@@ -72,6 +78,7 @@ public class WindowMaker extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("RVS Pricing Program");
 		primaryStage.getIcons().add(new Image("java.png"));
+		primaryStage.setMinWidth(1100.0);
 		Message.consoleMessage("Showing window.");
 		primaryStage.show();
 		Message.consoleMessage("Window displayed.");
@@ -112,10 +119,14 @@ public class WindowMaker extends Application {
 	 * @return Returns the Node that will be displayed in the centerPane.
 	 */
 	private Node centerPane() {
+		root = new TreeItem<>(new Product("root"));
+		centerPane  = new TableView<>();
+
+		genericPaneWrapper =  new Pane();
+
 		Message.consoleMessage("Adding center pane.");
 
 		//CREATE TREEVIEW
-		TreeItem<Product> root = new TreeItem<>(new Product("root"));
 		root.setExpanded(true);
 		//TODO: find a way to set the TreeView width
 
@@ -141,15 +152,15 @@ public class WindowMaker extends Application {
 		buttonDeleteItem = new Button("Remove Item");
 		buttonEditItem = new Button("Edit Item");
 		//buttonEditItem ("Edit Item") is instantiated in the preamble
-		buttonAddProduct.setMinWidth(85);
+		buttonAddProduct.setMinWidth(95);
 		buttonAddProduct.setPrefWidth(100);
-		buttonAddFeature.setMinWidth(85);
+		buttonAddFeature.setMinWidth(95);
 		buttonAddFeature.setPrefWidth(100);
 		buttonAddFeature.setDisable(true);
-		buttonDeleteItem.setMinWidth(90);
+		buttonDeleteItem.setMinWidth(100);
 		buttonDeleteItem.setPrefWidth(100);
 		buttonDeleteItem.setDisable(true);
-		buttonEditItem.setMinWidth(80);
+		buttonEditItem.setMinWidth(85);
 		buttonEditItem.setPrefWidth(100);
 		buttonEditItem.setDisable(true);
 		buttonBar.getChildren().addAll(buttonAddProduct,buttonAddFeature,buttonDeleteItem,buttonEditItem);
@@ -160,18 +171,23 @@ public class WindowMaker extends Application {
 		buttonAddProduct.setOnAction(event -> addProduct());
 		buttonAddFeature.setOnAction(event -> addFeature());
 		buttonDeleteItem.setOnAction(event -> deleteItem());
-		buttonEditItem.setOnAction(event -> editItem());
+		buttonEditItem.setOnAction(event -> editItem(treeView.getSelectionModel().getSelectedItem().getValue()));
 
 		VBox leftPane = new VBox(treeView,buttonBar);
 		VBox.setVgrow(treeView,Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
 
 		//CREATE TABLEVIEW
-		TableView<Product> centerPane = new TableView<>();
+		//centerPane = new TableView<>();
 		//add items to the table
 //		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",new BigDecimal(43528)));
 //		centerPane.getItems().add(new ProductList("MVI-48V","Vertical intercooler package",new BigDecimal(32978)));
 //		centerPane.getItems().add(new ProductList("HOP-10","Horizontal oil pot",new BigDecimal(1823)));
-//		centerPane.getItems().add(new Product("MRP", 48, 171.0, Product.Orient.VERTICAL, new BigDecimal(12345), Product.Material.CARBON));
+//		centerPane.getItems().add(new Product("MRP",
+//				48,
+//				171.0,
+//				Product.Orient.VERTICAL,
+//				new BigDecimal(12345),
+//				Product.Material.CARBON));
 
 		//CREATE TABLE COLUMNS
 		//model column
@@ -193,19 +209,24 @@ public class WindowMaker extends Application {
 		//noinspection unchecked
 		centerPane.getColumns().addAll(columnModel,columnDesc,columnListPrice);
 
+
+
 		//ADD BOTH PANES TO THE SPLITPANE
-		SplitPane splitPane = new SplitPane(leftPane,centerPane);
+		genericPaneWrapper.getChildren().add(centerPane);
+		SplitPane splitPane = new SplitPane(leftPane,genericPaneWrapper);
 		splitPane.setOrientation(Orientation.HORIZONTAL);
 		splitPane.setDividerPosition(0,0.2f);
+		SplitPane.setResizableWithParent(leftPane, false); //static method
 
 		return splitPane;
 	}
 
-	private Node editPane() {
-		Label sampleLabel = new Label("TEST");
-
-		return sampleLabel;
-	}
+//	private Node editPane(TableView<Product> tableView) {
+//		Label sampleLabel = new Label("TEST");
+//
+//
+//		return sampleLabel;
+//	}
 
 	/**
 	 * This method will create the bottomPane of the root BorderPane layout.
@@ -256,9 +277,13 @@ public class WindowMaker extends Application {
 	private void addProduct() {
 		try {
 			//display message box to select proper product
-			String nameProduct = Message.selectProduct("Please enter the product name.", "Product Selection", productList);
+			String nameProduct = Message.selectProduct("Please enter the product name.",
+					"Product Selection",
+					productList);
 			//if the two strings do not equal each other, make the TreeItem
-			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {makeTreeItem(nameProduct, treeView.getRoot());}
+			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {
+				makeTreeItem(nameProduct, treeView.getRoot());
+			}
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
 			//TODO: add pop up box notifying user to select an item.
@@ -278,7 +303,9 @@ public class WindowMaker extends Application {
 			//attempt to collect selection
 			TreeItem<Product> selectedItem = treeView.getSelectionModel().getSelectedItem();
 			//display window with Feature selection list
-			String nameOfFeature = Message.selectProduct("Please select the feature to add.", "Feature Selection", featureList);
+			String nameOfFeature = Message.selectProduct("Please select the feature to add.",
+					"Feature Selection",
+					featureList);
 			//add Feature to selected Product
 			makeTreeItem(nameOfFeature, selectedItem);
 		} catch (Exception e) {
@@ -291,7 +318,8 @@ public class WindowMaker extends Application {
 	private void deleteItem() {
 		String selectedItem = treeView.getSelectionModel().getSelectedItem().getValue().getModel();
 		Message.consoleMessage("Removing item from TreeView: " + selectedItem);
-		treeView.getSelectionModel().getSelectedItem().getParent().getChildren().remove(treeView.getSelectionModel().getSelectedItem());
+		treeView.getSelectionModel().getSelectedItem().getParent().getChildren().remove(
+				treeView.getSelectionModel().getSelectedItem());
 
 		if (treeView.getRoot().isLeaf()) {
 			Message.consoleMessage("Empty product list. Disabling Feature, Delete, and Edit buttons.");
@@ -303,10 +331,30 @@ public class WindowMaker extends Application {
 		treeView.getSelectionModel().clearSelection();
 	}
 
-	private void editItem() {
-		Message.consoleMessage("Displaying item edit pane for item: " + treeView.getSelectionModel().getSelectedItem().getValue().getModel());
+	private void editItem(Product product) {
+		GridPane productDetailPane = new GridPane();
 
-		//rootPane.setCenter();
+		Message.consoleMessage("Displaying item edit pane for item: " + product.getModel());
+
+		//CREATE PRODUCT DETAIL PANE
+		//define GridPane objects
+		Button backToTable = new Button("<- Back to Product Table");
+		Label lblModel = new Label("Model");
+		productDetailPane.addRow(0,backToTable);
+		productDetailPane.addRow(1,lblModel);
+
+		//control objects
+		backToTable.setOnAction(event -> returnToTable());
+
+		genericPaneWrapper.getChildren().clear();
+		genericPaneWrapper.getChildren().add(productDetailPane);
+	}
+
+	private void returnToTable() {
+		Message.consoleMessage("Returning to Product Table view");
+
+		genericPaneWrapper.getChildren().clear();
+		genericPaneWrapper.getChildren().add(centerPane);
 	}
 
 }
