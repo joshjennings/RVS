@@ -32,7 +32,7 @@ public class WindowMaker extends Application {
 	//centerPane
 	TreeItem<Product> root;
 	TableView<Product> centerPane;
-	Pane genericPaneWrapper;
+	ScrollPane genericPaneWrapper;
 
 	public static void main(String[] args) {
 		Message.consoleMessage("Program launch arguments: ");
@@ -122,13 +122,15 @@ public class WindowMaker extends Application {
 		root = new TreeItem<>(new Product("root"));
 		centerPane  = new TableView<>();
 
-		genericPaneWrapper =  new Pane();
+		genericPaneWrapper =  new ScrollPane();
+		//fit to containing view pane
+		genericPaneWrapper.setFitToWidth(true);
+		genericPaneWrapper.setFitToHeight(true);
 
 		Message.consoleMessage("Adding center pane.");
 
 		//CREATE TREEVIEW
 		root.setExpanded(true);
-		//TODO: find a way to set the TreeView width
 
 		treeView = new TreeView<>(root);
 		treeView.setShowRoot(false);
@@ -208,11 +210,11 @@ public class WindowMaker extends Application {
 
 		//noinspection unchecked
 		centerPane.getColumns().addAll(columnModel,columnDesc,columnListPrice);
-
-
+		centerPane.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		centerPane.setMinWidth(columnModel.getMinWidth() + columnDesc.getMinWidth() + columnListPrice.getMinWidth());
 
 		//ADD BOTH PANES TO THE SPLITPANE
-		genericPaneWrapper.getChildren().add(centerPane);
+		genericPaneWrapper.setContent(centerPane);
 		SplitPane splitPane = new SplitPane(leftPane,genericPaneWrapper);
 		splitPane.setOrientation(Orientation.HORIZONTAL);
 		splitPane.setDividerPosition(0,0.2f);
@@ -220,13 +222,6 @@ public class WindowMaker extends Application {
 
 		return splitPane;
 	}
-
-//	private Node editPane(TableView<Product> tableView) {
-//		Label sampleLabel = new Label("TEST");
-//
-//
-//		return sampleLabel;
-//	}
 
 	/**
 	 * This method will create the bottomPane of the root BorderPane layout.
@@ -338,7 +333,7 @@ public class WindowMaker extends Application {
 
 		//CREATE PRODUCT DETAIL PANE
 		//define GridPane objects
-		Button backToTable = new Button("<- Back to Product Table");
+		Button backToTable = new Button("<- Back to Pricing Overview");
 		Label lblModel = new Label("Model");
 		productDetailPane.addRow(0,backToTable);
 		productDetailPane.addRow(1,lblModel);
@@ -346,15 +341,13 @@ public class WindowMaker extends Application {
 		//control objects
 		backToTable.setOnAction(event -> returnToTable());
 
-		genericPaneWrapper.getChildren().clear();
-		genericPaneWrapper.getChildren().add(productDetailPane);
+		genericPaneWrapper.setContent(productDetailPane);
 	}
 
 	private void returnToTable() {
 		Message.consoleMessage("Returning to Product Table view");
 
-		genericPaneWrapper.getChildren().clear();
-		genericPaneWrapper.getChildren().add(centerPane);
+		genericPaneWrapper.setContent(centerPane);
 	}
 
 }
