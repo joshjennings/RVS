@@ -271,17 +271,24 @@ public class WindowMaker extends Application {
 
 	private void addProduct() {
 		try {
+			TreeItem<Product> newProductItem = new TreeItem<>();
+
 			//display message box to select proper product
 			String nameProduct = Message.selectProduct("Please enter the product name.",
 					"Product Selection",
 					productList);
+
 			//if the two strings do not equal each other, make the TreeItem
 			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {
-				makeTreeItem(nameProduct, treeView.getRoot());
+				newProductItem = makeTreeItem(nameProduct, treeView.getRoot());
 			}
+
+			//TODO: automatically add features to packages
+			makeTreeItem("Vessel", newProductItem);
+			makeTreeItem("Oil pot", newProductItem);
+			makeTreeItem("Pumps", newProductItem);
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
-			//TODO: add pop up box notifying user to select an item.
 			Message.messageBox("Please select an item in the list.","Notification");
 		}
 
@@ -305,7 +312,6 @@ public class WindowMaker extends Application {
 			makeTreeItem(nameOfFeature, selectedItem);
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
-			//TODO: add pop up box notifying user to select an item.
 			Message.messageBox("Please select an item in the list.","Notification");
 		}
 	}
@@ -339,7 +345,11 @@ public class WindowMaker extends Application {
 		productDetailPane.addRow(1,lblModel);
 
 		//control objects
-		backToTable.setOnAction(event -> returnToTable());
+		//backToTable.setOnAction(event -> returnToTable());
+		backToTable.setOnAction(event -> {
+			Message.consoleMessage("Returning to Product Table view");
+			genericPaneWrapper.setContent(centerPane);
+		});
 
 		genericPaneWrapper.setContent(productDetailPane);
 	}

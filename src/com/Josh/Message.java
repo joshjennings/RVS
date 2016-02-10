@@ -30,6 +30,7 @@ import static java.lang.System.out;
 
 /**
  * This class contains standard message methods of various functionality.
+ *
  * @author Josh Jennings
  */
 public class Message {
@@ -44,6 +45,7 @@ public class Message {
 
 	/**
 	 * This method displays a message in the console formatted with the time stamp.
+	 *
 	 * @param message The String message that one wants displayed in the console.
 	 */
 	public static void consoleMessage(String message) {
@@ -94,11 +96,11 @@ public class Message {
 
 		Button btnYes = new Button();
 		btnYes.setText(textYes);
-		btnYes.setOnAction(e -> btnYes_Clicked() );
+		btnYes.setOnAction(e -> btnYes_Clicked());
 
 		Button btnNo = new Button();
 		btnNo.setText(textNo);
-		btnNo.setOnAction(e -> btnNo_Clicked() );
+		btnNo.setOnAction(e -> btnNo_Clicked());
 
 		HBox paneBtn = new HBox(20);
 		paneBtn.getChildren().addAll(btnYes, btnNo);
@@ -137,15 +139,15 @@ public class Message {
 		TextField textField = new TextField();
 
 		Button buttonEnter = new Button("Enter");
-		buttonEnter.setOnAction(e -> buttonEnterClicked(textField.getText()) );
+		buttonEnter.setOnAction(e -> buttonEnterClicked(textField.getText()));
 
 		Button buttonCancel = new Button("Cancel");
-		buttonCancel.setOnAction(e -> buttonCancelClicked() );
+		buttonCancel.setOnAction(e -> buttonCancelClicked());
 
 		HBox paneBtn = new HBox(20);
 		paneBtn.getChildren().addAll(buttonEnter, buttonCancel);
 		VBox pane = new VBox(20);
-		pane.getChildren().addAll(lbl,textField,paneBtn);
+		pane.getChildren().addAll(lbl, textField, paneBtn);
 		pane.setAlignment(Pos.CENTER);
 		Scene scene = new Scene(pane);
 		stage.setScene(scene);
@@ -167,6 +169,7 @@ public class Message {
 
 	public static String selectProduct(String message, String title, ObservableList<String> list) {
 		//TODO: Center the Enter and Cancel buttons
+		//TODO: employ this list model:http://stackoverflow.com/questions/26873045/how-do-you-add-labels-to-the-options-in-combobox-and-list
 		stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle(title);
@@ -184,16 +187,16 @@ public class Message {
 		productBox.getItems().addAll();
 
 		Button buttonEnter = new Button("Enter");
-		buttonEnter.setOnAction(e -> buttonEnterClicked(productBox.getValue()) );
+		buttonEnter.setOnAction(e -> buttonEnterClicked(productBox.getValue()));
 
 		Button buttonCancel = new Button("Cancel");
-		buttonCancel.setOnAction(e -> buttonCancelClicked() );
+		buttonCancel.setOnAction(e -> buttonCancelClicked());
 
 		HBox paneBtn = new HBox(20);
 		//paneBtn.getChildren().addAll(spacer, buttonEnter, buttonCancel, spacer);
 		paneBtn.getChildren().addAll(buttonEnter, buttonCancel);
 		VBox pane = new VBox(20);
-		pane.getChildren().addAll(lbl,productBox,paneBtn);
+		pane.getChildren().addAll(lbl, productBox, paneBtn);
 		pane.setAlignment(Pos.CENTER);
 		Scene scene = new Scene(pane);
 		stage.setScene(scene);
