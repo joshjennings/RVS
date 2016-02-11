@@ -334,30 +334,79 @@ public class WindowMaker extends Application {
 
 	private void editItem(Product product) {
 		GridPane productDetailPane = new GridPane();
-
 		Message.consoleMessage("Displaying item edit pane for item: " + product.getModel());
 
 		//CREATE PRODUCT DETAIL PANE
 		//define GridPane objects
+		//buttons
 		Button backToTable = new Button("<- Back to Pricing Overview");
+		//text labels
 		Label lblModel = new Label("Model");
-		productDetailPane.addRow(0,backToTable);
-		productDetailPane.addRow(1,lblModel);
+		Label lblSize = new Label("Size");
+		Label lblOrientation = new Label("Orientation");
+		Label lblDescription = new Label("Description");
+		//input controls
+		TextField inputModel = new TextField();
+		ComboBox<ComboBoxItem> inputSize = new ComboBox<>();
+		inputSize.getItems().addAll(
+				new ComboBoxItem("Pipe", false),
+				new ComboBoxItem("8", true),
+				new ComboBoxItem("10", true),
+				new ComboBoxItem("12", true),
+				new ComboBoxItem("", false),
+				new ComboBoxItem("Plate", false),
+				new ComboBoxItem("24", true),
+				new ComboBoxItem("36", true),
+				new ComboBoxItem("48", true)
+		);
+
+		inputSize.setCellFactory(listView -> new ListCell<ComboBoxItem>() {
+			@Override
+			public void updateItem(ComboBoxItem item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty) {
+					setText(null);
+					setDisable(false);
+				} else {
+					setText(item.toString());
+					setDisable(!item.isSelectable());
+				}
+			}
+		});
+
+		//add objects to GridPane
+		productDetailPane.add(lblModel,0,0);
+		productDetailPane.add(inputModel,1,0);
+		productDetailPane.add(lblSize,2,0);
+		productDetailPane.add(inputSize,3,0);
 
 		//control objects
-		//backToTable.setOnAction(event -> returnToTable());
 		backToTable.setOnAction(event -> {
 			Message.consoleMessage("Returning to Product Table view");
 			genericPaneWrapper.setContent(centerPane);
 		});
 
-		genericPaneWrapper.setContent(productDetailPane);
+		VBox gridPaneVbox = new VBox(backToTable,productDetailPane);
+		genericPaneWrapper.setContent(gridPaneVbox);
 	}
 
-	private void returnToTable() {
-		Message.consoleMessage("Returning to Product Table view");
+	public static class ComboBoxItem {
+		private final String name ;
+		private final boolean selectable ;
 
-		genericPaneWrapper.setContent(centerPane);
+		public ComboBoxItem(String name, boolean selectable) {
+			this.name = name ;
+			this.selectable = selectable ;
+		}
+
+		public boolean isSelectable() {
+			return selectable ;
+		}
+
+		@Override
+		public String toString() {
+			return name ;
+		}
 	}
 
 }
