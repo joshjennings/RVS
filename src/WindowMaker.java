@@ -333,8 +333,6 @@ public class WindowMaker extends Application {
 			Message.consoleMessage("Adding features for Accumulator");
 			makeTreeItem("Vessel", newProductItem);
 		}
-
-		return;
 	}
 
 	private void addFeature() {
