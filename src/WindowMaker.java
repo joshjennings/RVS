@@ -278,7 +278,8 @@ public class WindowMaker extends Application {
 					"Product Selection",
 					productList);
 
-			//if the two strings do not equal each other, make the TreeItem
+			//if Cancel or Close pushed or null item selected -> do nothing and return
+			//if legitimate item selected and Enter click -> make the TreeItem
 			if (Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW") || Objects.equals(nameProduct, null)) {
 				Message.consoleMessage("Add Product window cancelled.");
 				return;
@@ -287,9 +288,7 @@ public class WindowMaker extends Application {
 			}
 
 			//TODO: automatically add features to packages
-			makeTreeItem("Vessel", newProductItem);
-			makeTreeItem("Oil pot", newProductItem);
-			makeTreeItem("Pumps", newProductItem);
+			addSubFeatures(newProductItem);
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
 			Message.messageBox("Please select an item in the list.","Notification");
@@ -300,6 +299,42 @@ public class WindowMaker extends Application {
 			buttonDeleteItem.setDisable(false);
 			buttonEditItem.setDisable(false);
 		}
+	}
+
+	private void addSubFeatures(TreeItem<Product> newProductItem) {
+		Message.consoleMessage("Automatically adding subfeatures");
+
+		if (newProductItem.getValue().getModel().equals("MRP")) {
+			Message.consoleMessage("Adding features for MRP");
+			makeTreeItem("Vessel", newProductItem);
+			makeTreeItem("Oil pot", newProductItem);
+			makeTreeItem("Pumps", newProductItem);
+		} else if (newProductItem.getValue().getModel().equals("MPC")) {
+			Message.consoleMessage("Adding features for MPC");
+			makeTreeItem("Vessel", newProductItem);
+			makeTreeItem("Oil pot", newProductItem);
+		} else if (newProductItem.getValue().getModel().equals("MVI")) {
+			Message.consoleMessage("Adding features for MVI");
+			makeTreeItem("Vessel", newProductItem);
+			makeTreeItem("Oil pot", newProductItem);
+		} else if (newProductItem.getValue().getModel().equals("HPR")) {
+			Message.consoleMessage("Adding features for HPR");
+			makeTreeItem("Vessel", newProductItem);
+		} else if (newProductItem.getValue().getModel().equals("TSR")) {
+			Message.consoleMessage("Adding features for TSR");
+			makeTreeItem("Vessel", newProductItem);
+		} else if (newProductItem.getValue().getModel().equals("Recirculator")) {
+			Message.consoleMessage("Adding features for Recirculator");
+			makeTreeItem("Vessel", newProductItem);
+		} else if (newProductItem.getValue().getModel().equals("Intercooler")) {
+			Message.consoleMessage("Adding features for Intercooler");
+			makeTreeItem("Vessel", newProductItem);
+		} else if (newProductItem.getValue().getModel().equals("Accumulator")) {
+			Message.consoleMessage("Adding features for Accumulator");
+			makeTreeItem("Vessel", newProductItem);
+		}
+
+		return;
 	}
 
 	private void addFeature() {
