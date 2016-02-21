@@ -279,7 +279,10 @@ public class WindowMaker extends Application {
 					productList);
 
 			//if the two strings do not equal each other, make the TreeItem
-			if (!Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW")) {
+			if (Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW") || Objects.equals(nameProduct, null)) {
+				Message.consoleMessage("Add Product window cancelled.");
+				return;
+			} else {
 				newProductItem = makeTreeItem(nameProduct, treeView.getRoot());
 			}
 
