@@ -271,7 +271,7 @@ public class WindowMaker extends Application {
 
 	private void addProduct() {
 		try {
-			TreeItem<Product> newProductItem = new TreeItem<>();
+			TreeItem<Product> newProductItem;
 
 			//display message box to select proper product
 			String nameProduct = Message.selectProduct("Please enter the product name.",
