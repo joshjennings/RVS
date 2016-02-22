@@ -18,6 +18,7 @@ import java.util.Objects;
 
 /**
  * This primary (main) class instantiates a window for data entry and creation.
+ *
  * @author Josh Jennings
  */
 public class WindowMaker extends Application {
@@ -36,10 +37,11 @@ public class WindowMaker extends Application {
 
 	public static void main(String[] args) {
 		Message.consoleMessage("Program launch arguments: ");
-		if (args.length == 0) {Message.consoleMessage("   <None>");}
-		else {
+		if (args.length == 0) {
+			Message.consoleMessage("   <None>");
+		} else {
 			for (int counter = 0; counter < args.length; counter++) {
-				Message.consoleMessage("   " + (counter+1) + ".) " + args[counter]);
+				Message.consoleMessage("   " + (counter + 1) + ".) " + args[counter]);
 			}
 		}
 		//TODO: add new method to create splash screen
@@ -56,7 +58,8 @@ public class WindowMaker extends Application {
 		launch(args);
 	}
 
-	@Override public void start(Stage primaryStage) {
+	@Override
+	public void start(Stage primaryStage) {
 		//initialize everything
 		Message.consoleMessage("Initializing data.");
 		initialize();
@@ -96,6 +99,7 @@ public class WindowMaker extends Application {
 
 	/**
 	 * This method will create the topPane of the root BorderPane layout.
+	 *
 	 * @return Returns the Node that will be displayed in the topPane.
 	 */
 	private Node topPane() {
@@ -116,13 +120,14 @@ public class WindowMaker extends Application {
 
 	/**
 	 * This method will create the centerPane of the root BorderPane layout.
+	 *
 	 * @return Returns the Node that will be displayed in the centerPane.
 	 */
 	private Node centerPane() {
 		root = new TreeItem<>(new Product("root"));
-		centerPane  = new TableView<>();
+		centerPane = new TableView<>();
 
-		genericPaneWrapper =  new ScrollPane();
+		genericPaneWrapper = new ScrollPane();
 		//fit to containing view pane
 		genericPaneWrapper.setFitToWidth(true);
 		genericPaneWrapper.setFitToHeight(true);
@@ -165,7 +170,7 @@ public class WindowMaker extends Application {
 		buttonEditItem.setMinWidth(85);
 		buttonEditItem.setPrefWidth(100);
 		buttonEditItem.setDisable(true);
-		buttonBar.getChildren().addAll(buttonAddProduct,buttonAddFeature,buttonDeleteItem,buttonEditItem);
+		buttonBar.getChildren().addAll(buttonAddProduct, buttonAddFeature, buttonDeleteItem, buttonEditItem);
 		buttonBar.setPrefWidth(400);
 		buttonBar.setMaxWidth(800);
 
@@ -175,8 +180,8 @@ public class WindowMaker extends Application {
 		buttonDeleteItem.setOnAction(event -> deleteItem());
 		buttonEditItem.setOnAction(event -> editItem(treeView.getSelectionModel().getSelectedItem().getValue()));
 
-		VBox leftPane = new VBox(treeView,buttonBar);
-		VBox.setVgrow(treeView,Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
+		VBox leftPane = new VBox(treeView, buttonBar);
+		VBox.setVgrow(treeView, Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
 
 		//CREATE TABLEVIEW
 		//centerPane = new TableView<>();
@@ -193,31 +198,31 @@ public class WindowMaker extends Application {
 
 		//CREATE TABLE COLUMNS
 		//model column
-		TableColumn<Product,String> columnModel = new TableColumn<>("Model");
+		TableColumn<Product, String> columnModel = new TableColumn<>("Model");
 		columnModel.setMinWidth(100);
 		columnModel.setPrefWidth(150);
 		columnModel.setCellValueFactory(new PropertyValueFactory<>("model"));
 		//description column
-		TableColumn<Product,String> columnDesc = new TableColumn<>("Description");
+		TableColumn<Product, String> columnDesc = new TableColumn<>("Description");
 		columnDesc.setMinWidth(200);
 		columnDesc.setPrefWidth(300);
 		columnDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
 		//price column
-		TableColumn<Product,String> columnListPrice = new TableColumn<>("List Price");
+		TableColumn<Product, String> columnListPrice = new TableColumn<>("List Price");
 		columnListPrice.setMinWidth(100);
 		columnListPrice.setPrefWidth(150);
 		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceListFormatted"));
 
 		//noinspection unchecked
-		centerPane.getColumns().addAll(columnModel,columnDesc,columnListPrice);
+		centerPane.getColumns().addAll(columnModel, columnDesc, columnListPrice);
 		centerPane.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		centerPane.setMinWidth(columnModel.getMinWidth() + columnDesc.getMinWidth() + columnListPrice.getMinWidth());
 
 		//ADD BOTH PANES TO THE SPLITPANE
 		genericPaneWrapper.setContent(centerPane);
-		SplitPane splitPane = new SplitPane(leftPane,genericPaneWrapper);
+		SplitPane splitPane = new SplitPane(leftPane, genericPaneWrapper);
 		splitPane.setOrientation(Orientation.HORIZONTAL);
-		splitPane.setDividerPosition(0,0.2f);
+		splitPane.setDividerPosition(0, 0.2f);
 		SplitPane.setResizableWithParent(leftPane, false); //static method
 
 		return splitPane;
@@ -225,6 +230,7 @@ public class WindowMaker extends Application {
 
 	/**
 	 * This method will create the bottomPane of the root BorderPane layout.
+	 *
 	 * @return Returns the Node that will be displayed in the bottomPane.
 	 */
 	private Node bottomPane() {
@@ -256,7 +262,8 @@ public class WindowMaker extends Application {
 
 	/**
 	 * This class will construct new items for a TreeView.
-	 * @param title Title of the new node/leaf item.
+	 *
+	 * @param title  Title of the new node/leaf item.
 	 * @param parent Parent of the new node/leaf item.
 	 * @return Returns the new TreeItem created in this method. Returned object can be used to create sub-nodes.
 	 */
@@ -291,7 +298,7 @@ public class WindowMaker extends Application {
 			addSubFeatures(newProductItem);
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
-			Message.messageBox("Please select an item in the list.","Notification");
+			Message.messageBox("Please select an item in the list.", "Notification");
 		}
 
 		if (!treeView.getRoot().isLeaf()) {
@@ -348,7 +355,7 @@ public class WindowMaker extends Application {
 			makeTreeItem(nameOfFeature, selectedItem);
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
-			Message.messageBox("Please select an item in the list.","Notification");
+			Message.messageBox("Please select an item in the list.", "Notification");
 		}
 	}
 
@@ -411,10 +418,12 @@ public class WindowMaker extends Application {
 		});
 
 		//add objects to GridPane
-		productDetailPane.add(lblModel,0,0);
-		productDetailPane.add(inputModel,1,0);
-		productDetailPane.add(lblSize,2,0);
-		productDetailPane.add(inputSize,3,0);
+		productDetailPane.add(lblModel, 0, 0);
+		productDetailPane.add(inputModel, 1, 0);
+		productDetailPane.add(lblSize, 2, 0);
+		productDetailPane.add(inputSize, 3, 0);
+		productDetailPane.add(lblOrientation, 4, 0);
+		productDetailPane.add(lblDescription, 0, 1);
 
 		//control objects
 		backToTable.setOnAction(event -> {
@@ -422,26 +431,26 @@ public class WindowMaker extends Application {
 			genericPaneWrapper.setContent(centerPane);
 		});
 
-		VBox gridPaneVbox = new VBox(backToTable,productDetailPane);
+		VBox gridPaneVbox = new VBox(backToTable, productDetailPane);
 		genericPaneWrapper.setContent(gridPaneVbox);
 	}
 
 	public static class ComboBoxItem {
-		private final String name ;
-		private final boolean selectable ;
+		private final String name;
+		private final boolean selectable;
 
 		public ComboBoxItem(String name, boolean selectable) {
-			this.name = name ;
-			this.selectable = selectable ;
+			this.name = name;
+			this.selectable = selectable;
 		}
 
 		public boolean isSelectable() {
-			return selectable ;
+			return selectable;
 		}
 
 		@Override
 		public String toString() {
-			return name ;
+			return name;
 		}
 	}
 
