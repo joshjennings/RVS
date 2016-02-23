@@ -1,5 +1,8 @@
+import com.RVS.Accessories.ControlPanel;
+import com.RVS.Accessories.Pump;
 import com.RVS.Products.Product;
 import com.RVS.Accessories.Feature;
+import com.RVS.Products.Vessel;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -276,7 +279,17 @@ public class WindowMaker extends Application {
 	 */
 	private TreeItem<Product> makeTreeItem(String title, TreeItem<Product> parent) {
 		Message.consoleMessage("Adding TreeView item. Item: " + title + " | ChildTo: " + parent.getValue().getModel());
-		TreeItem<Product> newItem = new TreeItem<>(new Product(title));
+
+		TreeItem<Product> newItem;
+		if (title.equals("Vessel")) {
+			newItem = new TreeItem<>(new Vessel(title));
+		} else if (title.equals("Pumps")) {
+			newItem = new TreeItem<>(new Pump(title));
+		} else if (title.equals("Control Panel")) {
+			newItem = new TreeItem<>(new ControlPanel(title));
+		} else {
+			newItem = new TreeItem<>(new Product(title));
+		}
 		newItem.setExpanded(true);
 		parent.getChildren().add(newItem);
 		Message.consoleMessage("TreeItem Product count: " + parent.getChildren().size());
@@ -321,8 +334,11 @@ public class WindowMaker extends Application {
 		if (newProductItem.getValue().getModel().equals("MRP")) {
 			Message.consoleMessage("Adding features for MRP");
 			makeTreeItem("Vessel", newProductItem);
+			makeTreeItem("Level column", newProductItem);
 			makeTreeItem("Oil pot", newProductItem);
 			makeTreeItem("Pumps", newProductItem);
+			makeTreeItem("Control Panel", newProductItem);
+			makeTreeItem("Liquid feed", newProductItem);
 		} else if (newProductItem.getValue().getModel().equals("MPC")) {
 			Message.consoleMessage("Adding features for MPC");
 			makeTreeItem("Vessel", newProductItem);
@@ -383,74 +399,88 @@ public class WindowMaker extends Application {
 	}
 
 	private void editItem(Product product) {
-		GridPane productDetailPane = new GridPane();
-		Message.consoleMessage("Displaying item edit pane for item: " + product.getModel());
-
-		//CREATE PRODUCT DETAIL PANE
-		//define GridPane objects
+		//will always include "back" button. instantiate and then move on.
 		//buttons
 		Button backToTable = new Button("<- Back to Pricing Overview");
-		//text labels
-		Label lblModel = new Label("Model");
-		Label lblSize = new Label("Size");
-		Label lblOrientation = new Label("Orientation");
-		Label lblDescription = new Label("Description");
-		Label lblList = new Label("List");
-		Label lblMultiplier = new Label("Multiplier");
-		Label lblNet = new Label("Net");
-		//input controls
-		TextField inputModel = new TextField();
-		ComboBox<ComboBoxItem> inputSize = new ComboBox<>();
-		ComboBox<String> inputOrientation = new ComboBox<>();
-		TextField inputDescription = new TextField();
-		//manage input controls
-		inputSize.getItems().addAll(
-				new ComboBoxItem("Pipe", false),
-				new ComboBoxItem("8", true),
-				new ComboBoxItem("10", true),
-				new ComboBoxItem("12", true),
-				new ComboBoxItem("", false),
-				new ComboBoxItem("Plate", false),
-				new ComboBoxItem("24", true),
-				new ComboBoxItem("36", true),
-				new ComboBoxItem("48", true)
-		);
-		inputSize.setCellFactory(listView -> new ListCell<ComboBoxItem>() {
-			@Override
-			public void updateItem(ComboBoxItem item, boolean empty) {
-				super.updateItem(item, empty);
-				if (empty) {
-					setText(null);
-					setDisable(false);
-				} else {
-					setText(item.toString());
-					setDisable(!item.isSelectable());
-				}
-			}
-		});
-		inputOrientation.getItems().addAll("Vertical","Horizontal");
-		inputDescription.setEditable(false);
-		inputDescription.setText(product.getDescription());
-
-		//add objects to GridPane
-		productDetailPane.add(lblModel, 0, 0);
-		productDetailPane.add(inputModel, 1, 0);
-		productDetailPane.add(lblSize, 2, 0);
-		productDetailPane.add(inputSize, 3, 0);
-		productDetailPane.add(lblOrientation, 4, 0);
-		productDetailPane.add(inputOrientation, 5,0);
-		productDetailPane.add(lblDescription, 0, 1);
-		productDetailPane.add(inputDescription, 1,1);
-		productDetailPane.add(new Label(""),0,2);
-		productDetailPane.add(lblList,0,3);
-		productDetailPane.add(lblMultiplier,0,4);
-		productDetailPane.add(lblNet,0,5);
-
 		//control objects
 		backToTable.setOnAction(event -> {
 			Message.consoleMessage("Returning to Product Table view");
 			genericPaneWrapper.setContent(centerPane);
 		});
+
+		//pre-define GridPane for all cases of the edit window
+		Pane productDetailPane;
+
+		//determine if there is a predefined instance method for the edit window in question
+		//each if statement must define productDetailPane so that it may be passed after all if statements
+		if (product instanceof ControlPanel) {
+			productDetailPane = ((ControlPanel) product).editWindow();
+		} else {
+			GridPane gridPane = new GridPane();
+			Message.consoleMessage("Displaying item edit pane for item: " + product.getModel());
+
+			//CREATE PRODUCT DETAIL PANE
+			//define GridPane objects
+
+			//text labels
+			Label lblModel = new Label("Model");
+			Label lblSize = new Label("Size");
+			Label lblOrientation = new Label("Orientation");
+			Label lblDescription = new Label("Description");
+			Label lblList = new Label("List");
+			Label lblMultiplier = new Label("Multiplier");
+			Label lblNet = new Label("Net");
+			//input controls
+			TextField inputModel = new TextField();
+			ComboBox<ComboBoxItem> inputSize = new ComboBox<>();
+			ComboBox<String> inputOrientation = new ComboBox<>();
+			TextField inputDescription = new TextField();
+			//manage input controls
+			inputSize.getItems().addAll(
+					new ComboBoxItem("Pipe", false),
+					new ComboBoxItem("8", true),
+					new ComboBoxItem("10", true),
+					new ComboBoxItem("12", true),
+					new ComboBoxItem("", false),
+					new ComboBoxItem("Plate", false),
+					new ComboBoxItem("24", true),
+					new ComboBoxItem("36", true),
+					new ComboBoxItem("48", true)
+			);
+			inputSize.setCellFactory(listView -> new ListCell<ComboBoxItem>() {
+				@Override
+				public void updateItem(ComboBoxItem item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty) {
+						setText(null);
+						setDisable(false);
+					} else {
+						setText(item.toString());
+						setDisable(!item.isSelectable());
+					}
+				}
+			});
+			inputOrientation.getItems().addAll("Vertical", "Horizontal");
+			inputDescription.setEditable(false);
+			inputDescription.setText(product.getDescription());
+
+			//add objects to GridPane
+			gridPane.add(lblModel, 0, 0);
+			gridPane.add(inputModel, 1, 0);
+			gridPane.add(lblSize, 2, 0);
+			gridPane.add(inputSize, 3, 0);
+			gridPane.add(lblOrientation, 4, 0);
+			gridPane.add(inputOrientation, 5, 0);
+			gridPane.add(lblDescription, 0, 1);
+			gridPane.add(inputDescription, 1, 1);
+			gridPane.add(new Label(""), 0, 2);
+			gridPane.add(lblList, 0, 3);
+			gridPane.add(lblMultiplier, 0, 4);
+			gridPane.add(lblNet, 0, 5);
+
+			productDetailPane = new Pane();
+			productDetailPane.getChildren().add(gridPane);
+		}
 
 		VBox gridPaneVbox = new VBox(backToTable, productDetailPane);
 		genericPaneWrapper.setContent(gridPaneVbox);
