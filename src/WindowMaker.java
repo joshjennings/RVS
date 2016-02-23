@@ -237,7 +237,14 @@ public class WindowMaker extends Application {
 		Message.consoleMessage("Adding bottom pane.");
 		//create control buttons
 		Button buttonOK = new Button("OK");
-		Button buttonCancel = new Button("Cancel");
+		Button buttonClose = new Button("Close");
+
+		//set button actions
+		buttonClose.setOnAction(event -> {
+			Message.consoleMessage("Closing program");
+			Stage stageToClose = (Stage) buttonClose.getScene().getWindow();
+			stageToClose.close();
+		});
 
 		//create radio button drop down
 		RadioButton rbOne = new RadioButton("One");
@@ -254,7 +261,7 @@ public class WindowMaker extends Application {
 		dropDownBox.setCollapsible(true);
 
 		//create bottom pane - removed dropdown selection box
-		HBox bottomPane = new HBox(10, spacer, buttonOK, buttonCancel);
+		HBox bottomPane = new HBox(10, spacer, buttonOK, buttonClose);
 		bottomPane.setPadding(new Insets(10));
 
 		return bottomPane;
@@ -388,9 +395,15 @@ public class WindowMaker extends Application {
 		Label lblSize = new Label("Size");
 		Label lblOrientation = new Label("Orientation");
 		Label lblDescription = new Label("Description");
+		Label lblList = new Label("List");
+		Label lblMultiplier = new Label("Multiplier");
+		Label lblNet = new Label("Net");
 		//input controls
 		TextField inputModel = new TextField();
 		ComboBox<ComboBoxItem> inputSize = new ComboBox<>();
+		ComboBox<String> inputOrientation = new ComboBox<>();
+		TextField inputDescription = new TextField();
+		//manage input controls
 		inputSize.getItems().addAll(
 				new ComboBoxItem("Pipe", false),
 				new ComboBoxItem("8", true),
@@ -402,7 +415,6 @@ public class WindowMaker extends Application {
 				new ComboBoxItem("36", true),
 				new ComboBoxItem("48", true)
 		);
-
 		inputSize.setCellFactory(listView -> new ListCell<ComboBoxItem>() {
 			@Override
 			public void updateItem(ComboBoxItem item, boolean empty) {
@@ -416,6 +428,9 @@ public class WindowMaker extends Application {
 				}
 			}
 		});
+		inputOrientation.getItems().addAll("Vertical","Horizontal");
+		inputDescription.setEditable(false);
+		inputDescription.setText(product.getDescription());
 
 		//add objects to GridPane
 		productDetailPane.add(lblModel, 0, 0);
@@ -423,7 +438,13 @@ public class WindowMaker extends Application {
 		productDetailPane.add(lblSize, 2, 0);
 		productDetailPane.add(inputSize, 3, 0);
 		productDetailPane.add(lblOrientation, 4, 0);
+		productDetailPane.add(inputOrientation, 5,0);
 		productDetailPane.add(lblDescription, 0, 1);
+		productDetailPane.add(inputDescription, 1,1);
+		productDetailPane.add(new Label(""),0,2);
+		productDetailPane.add(lblList,0,3);
+		productDetailPane.add(lblMultiplier,0,4);
+		productDetailPane.add(lblNet,0,5);
 
 		//control objects
 		backToTable.setOnAction(event -> {
