@@ -415,68 +415,13 @@ public class WindowMaker extends Application {
 		//each if statement must define productDetailPane so that it may be passed after all if statements
 		if (product instanceof ControlPanel) {
 			productDetailPane = ((ControlPanel) product).editWindow();
+		} else if (product instanceof Vessel) {
+			productDetailPane = ((Vessel) product).editWindow();
+		} else if (product instanceof Pump) {
+			productDetailPane = ((Pump) product).editWindow();
 		} else {
 			GridPane gridPane = new GridPane();
 			Message.consoleMessage("Displaying item edit pane for item: " + product.getModel());
-
-			//CREATE PRODUCT DETAIL PANE
-			//define GridPane objects
-
-			//text labels
-			Label lblModel = new Label("Model");
-			Label lblSize = new Label("Size");
-			Label lblOrientation = new Label("Orientation");
-			Label lblDescription = new Label("Description");
-			Label lblList = new Label("List");
-			Label lblMultiplier = new Label("Multiplier");
-			Label lblNet = new Label("Net");
-			//input controls
-			TextField inputModel = new TextField();
-			ComboBox<ComboBoxItem> inputSize = new ComboBox<>();
-			ComboBox<String> inputOrientation = new ComboBox<>();
-			TextField inputDescription = new TextField();
-			//manage input controls
-			inputSize.getItems().addAll(
-					new ComboBoxItem("Pipe", false),
-					new ComboBoxItem("8", true),
-					new ComboBoxItem("10", true),
-					new ComboBoxItem("12", true),
-					new ComboBoxItem("", false),
-					new ComboBoxItem("Plate", false),
-					new ComboBoxItem("24", true),
-					new ComboBoxItem("36", true),
-					new ComboBoxItem("48", true)
-			);
-			inputSize.setCellFactory(listView -> new ListCell<ComboBoxItem>() {
-				@Override
-				public void updateItem(ComboBoxItem item, boolean empty) {
-					super.updateItem(item, empty);
-					if (empty) {
-						setText(null);
-						setDisable(false);
-					} else {
-						setText(item.toString());
-						setDisable(!item.isSelectable());
-					}
-				}
-			});
-			inputOrientation.getItems().addAll("Vertical", "Horizontal");
-			inputDescription.setEditable(false);
-			inputDescription.setText(product.getDescription());
-
-			//add objects to GridPane
-			gridPane.add(lblModel, 0, 0);
-			gridPane.add(inputModel, 1, 0);
-			gridPane.add(lblSize, 2, 0);
-			gridPane.add(inputSize, 3, 0);
-			gridPane.add(lblOrientation, 4, 0);
-			gridPane.add(inputOrientation, 5, 0);
-			gridPane.add(lblDescription, 0, 1);
-			gridPane.add(inputDescription, 1, 1);
-			gridPane.add(new Label(""), 0, 2);
-			gridPane.add(lblList, 0, 3);
-			gridPane.add(lblMultiplier, 0, 4);
-			gridPane.add(lblNet, 0, 5);
 
 			productDetailPane = new Pane();
 			productDetailPane.getChildren().add(gridPane);

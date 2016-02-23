@@ -17,6 +17,11 @@ public class ControlPanel extends Product {
 		this.model = model;
 	}
 
+	@Override
+	public String toString() {
+		return this.model;
+	}
+
 	public Pane editWindow() {
 		GridPane controlPanelEditPane = new GridPane();
 
