@@ -31,6 +31,34 @@ public class Vessel extends Product {
 		this.description = model;
 	}
 
+	public void setModel(String model) {
+		this.model = model;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setDiameter(int diameter) {
+		this.diameter = diameter;
+	}
+
+	public void setLength(BigDecimal length) {
+		this.length = length;
+	}
+
+	public void setOrientation(Orient orientation) {
+		this.orientation = orientation;
+	}
+
+	public void setPriceList(BigDecimal priceList) {
+		this.priceList = priceList;
+	}
+
+	public void setMaterial(Material material) {
+		this.material = material;
+	}
+
 	@Override
 	public String toString() {
 		return this.model;

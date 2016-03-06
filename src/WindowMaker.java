@@ -321,6 +321,7 @@ public class WindowMaker extends Application {
 			Message.messageBox("Please select an item in the list.", "Notification");
 		}
 
+		//if there are no remaining TreeItems remaining, make specific buttons unavailable
 		if (!treeView.getRoot().isLeaf()) {
 			buttonAddFeature.setDisable(false);
 			buttonDeleteItem.setDisable(false);
@@ -366,6 +367,10 @@ public class WindowMaker extends Application {
 	}
 
 	private void addFeature() {
+		//TODO: if "Add Feature" is clicked and then closed, the previously added instance is re-added as sub-feature
+		//replicate: Click "Add Feature", Do not select anythin in ComboBox, Close window. New item is sub-feature
+		//to whatever was selected item in ListView. FIX!
+
 		//attempt to collect the selected TreeItem
 		try {
 			//attempt to collect selection
