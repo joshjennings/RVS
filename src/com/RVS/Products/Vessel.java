@@ -1,6 +1,8 @@
 package com.RVS.Products;
 
 import com.Josh.Message;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -139,9 +141,17 @@ public class Vessel extends Product {
 
 		}
 		//set Lambda for ComboBox clicking event
-		inputSize.setOnMouseClicked(event -> { /* DOESN'T WORK YET!!!!!!!!!!!! setOnMouseClick is the wrong method */
-			String diameter = inputSize.getValue().name;
-			this.setDiameter(Integer.parseInt(diameter));
+//		inputSize.setOnMouseReleased(event -> { /* DOESN'T WORK YET!!!!!!!!!!!! setOnMouseClick is the wrong method */
+//			String diameter = inputSize.getValue().name;
+//			this.setDiameter(Integer.parseInt(diameter));
+//		});
+		inputSize.valueProperty().addListener(new ChangeListener<ComboBoxItem>() {
+			@Override
+			public void changed(ObservableValue<? extends ComboBoxItem> observable, ComboBoxItem oldValue, ComboBoxItem newValue) {
+				Message.consoleMessage("Changing selected property's size from " + oldValue + " to " + newValue + ".");
+				String diameter = newValue.name;
+				//TODO: change instance field with "diameter"
+			}
 		});
 		inputOrientation.getItems().addAll("Vertical", "Horizontal");
 		inputDescription.setEditable(false);
