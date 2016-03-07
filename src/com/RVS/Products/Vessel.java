@@ -12,15 +12,17 @@ import java.math.BigDecimal;
 
 /**
  * Created by Josh on 12/16/2015.
+ *
  * @author Josh Jennings
  */
 public class Vessel extends Product {
-	String model, description;
-	int diameter;
-	BigDecimal length;
-	Orient orientation;
-	BigDecimal priceList;
-	Material material;
+
+	private String model, description;
+	private int diameter;
+	private BigDecimal length;
+	private Orient orientation;
+	private BigDecimal priceList;
+	private Material material;
 
 	public Vessel() {
 		super();
@@ -29,6 +31,7 @@ public class Vessel extends Product {
 	public Vessel(String model) {
 		this.model = model;
 		this.description = model;
+//		Message.consoleMessage("Diameter: " + this.diameter);
 	}
 
 	public void setModel(String model) {
@@ -119,6 +122,27 @@ public class Vessel extends Product {
 				}
 			}
 		});
+		//if diameter of instance is already selected, fill in the ComboBox
+		if (this.diameter != 0) { //if zero, skip because it's not been instantiated yet
+			ComboBoxItem selectedDiameter = new ComboBoxItem("",false);
+			//iterate through list to find assigned size
+			for (ComboBoxItem listOfDiameters : inputSize.getItems()) {
+				//if assigned size matches an item in the list, assign to
+				if (this.diameter == Integer.parseInt(listOfDiameters.name)) {
+					selectedDiameter = listOfDiameters;
+					break;
+				}
+			}
+			//select matching size in list
+			inputSize.setValue(selectedDiameter);
+			//TODO: define what to do if matching list item was not found
+
+		}
+		//set Lambda for ComboBox clicking event
+		inputSize.setOnMouseClicked(event -> { /* DOESN'T WORK YET!!!!!!!!!!!! setOnMouseClick is the wrong method */
+			String diameter = inputSize.getValue().name;
+			this.setDiameter(Integer.parseInt(diameter));
+		});
 		inputOrientation.getItems().addAll("Vertical", "Horizontal");
 		inputDescription.setEditable(false);
 		inputDescription.setText(this.getDescription());
@@ -141,6 +165,7 @@ public class Vessel extends Product {
 	}
 
 	public static class ComboBoxItem {
+
 		private final String name;
 		private final boolean selectable;
 
@@ -158,4 +183,6 @@ public class Vessel extends Product {
 			return name;
 		}
 	}
+
+
 }
