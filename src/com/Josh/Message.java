@@ -1,7 +1,5 @@
 package com.Josh;
 
-import com.RVS.Products.Product;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,8 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -20,11 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.lang.System.out;
 
@@ -170,6 +162,11 @@ public class Message {
 	public static String selectProduct(String message, String title, ObservableList<String> list) {
 		//TODO: Center the Enter and Cancel buttons
 		//TODO: employ this list model:http://stackoverflow.com/questions/26873045/how-do-you-add-labels-to-the-options-in-combobox-and-list
+
+		//initializes to ensure no old values are carried over in subsequent method calls
+		input = null;
+
+		//create Stage
 		stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle(title);

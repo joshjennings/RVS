@@ -1,7 +1,5 @@
-import com.RVS.Accessories.ControlPanel;
-import com.RVS.Accessories.Pump;
+import com.RVS.Accessories.*;
 import com.RVS.Products.Product;
-import com.RVS.Accessories.Feature;
 import com.RVS.Products.Vessel;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -273,7 +271,7 @@ public class WindowMaker extends Application {
 	/**
 	 * This class will construct new items for a TreeView.
 	 *
-	 * @param title  Title of the new node/leaf item.
+	 * @param title Title of the new node/leaf item.
 	 * @param parent Parent of the new node/leaf item.
 	 * @return Returns the new TreeItem created in this method. Returned object can be used to create sub-nodes.
 	 */
@@ -281,14 +279,28 @@ public class WindowMaker extends Application {
 		Message.consoleMessage("Adding TreeView item. Item: " + title + " | ChildTo: " + parent.getValue().getModel());
 
 		TreeItem<Product> newItem;
-		if (title.equals("Vessel")) {
-			newItem = new TreeItem<>(new Vessel(title));
-		} else if (title.equals("Pumps")) {
-			newItem = new TreeItem<>(new Pump(title));
-		} else if (title.equals("Control Panel")) {
-			newItem = new TreeItem<>(new ControlPanel(title));
-		} else {
-			newItem = new TreeItem<>(new Product(title));
+		switch (title) {
+			case "Vessel":
+				newItem = new TreeItem<>(new Vessel(title));
+				break;
+			case "Pumps":
+				newItem = new TreeItem<>(new Pump(title));
+				break;
+			case "Control Panel":
+				newItem = new TreeItem<>(new ControlPanel(title));
+				break;
+			case "Level Column":
+				newItem = new TreeItem<>(new LevelColumn(title));
+				break;
+			case "Liquid Feed":
+				newItem = new TreeItem<>(new LiquidFeed(title));
+				break;
+			case "Coil":
+				newItem = new TreeItem<>(new Coil(title));
+				break;
+			default:
+				newItem = new TreeItem<>(new Product(title));
+				break;
 		}
 		newItem.setExpanded(true);
 		parent.getChildren().add(newItem);
@@ -332,45 +344,83 @@ public class WindowMaker extends Application {
 	private void addSubFeatures(TreeItem<Product> newProductItem) {
 		Message.consoleMessage("Automatically adding subfeatures");
 
-		if (newProductItem.getValue().getModel().equals("MRP")) {
-			Message.consoleMessage("Adding features for MRP");
-			makeTreeItem("Vessel", newProductItem);
-			makeTreeItem("Level column", newProductItem);
-			makeTreeItem("Oil pot", newProductItem);
-			makeTreeItem("Pumps", newProductItem);
-			makeTreeItem("Control Panel", newProductItem);
-			makeTreeItem("Liquid feed", newProductItem);
-		} else if (newProductItem.getValue().getModel().equals("MPC")) {
-			Message.consoleMessage("Adding features for MPC");
-			makeTreeItem("Vessel", newProductItem);
-			makeTreeItem("Oil pot", newProductItem);
-		} else if (newProductItem.getValue().getModel().equals("MVI")) {
-			Message.consoleMessage("Adding features for MVI");
-			makeTreeItem("Vessel", newProductItem);
-			makeTreeItem("Oil pot", newProductItem);
-		} else if (newProductItem.getValue().getModel().equals("HPR")) {
-			Message.consoleMessage("Adding features for HPR");
-			makeTreeItem("Vessel", newProductItem);
-		} else if (newProductItem.getValue().getModel().equals("TSR")) {
-			Message.consoleMessage("Adding features for TSR");
-			makeTreeItem("Vessel", newProductItem);
-		} else if (newProductItem.getValue().getModel().equals("Recirculator")) {
-			Message.consoleMessage("Adding features for Recirculator");
-			makeTreeItem("Vessel", newProductItem);
-		} else if (newProductItem.getValue().getModel().equals("Intercooler")) {
-			Message.consoleMessage("Adding features for Intercooler");
-			makeTreeItem("Vessel", newProductItem);
-		} else if (newProductItem.getValue().getModel().equals("Accumulator")) {
-			Message.consoleMessage("Adding features for Accumulator");
-			makeTreeItem("Vessel", newProductItem);
+		switch (newProductItem.getValue().getModel()) {
+			case "MRP":
+				Message.consoleMessage("Adding features for MRP");
+				makeTreeItem("Vessel", newProductItem);
+				makeTreeItem("Level column", newProductItem);
+				makeTreeItem("Oil pot", newProductItem);
+				makeTreeItem("Pumps", newProductItem);
+				makeTreeItem("Control Panel", newProductItem);
+				makeTreeItem("Liquid feed", newProductItem);
+				break;
+			case "MPC":
+				Message.consoleMessage("Adding features for MPC");
+				makeTreeItem("Vessel", newProductItem);
+				makeTreeItem("Oil pot", newProductItem);
+				break;
+			case "MVI":
+				Message.consoleMessage("Adding features for MVI");
+				makeTreeItem("Vessel", newProductItem);
+				makeTreeItem("Oil pot", newProductItem);
+				break;
+			case "HPR":
+				Message.consoleMessage("Adding features for HPR");
+				makeTreeItem("Vessel", newProductItem);
+				break;
+			case "TSR":
+				Message.consoleMessage("Adding features for TSR");
+				makeTreeItem("Vessel", newProductItem);
+				break;
+			case "Recirculator":
+				Message.consoleMessage("Adding features for Recirculator");
+				makeTreeItem("Vessel", newProductItem);
+				break;
+			case "Intercooler":
+				Message.consoleMessage("Adding features for Intercooler");
+				makeTreeItem("Vessel", newProductItem);
+				break;
+			case "Accumulator":
+				Message.consoleMessage("Adding features for Accumulator");
+				makeTreeItem("Vessel", newProductItem);
+				break;
 		}
+
+//		if (newProductItem.getValue().getModel().equals("MRP")) {
+//			Message.consoleMessage("Adding features for MRP");
+//			makeTreeItem("Vessel", newProductItem);
+//			makeTreeItem("Level column", newProductItem);
+//			makeTreeItem("Oil pot", newProductItem);
+//			makeTreeItem("Pumps", newProductItem);
+//			makeTreeItem("Control Panel", newProductItem);
+//			makeTreeItem("Liquid feed", newProductItem);
+//		} else if (newProductItem.getValue().getModel().equals("MPC")) {
+//			Message.consoleMessage("Adding features for MPC");
+//			makeTreeItem("Vessel", newProductItem);
+//			makeTreeItem("Oil pot", newProductItem);
+//		} else if (newProductItem.getValue().getModel().equals("MVI")) {
+//			Message.consoleMessage("Adding features for MVI");
+//			makeTreeItem("Vessel", newProductItem);
+//			makeTreeItem("Oil pot", newProductItem);
+//		} else if (newProductItem.getValue().getModel().equals("HPR")) {
+//			Message.consoleMessage("Adding features for HPR");
+//			makeTreeItem("Vessel", newProductItem);
+//		} else if (newProductItem.getValue().getModel().equals("TSR")) {
+//			Message.consoleMessage("Adding features for TSR");
+//			makeTreeItem("Vessel", newProductItem);
+//		} else if (newProductItem.getValue().getModel().equals("Recirculator")) {
+//			Message.consoleMessage("Adding features for Recirculator");
+//			makeTreeItem("Vessel", newProductItem);
+//		} else if (newProductItem.getValue().getModel().equals("Intercooler")) {
+//			Message.consoleMessage("Adding features for Intercooler");
+//			makeTreeItem("Vessel", newProductItem);
+//		} else if (newProductItem.getValue().getModel().equals("Accumulator")) {
+//			Message.consoleMessage("Adding features for Accumulator");
+//			makeTreeItem("Vessel", newProductItem);
+//		}
 	}
 
 	private void addFeature() {
-		//TODO: if "Add Feature" is clicked and then closed, the previously added instance is re-added as sub-feature
-		//replicate: Click "Add Feature", Do not select anythin in ComboBox, Close window. New item is sub-feature
-		//to whatever was selected item in ListView. FIX!
-
 		//attempt to collect the selected TreeItem
 		try {
 			//attempt to collect selection
@@ -404,12 +454,13 @@ public class WindowMaker extends Application {
 	}
 
 	private void editItem(Product product) {
-		//will always include "back" button. instantiate and then move on.
+		//will always include "back" button. Instantiate, control, and then move on.
 		//buttons
-		Button backToTable = new Button("<- Back to Pricing Overview");
+		Button backToTable = new Button("<- Back to Pricing Overview"); //improve on the back arrow - make an image
 		//control objects
 		backToTable.setOnAction(event -> {
 			Message.consoleMessage("Returning to Product Table view");
+			treeView.setDisable(false);
 			genericPaneWrapper.setContent(centerPane);
 		});
 
@@ -424,6 +475,10 @@ public class WindowMaker extends Application {
 			productDetailPane = ((Vessel) product).editWindow();
 		} else if (product instanceof Pump) {
 			productDetailPane = ((Pump) product).editWindow();
+		} else if (product instanceof LevelColumn) {
+			productDetailPane = ((LevelColumn) product).editWindow();
+		} else if (product instanceof LiquidFeed) {
+			productDetailPane = ((LiquidFeed) product).editWindow();
 		} else {
 			GridPane gridPane = new GridPane();
 			Message.consoleMessage("Displaying item edit pane for item: " + product.getModel());
@@ -432,10 +487,15 @@ public class WindowMaker extends Application {
 			productDetailPane.getChildren().add(gridPane);
 		}
 
-		VBox gridPaneVbox = new VBox(backToTable, productDetailPane);
+		//disable the TreeView to avoid selecting another TreeItem that is different than what is shown in editWindow()
+		treeView.setDisable(true);
+
+		VBox gridPaneVbox = new VBox(backToTable, new Separator(), productDetailPane);
+		gridPaneVbox.setPadding(new Insets(10));
 		genericPaneWrapper.setContent(gridPaneVbox);
 	}
 
+	@SuppressWarnings("unused")
 	public static class ComboBoxItem {
 		private final String name;
 		private final boolean selectable;

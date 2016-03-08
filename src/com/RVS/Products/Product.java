@@ -84,7 +84,7 @@ public class Product {
 
 	@SuppressWarnings("unused")
 	public enum Orient {
-		HORIZONTAL, VERTICAL
+		HORIZONTAL, VERTICAL, UNASSIGNED
 	}
 
 	@SuppressWarnings("unused")
