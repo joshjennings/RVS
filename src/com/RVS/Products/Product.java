@@ -13,10 +13,10 @@ import java.util.*;
  *
  * @author Josh Jennings
  */
-public class Product {
+public abstract class Product {
 
 	String model, description;
-	int diameter;
+//	int diameter;
 	BigDecimal length;
 	Orient orientation;
 	BigDecimal priceList;
@@ -28,7 +28,7 @@ public class Product {
 	 */
 	public Product() {
 		this.model = "";
-		this.diameter = 0;
+//		this.diameter = 0;
 		this.length = new BigDecimal(0.0);
 		this.orientation = Orient.HORIZONTAL;
 		this.priceList = new BigDecimal(0.0);
@@ -42,7 +42,7 @@ public class Product {
 	@SuppressWarnings("unused")
 	public Product(String model, int diameter, Orient orientation) {
 		this.model = model;
-		this.diameter = diameter;
+//		this.diameter = diameter;
 		this.orientation = orientation;
 	}
 
@@ -66,7 +66,7 @@ public class Product {
 	 */
 	public Product(String model, int diameter, BigDecimal length, Orient orientation, BigDecimal priceList, Material material) {
 		this.model = model;
-		this.diameter = diameter;
+//		this.diameter = diameter;
 		this.length = length;
 		this.orientation = orientation;
 		this.priceList = priceList;
@@ -97,12 +97,13 @@ public class Product {
 	public String getDescription() {
 		Message.consoleMessage("Collecting product description: " + this.description);
 		if (this.orientation == Orient.VERTICAL) {
-			return "Vertical " + this.model + this.diameter;
+//			return "Vertical " + this.model + this.diameter;
 		} else if (this.orientation == Orient.HORIZONTAL) {
-			return "Horizontal " + this.model + this.diameter;
+//			return "Horizontal " + this.model + this.diameter;
 		} else {
 			return "Unknown Orientation";
 		}
+		return "";
 	}
 
 	@SuppressWarnings("unused")
@@ -146,45 +147,45 @@ public class Product {
 
 
 
-	public static Product createNewBareMRP() {
-		return new Product("MRP");
-	}
-
-	public static Product createNewBareMPC() {
-		return new Product("MPC");
-	}
-
-	public static Product createNewBareMVI() {
-		return new Product("MVI");
-	}
-
-	public static Product createNewBareHPR() {
-		return new Product("HPR");
-	}
-
-	public static Product createNewBareTSR() {
-		return new Product("TSR");
-	}
-
-	public static Product createNewBareRecirculator() {
-		return new Product("Recirculator");
-	}
-
-	public static Product createNewBareIntercooler() {
-		return new Product("Intercooler");
-	}
-
-	public static Product createNewBareAccumulator() {
-		return new Product("Accumulator");
-	}
-
-	public static Product createNewBareSD() {
-		return new Product("Surge Drum");
-	}
-
-	public static Product createNewBareOP() {
-		return new Product("Oil Pot");
-	}
+//	public static Product createNewBareMRP() {
+//		return new Product("MRP");
+//	}
+//
+//	public static Product createNewBareMPC() {
+//		return new Product("MPC");
+//	}
+//
+//	public static Product createNewBareMVI() {
+//		return new Product("MVI");
+//	}
+//
+//	public static Product createNewBareHPR() {
+//		return new Product("HPR");
+//	}
+//
+//	public static Product createNewBareTSR() {
+//		return new Product("TSR");
+//	}
+//
+//	public static Product createNewBareRecirculator() {
+//		return new Product("Recirculator");
+//	}
+//
+//	public static Product createNewBareIntercooler() {
+//		return new Product("Intercooler");
+//	}
+//
+//	public static Product createNewBareAccumulator() {
+//		return new Product("Accumulator");
+//	}
+//
+//	public static Product createNewBareSD() {
+//		return new Product("Surge Drum");
+//	}
+//
+//	public static Product createNewBareOP() {
+//		return new Product("Oil Pot");
+//	}
 
 
 }

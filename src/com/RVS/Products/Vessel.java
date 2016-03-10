@@ -1,6 +1,7 @@
 package com.RVS.Products;
 
 import com.Josh.Message;
+import com.RVS.Products.Vessels.Recirculator;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -15,21 +16,24 @@ import java.math.BigDecimal;
  *
  * @author Josh Jennings
  */
-public class Vessel extends Product {
+public abstract class Vessel extends Product {
 
-	private String model, description;
+	private String description;
 	private int diameter;
 	private BigDecimal length;
 	private Orient orientation;
 	private BigDecimal priceList;
 	private Material material;
 
+	public abstract String formattedModel();
+
 	public Vessel() {
 		super();
 	}
 
 	public Vessel(String model) {
-		this.model = model;
+		super(model);
+//		this.model = model;
 		this.description = model;
 		this.orientation = Orient.UNASSIGNED;
 	}
@@ -41,14 +45,22 @@ public class Vessel extends Product {
 //	public void setDescription(String description) {
 //		this.description = description;
 //	}
-//
+
+	public int getDiameter() {
+		return this.diameter;
+	}
+
 	public void setDiameter(int diameter) {
 		this.diameter = diameter;
 	}
-//
-//	public void setLength(BigDecimal length) {
-//		this.length = length;
-//	}
+
+	public BigDecimal getLength() {
+		return this.length;
+	}
+
+	public void setLength(BigDecimal length) {
+		this.length = length;
+	}
 
 	public Orient getOrientation() {
 		return this.orientation;
@@ -106,6 +118,8 @@ public class Vessel extends Product {
 		ComboBox<String> inputOrientation = new ComboBox<>();
 		TextField inputDescription = new TextField();
 		//manage input controls
+		inputModel.setText(""); //TextField is filled in the inputSize if statement below
+
 		inputSize.getItems().addAll(
 				new ComboBoxItem("Pipe", false),
 				new ComboBoxItem("8", true),
@@ -162,6 +176,15 @@ public class Vessel extends Product {
 			}
 			//select matching size in list
 			inputSize.setValue(selectedDiameter);
+			//set model text
+
+			if (this.getLength() == null) { //if length isn't set, don't use it
+				this.formattedModel();
+//				inputModel.setText("Vessel" + this.getDiameter()); //TODO: change "Vessel" to model
+			} else { //if length is set, include it
+				inputModel.setText("Vessel" + this.getDiameter() + "-" + this.getLength()); //TODO: change "Vessel"
+			}
+
 			//TODO: define what to do if matching list item was not found
 
 		}
@@ -176,14 +199,8 @@ public class Vessel extends Product {
 				this.setOrientation(Orient.VERTICAL);
 			}
 		});
-		if (!this.getOrientation().equals(Orient.UNASSIGNED)) {
-			inputOrientation.setValue(this.getOrientationString());
-//			for (String selectedOrientation : inputOrientation.getItems()) {
-//				if (this.getOrientationString().equals(selectedOrientation)) {
-//
-//				}
-//			}
-		}
+		//set orientation ComboBox - if not unassigned, get orientation and set it
+		if (!this.getOrientation().equals(Orient.UNASSIGNED)) {inputOrientation.setValue(this.getOrientationString());}
 
 		inputDescription.setEditable(false);
 		inputDescription.setText(this.getDescription());
@@ -228,6 +245,8 @@ public class Vessel extends Product {
 			return name;
 		}
 	}
+
+
 
 
 }

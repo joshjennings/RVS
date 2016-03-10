@@ -1,6 +1,8 @@
 import com.RVS.Accessories.*;
 import com.RVS.Products.Product;
 import com.RVS.Products.Vessel;
+import com.RVS.Products.Vessels.BareVessel;
+import com.RVS.Products.Vessels.Recirculator;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -125,7 +127,7 @@ public class WindowMaker extends Application {
 	 * @return Returns the Node that will be displayed in the centerPane.
 	 */
 	private Node centerPane() {
-		root = new TreeItem<>(new Product("root"));
+		root = new TreeItem<>(new BareVessel("root"));
 		centerPane = new TableView<>();
 
 		genericPaneWrapper = new ScrollPane();
@@ -261,7 +263,7 @@ public class WindowMaker extends Application {
 		TitledPane dropDownBox = new TitledPane("Numbers", selectionBox);
 		dropDownBox.setCollapsible(true);
 
-		//create bottom pane - removed dropdown selection box
+		//create bottom pane
 		HBox bottomPane = new HBox(10, spacer, buttonOK, buttonClose);
 		bottomPane.setPadding(new Insets(10));
 
@@ -281,7 +283,7 @@ public class WindowMaker extends Application {
 		TreeItem<Product> newItem;
 		switch (title) {
 			case "Vessel":
-				newItem = new TreeItem<>(new Vessel(title));
+				newItem = new TreeItem<>(new BareVessel(title));
 				break;
 			case "Pumps":
 				newItem = new TreeItem<>(new Pump(title));
@@ -298,9 +300,11 @@ public class WindowMaker extends Application {
 			case "Coil":
 				newItem = new TreeItem<>(new Coil(title));
 				break;
-			default:
-				newItem = new TreeItem<>(new Product(title));
+			case "Recirculator":
+				newItem = new TreeItem<>(new Recirculator(title));
 				break;
+			default:
+				newItem = new TreeItem<>(new BareVessel(title));
 		}
 		newItem.setExpanded(true);
 		parent.getChildren().add(newItem);
@@ -347,7 +351,7 @@ public class WindowMaker extends Application {
 		switch (newProductItem.getValue().getModel()) {
 			case "MRP":
 				Message.consoleMessage("Adding features for MRP");
-				makeTreeItem("Vessel", newProductItem);
+				makeTreeItem("Recirculator", newProductItem);
 				makeTreeItem("Level column", newProductItem);
 				makeTreeItem("Oil pot", newProductItem);
 				makeTreeItem("Pumps", newProductItem);
