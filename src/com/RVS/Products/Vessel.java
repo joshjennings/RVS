@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 /**
  * Created by Josh on 12/16/2015.
@@ -25,7 +26,7 @@ public abstract class Vessel extends Product {
 	private BigDecimal priceList;
 	private Material material;
 
-	public abstract String formattedModel();
+	public abstract String formattedModel(HashMap<Integer,Integer> hashMap);
 
 	public Vessel() {
 		super();
@@ -94,6 +95,39 @@ public abstract class Vessel extends Product {
 		return this.model;
 	}
 
+	public static HashMap<Integer, Double> makeHeadDepthMap() {
+		HashMap<Integer, Double> hashMap = new HashMap<>();
+		hashMap.put(24,8.0);
+		hashMap.put(30,9.5);
+		hashMap.put(36,11.0);
+		hashMap.put(42,12.5);
+		hashMap.put(48,14.0);
+		hashMap.put(54,15.5);
+		hashMap.put(60,17.0);
+		hashMap.put(66,18.5);
+		hashMap.put(72,20.0);
+		hashMap.put(84,23.0);
+		hashMap.put(96,26.0);
+		hashMap.put(108,29.0);
+		hashMap.put(120,32.0);
+		hashMap.put(144,38.0);
+
+		return hashMap;
+	}
+
+	public static HashMap<Integer, Integer> makeDiameterLengthMap() {
+		HashMap<Integer, Integer> hashMap = new HashMap<>();
+
+		HashMap<Integer, Double> mapHeadDepth = makeHeadDepthMap();
+
+		mapHeadDepth.forEach((k,v) -> {
+			hashMap.put(k, (int) Math.round(119.0 + (2.0*v)));
+			//Message.consoleMessage(k.toString() + " : " + hashMap.get(k).toString());
+		});
+
+		return hashMap;
+	}
+
 	public Pane editWindow() {
 		Message.consoleMessage("Displaying item edit pane for item: " + this.getDescription());
 		GridPane gridPane = new GridPane();
@@ -156,6 +190,7 @@ public abstract class Vessel extends Product {
 		});
 		//set listening event for ComboBox clicking event
 		inputSize.valueProperty().addListener((observable, oldValue, newValue) -> {
+			//TODO: if value is changed, update model TextField
 			Message.consoleMessage("Changing selected property's size from " + oldValue + " to " + newValue + ".");
 			this.setDiameter(Integer.parseInt(newValue.getName()));
 		});
@@ -179,7 +214,7 @@ public abstract class Vessel extends Product {
 			//set model text
 
 			if (this.getLength() == null) { //if length isn't set, don't use it
-				String formattedModel = this.formattedModel();
+				String formattedModel = this.formattedModel(makeDiameterLengthMap());
 				inputModel.setText(formattedModel);
 //				inputModel.setText("Vessel" + this.getDiameter()); //TODO: change "Vessel" to model
 			} else { //if length is set, include it

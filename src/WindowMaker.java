@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 
 import com.Josh.Message;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -30,6 +31,7 @@ public class WindowMaker extends Application {
 	TreeView<Product> treeView;
 	ObservableList<String> productList;
 	ObservableList<String> featureList;
+	HashMap<Integer, Integer> mapDiameterLength;
 	Button buttonAddProduct, buttonAddFeature, buttonDeleteItem, buttonEditItem;
 	BorderPane rootPane;
 
@@ -98,6 +100,7 @@ public class WindowMaker extends Application {
 		//populate data lists
 		productList = Product.constructListOfStandardProducts();
 		featureList = Feature.constructListOfStandardFeatures();
+		mapDiameterLength = Vessel.makeDiameterLengthMap();
 	}
 
 	/**

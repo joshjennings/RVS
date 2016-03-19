@@ -3,6 +3,8 @@ package com.RVS.Products.Vessels;
 import com.Josh.Message;
 import com.RVS.Products.Vessel;
 
+import java.util.HashMap;
+
 /**
  * Created by Josh on 3/9/16.
  */
@@ -14,14 +16,18 @@ public class Recirculator extends Vessel {
 	}
 
 	@Override
-	public String formattedModel() {
+	public String formattedModel(HashMap<Integer,Integer> mapDiameterLength) { //this method assumes that vessel diameter is defined
 		String model, diameter, length;
 
-		//TODO:
-		Message.consoleMessage("Formatting model");
+		Message.consoleMessage("Formatting model name");
 
-		diameter = (this.getDiameter() != 0) ? String.valueOf(this.getDiameter()) : "";
-		length = (this.getLength() != null) ? this.getLength().toString() : "";
+		diameter = String.valueOf(this.getDiameter());
+		length = mapDiameterLength.get(this.getDiameter()).toString();
+
+//		diameter = (this.getDiameter() != 0) ? String.valueOf(this.getDiameter()) : "";
+//		length = (this.getLength() != null) ? mapDiameterLength.get(this.getDiameter()).toString() : "";
+
+		Message.consoleMessage("Model: " + diameter + "-" + length);
 
 
 		if (this.getOrientation().equals(Orient.HORIZONTAL)) {

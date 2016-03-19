@@ -2,6 +2,8 @@ package com.RVS.Products.Vessels;
 
 import com.RVS.Products.Vessel;
 
+import java.util.HashMap;
+
 /**
  * Created by Josh on 3/9/16.
  */
@@ -12,7 +14,7 @@ public class BareVessel extends Vessel {
 	}
 	
 	@Override
-	public String formattedModel() {
+	public String formattedModel(HashMap<Integer,Integer> mapDiameterLength) {
 		return null;
 	}
 }
