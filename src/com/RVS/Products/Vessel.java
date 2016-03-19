@@ -179,7 +179,8 @@ public abstract class Vessel extends Product {
 			//set model text
 
 			if (this.getLength() == null) { //if length isn't set, don't use it
-				this.formattedModel();
+				String formattedModel = this.formattedModel();
+				inputModel.setText(formattedModel);
 //				inputModel.setText("Vessel" + this.getDiameter()); //TODO: change "Vessel" to model
 			} else { //if length is set, include it
 				inputModel.setText("Vessel" + this.getDiameter() + "-" + this.getLength()); //TODO: change "Vessel"

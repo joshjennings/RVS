@@ -1,5 +1,6 @@
 package com.RVS.Products.Vessels;
 
+import com.Josh.Message;
 import com.RVS.Products.Vessel;
 
 /**
@@ -15,16 +16,30 @@ public class Recirculator extends Vessel {
 	@Override
 	public String formattedModel() {
 		String model, diameter, length;
-		if (this.getOrientation().equals(Orient.HORIZONTAL)) {
-			model = "HR";
-		} else if (this.getOrientation().equals(Orient.VERTICAL)) {
-			model = "VR";
-		} else {
-			model = "Recirculator";
-		}
+
+		//TODO:
+		Message.consoleMessage("Formatting model");
 
 		diameter = (this.getDiameter() != 0) ? String.valueOf(this.getDiameter()) : "";
-		length = (!this.getLength().equals(null)) ? this.getLength().toString() : "";
+		length = (this.getLength() != null) ? this.getLength().toString() : "";
+
+
+		if (this.getOrientation().equals(Orient.HORIZONTAL)) {
+			model = "HR";
+			if (length.equals("")) {
+				return model + diameter;
+			}
+		} else if (this.getOrientation().equals(Orient.VERTICAL)) {
+			model = "VR";
+			if (length.equals("")) {
+				return model + diameter;
+			}
+		} else {
+			model = "Recirculator";
+			if (length.equals("")) {
+				return model + " " + diameter;
+			}
+		}
 
 		return model + diameter + "-" + length;
 	}

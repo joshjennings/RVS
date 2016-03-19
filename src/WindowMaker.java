@@ -389,39 +389,6 @@ public class WindowMaker extends Application {
 				makeTreeItem("Vessel", newProductItem);
 				break;
 		}
-
-//		if (newProductItem.getValue().getModel().equals("MRP")) {
-//			Message.consoleMessage("Adding features for MRP");
-//			makeTreeItem("Vessel", newProductItem);
-//			makeTreeItem("Level column", newProductItem);
-//			makeTreeItem("Oil pot", newProductItem);
-//			makeTreeItem("Pumps", newProductItem);
-//			makeTreeItem("Control Panel", newProductItem);
-//			makeTreeItem("Liquid feed", newProductItem);
-//		} else if (newProductItem.getValue().getModel().equals("MPC")) {
-//			Message.consoleMessage("Adding features for MPC");
-//			makeTreeItem("Vessel", newProductItem);
-//			makeTreeItem("Oil pot", newProductItem);
-//		} else if (newProductItem.getValue().getModel().equals("MVI")) {
-//			Message.consoleMessage("Adding features for MVI");
-//			makeTreeItem("Vessel", newProductItem);
-//			makeTreeItem("Oil pot", newProductItem);
-//		} else if (newProductItem.getValue().getModel().equals("HPR")) {
-//			Message.consoleMessage("Adding features for HPR");
-//			makeTreeItem("Vessel", newProductItem);
-//		} else if (newProductItem.getValue().getModel().equals("TSR")) {
-//			Message.consoleMessage("Adding features for TSR");
-//			makeTreeItem("Vessel", newProductItem);
-//		} else if (newProductItem.getValue().getModel().equals("Recirculator")) {
-//			Message.consoleMessage("Adding features for Recirculator");
-//			makeTreeItem("Vessel", newProductItem);
-//		} else if (newProductItem.getValue().getModel().equals("Intercooler")) {
-//			Message.consoleMessage("Adding features for Intercooler");
-//			makeTreeItem("Vessel", newProductItem);
-//		} else if (newProductItem.getValue().getModel().equals("Accumulator")) {
-//			Message.consoleMessage("Adding features for Accumulator");
-//			makeTreeItem("Vessel", newProductItem);
-//		}
 	}
 
 	private void addFeature() {
@@ -465,6 +432,10 @@ public class WindowMaker extends Application {
 		backToTable.setOnAction(event -> {
 			Message.consoleMessage("Returning to Product Table view");
 			treeView.setDisable(false);
+			buttonAddProduct.setDisable(false);
+			buttonAddFeature.setDisable(false);
+			buttonDeleteItem.setDisable(false);
+			buttonEditItem.setDisable(false);
 			genericPaneWrapper.setContent(centerPane);
 		});
 
@@ -493,6 +464,10 @@ public class WindowMaker extends Application {
 
 		//disable the TreeView to avoid selecting another TreeItem that is different than what is shown in editWindow()
 		treeView.setDisable(true);
+		buttonAddProduct.setDisable(true);
+		buttonAddFeature.setDisable(true);
+		buttonDeleteItem.setDisable(true);
+		buttonEditItem.setDisable(true);
 
 		VBox gridPaneVbox = new VBox(backToTable, new Separator(), productDetailPane);
 		gridPaneVbox.setPadding(new Insets(10));
