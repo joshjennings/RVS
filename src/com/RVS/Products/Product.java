@@ -16,61 +16,12 @@ import java.util.*;
 public abstract class Product {
 
 	String model, description;
-//	int diameter;
-	BigDecimal length;
-	Orient orientation;
-	BigDecimal priceList;
 	Material material;
 
-
-	/**
-	 * Standard Product() constructor. Initializes to a horizontal carbon vessel with zero dimensions.
-	 */
-	public Product() {
-		this.model = "";
-//		this.diameter = 0;
-		this.length = new BigDecimal(0.0);
-		this.orientation = Orient.HORIZONTAL;
-		this.priceList = new BigDecimal(0.0);
-		this.material = Material.CARBON;
-	}
+	public Product() {}
 
 	public Product(String model) {
 		this.model = model;
-	}
-
-	@SuppressWarnings("unused")
-	public Product(String model, int diameter, Orient orientation) {
-		this.model = model;
-//		this.diameter = diameter;
-		this.orientation = orientation;
-	}
-
-//	public Product(String model, int diameter, BigDecimal length, Orient orientation, Material material) {
-//		this.model = model;
-//		this.diameter = diameter;
-//		this.length = length;
-//		this.orientation = orientation;
-//		this.material = material;
-//	}
-
-	@SuppressWarnings("unused")
-	/**
-	 * This constructor builds a standard product with the following parameters.
-	 * @param model Model of the product in String format.
-	 * @param diameter Diameter in int format.
-	 * @param length Length of the product in double format.
-	 * @param orientation Vessel orientation using the Orient enumeration.
-	 * @param priceList Price of the selected item.
-	 * @param material Material of the product using the Material enumeration.
-	 */
-	public Product(String model, int diameter, BigDecimal length, Orient orientation, BigDecimal priceList, Material material) {
-		this.model = model;
-//		this.diameter = diameter;
-		this.length = length;
-		this.orientation = orientation;
-		this.priceList = priceList;
-		this.material = material;
 	}
 
 	@Override public String toString() {
@@ -87,45 +38,56 @@ public abstract class Product {
 		HORIZONTAL, VERTICAL, UNASSIGNED
 	}
 
-	@SuppressWarnings("unused")
 	public String getModel() {
 		Message.consoleMessage("Collecting product model: " + this.model);
 		return this.model;
 	}
 
-	@SuppressWarnings("unused")
+	public void setModel(String model) {
+		this.model = model;
+	}
+
 	public String getDescription() {
 		Message.consoleMessage("Collecting product description: " + this.description);
-		if (this.orientation == Orient.VERTICAL) {
-//			return "Vertical " + this.model + this.diameter;
-		} else if (this.orientation == Orient.HORIZONTAL) {
-//			return "Horizontal " + this.model + this.diameter;
+		if (this.description == null) {
+			return "";
 		} else {
-			return "Unknown Orientation";
+			return this.description;
 		}
-		return "";
 	}
 
-	@SuppressWarnings("unused")
-	public BigDecimal getPriceList() {
-		Message.consoleMessage("Collecting product price: " + this.priceList.toString());
-		return this.priceList;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	@SuppressWarnings("unused")
-	/**
-	 * This method is built solely for the TableColumn such that the price is correctly formatted.
-	 * @return Returns a string that is formatted with the current locale's currency symbol and commas.
-	 */
-	public String getPriceListFormatted() {
-		//Set locale and number formatter object
-		Locale currentLocale = new Locale("en","US");
-		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(currentLocale);
-		//output to console
-		Message.consoleMessage("Collecting product price: " + currencyFormatter.format(this.priceList));
-		//return formatted price
-		return currencyFormatter.format(this.priceList);
+	public Material getMaterial() {
+		return this.material;
 	}
+
+	public void setMaterial(Material material) {
+		this.material = material;
+	}
+
+	//	@SuppressWarnings("unused")
+//	public BigDecimal getPriceList() {
+//		Message.consoleMessage("Collecting product price: " + this.priceList.toString());
+//		return this.priceList;
+//	}
+//
+//	@SuppressWarnings("unused")
+//	/**
+//	 * This method is built solely for the TableColumn such that the price is correctly formatted.
+//	 * @return Returns a string that is formatted with the current locale's currency symbol and commas.
+//	 */
+//	public String getPriceListFormatted() {
+//		//Set locale and number formatter object
+//		Locale currentLocale = new Locale("en","US");
+//		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(currentLocale);
+//		//output to console
+//		Message.consoleMessage("Collecting product price: " + currencyFormatter.format(this.priceList));
+//		//return formatted price
+//		return currencyFormatter.format(this.priceList);
+//	}
 
 	@SuppressWarnings("unused")
 	public static ObservableList<String> constructListOfStandardProducts() {

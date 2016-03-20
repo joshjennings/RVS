@@ -8,10 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -160,8 +157,9 @@ public class Message {
 	}
 
 	public static String selectProduct(String message, String title, ObservableList<String> list) {
-		//TODO: Center the Enter and Cancel buttons
 		//TODO: employ this list model:http://stackoverflow.com/questions/26873045/how-do-you-add-labels-to-the-options-in-combobox-and-list
+
+		consoleMessage("New product selection window opened.");
 
 		//initializes to ensure no old values are carried over in subsequent method calls
 		input = null;
@@ -190,8 +188,9 @@ public class Message {
 		buttonCancel.setOnAction(e -> buttonCancelClicked());
 
 		HBox paneBtn = new HBox(20);
-		//paneBtn.getChildren().addAll(spacer, buttonEnter, buttonCancel, spacer);
 		paneBtn.getChildren().addAll(buttonEnter, buttonCancel);
+		paneBtn.setAlignment(Pos.CENTER);
+
 		VBox pane = new VBox(20);
 		pane.getChildren().addAll(lbl, productBox, paneBtn);
 		pane.setAlignment(Pos.CENTER);

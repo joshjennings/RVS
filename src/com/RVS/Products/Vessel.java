@@ -19,7 +19,7 @@ import java.util.HashMap;
  */
 public abstract class Vessel extends Product {
 
-	private String description;
+	private String model, description;
 	private int diameter;
 	private BigDecimal length;
 	private Orient orientation;
@@ -27,10 +27,9 @@ public abstract class Vessel extends Product {
 	private Material material;
 
 	public abstract String formattedModel(HashMap<Integer,Integer> hashMap);
+	public abstract String formattedDescription();
 
-	public Vessel() {
-		super();
-	}
+	public Vessel() {}
 
 	public Vessel(String model) {
 		super(model);
@@ -38,14 +37,6 @@ public abstract class Vessel extends Product {
 		this.description = model;
 		this.orientation = Orient.UNASSIGNED;
 	}
-
-	//	public void setModel(String model) {
-//		this.model = model;
-//	}
-//
-//	public void setDescription(String description) {
-//		this.description = description;
-//	}
 
 	public int getDiameter() {
 		return this.diameter;
@@ -85,15 +76,11 @@ public abstract class Vessel extends Product {
 //	public void setPriceList(BigDecimal priceList) {
 //		this.priceList = priceList;
 //	}
-//
-//	public void setMaterial(Material material) {
-//		this.material = material;
-//	}
 
-	@Override
-	public String toString() {
-		return this.model;
-	}
+//	@Override
+//	public String toString() {
+//		return this.model;
+//	}
 
 	public static HashMap<Integer, Double> makeHeadDepthMap() {
 		HashMap<Integer, Double> hashMap = new HashMap<>();
@@ -239,7 +226,7 @@ public abstract class Vessel extends Product {
 		if (!this.getOrientation().equals(Orient.UNASSIGNED)) {inputOrientation.setValue(this.getOrientationString());}
 
 		inputDescription.setEditable(false);
-		inputDescription.setText(this.getDescription());
+		inputDescription.setText(this.formattedDescription());
 
 		//add objects to GridPane
 		gridPane.add(lblModel, 0, 0);

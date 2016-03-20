@@ -1,8 +1,7 @@
 import com.RVS.Accessories.*;
 import com.RVS.Products.Product;
 import com.RVS.Products.Vessel;
-import com.RVS.Products.Vessels.BareVessel;
-import com.RVS.Products.Vessels.Recirculator;
+import com.RVS.Products.Vessels.*;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -131,6 +130,7 @@ public class WindowMaker extends Application {
 	 */
 	private Node centerPane() {
 		root = new TreeItem<>(new BareVessel("root"));
+//		Message.consoleMessage(root.getValue().getModel());
 		centerPane = new TableView<>();
 
 		genericPaneWrapper = new ScrollPane();
@@ -143,7 +143,10 @@ public class WindowMaker extends Application {
 		//CREATE TREEVIEW
 		root.setExpanded(true);
 
+		Message.consoleMessage(root.toString());
+
 		treeView = new TreeView<>(root);
+
 		treeView.setShowRoot(false);
 		treeView.setMinWidth(340);
 		treeView.setOnMouseClicked(event -> {
@@ -306,6 +309,15 @@ public class WindowMaker extends Application {
 			case "Recirculator":
 				newItem = new TreeItem<>(new Recirculator(title));
 				break;
+			case "Accumulator":
+				newItem = new TreeItem<>(new Accumulator(title));
+				break;
+			case "HPR":
+				newItem = new TreeItem<>(new HighPressureReceiver("High Pressure Receiver"));
+				break;
+			case "Intercooler":
+				newItem = new TreeItem<>(new Intercooler(title));
+				break;
 			default:
 				newItem = new TreeItem<>(new BareVessel(title));
 		}
@@ -333,7 +345,7 @@ public class WindowMaker extends Application {
 				newProductItem = makeTreeItem(nameProduct, treeView.getRoot());
 			}
 
-			//TODO: automatically add features to packages
+			//automatically add subfeatures
 			addSubFeatures(newProductItem);
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
@@ -350,6 +362,8 @@ public class WindowMaker extends Application {
 
 	private void addSubFeatures(TreeItem<Product> newProductItem) {
 		Message.consoleMessage("Automatically adding subfeatures");
+
+
 
 		switch (newProductItem.getValue().getModel()) {
 			case "MRP":
@@ -373,7 +387,7 @@ public class WindowMaker extends Application {
 				break;
 			case "HPR":
 				Message.consoleMessage("Adding features for HPR");
-				makeTreeItem("Vessel", newProductItem);
+				makeTreeItem("HPR", newProductItem);
 				break;
 			case "TSR":
 				Message.consoleMessage("Adding features for TSR");
@@ -381,15 +395,15 @@ public class WindowMaker extends Application {
 				break;
 			case "Recirculator":
 				Message.consoleMessage("Adding features for Recirculator");
-				makeTreeItem("Vessel", newProductItem);
+				makeTreeItem("Recirculator", newProductItem);
 				break;
 			case "Intercooler":
 				Message.consoleMessage("Adding features for Intercooler");
-				makeTreeItem("Vessel", newProductItem);
+				makeTreeItem("Intercooler", newProductItem);
 				break;
 			case "Accumulator":
 				Message.consoleMessage("Adding features for Accumulator");
-				makeTreeItem("Vessel", newProductItem);
+				makeTreeItem("Accumulator", newProductItem);
 				break;
 		}
 	}
