@@ -138,10 +138,9 @@ public abstract class Vessel extends Product {
 		ComboBox<ComboBoxItem> inputSize = new ComboBox<>();
 		ComboBox<String> inputOrientation = new ComboBox<>();
 		TextField inputDescription = new TextField();
-		//manage input controls
-		inputModel.setText(""); //TextField is filled in the inputSize if statement below
 
-		inputSize.getItems().addAll(
+		//manage input controls
+		inputSize.getItems().addAll( //TODO: convert to mandatory method call
 				new ComboBoxItem("Pipe", false),
 				new ComboBoxItem("8", true),
 				new ComboBoxItem("10", true),
@@ -179,7 +178,8 @@ public abstract class Vessel extends Product {
 		inputSize.valueProperty().addListener((observable, oldValue, newValue) -> {
 			//TODO: if value is changed, update model TextField
 			Message.consoleMessage("Changing selected property's size from " + oldValue + " to " + newValue + ".");
-			this.setDiameter(Integer.parseInt(newValue.getName()));
+			this.setDiameter(Integer.parseInt(newValue.getName())); //set instance diameter
+			inputModel.setText(this.formattedModel(makeDiameterLengthMap())); //set model
 		});
 		//if diameter of instance is already selected, fill in the ComboBox
 		if (this.diameter != 0) { //if zero, skip because it's not been instantiated yet
@@ -199,14 +199,17 @@ public abstract class Vessel extends Product {
 			//select matching size in list
 			inputSize.setValue(selectedDiameter);
 			//set model text
+			inputModel.setText(this.formattedModel(makeDiameterLengthMap()));
 
-			if (this.getLength() == null) { //if length isn't set, don't use it
-				String formattedModel = this.formattedModel(makeDiameterLengthMap());
-				inputModel.setText(formattedModel);
-//				inputModel.setText("Vessel" + this.getDiameter()); //TODO: change "Vessel" to model
-			} else { //if length is set, include it
-				inputModel.setText("Vessel" + this.getDiameter() + "-" + this.getLength()); //TODO: change "Vessel"
-			}
+//			if (this.getLength() == null) { //if length isn't set, don't use it
+//				Message.consoleMessage("Here");
+//				String formattedModel = this.formattedModel(makeDiameterLengthMap());
+//				inputModel.setText(formattedModel);
+////				inputModel.setText("Vessel" + this.getDiameter()); //TODO: change "Vessel" to model
+//			} else { //if length is set, include it
+//				Message.consoleMessage("Nope. Here.");
+//				inputModel.setText("Vessel" + this.getDiameter() + "-" + this.getLength()); //TODO: change "Vessel"
+//			}
 
 			//TODO: define what to do if matching list item was not found
 
@@ -215,11 +218,34 @@ public abstract class Vessel extends Product {
 		inputOrientation.getItems().addAll("Vertical", "Horizontal");
 		inputOrientation.valueProperty().addListener((observable, oldValue, newValue) -> {
 			Message.consoleMessage("Changing selected property's orientation from " + oldValue + " to " + newValue + ".");
-			if (newValue.equals("Horizontal")) {
+			if (inputDescription.getText().contains(" ")) {
+				String subStringDescription = "";
+				for (int counter = 0; counter < inputDescription.getLength(); counter++) {
+					if (inputDescription.getText().charAt(counter) == ' ') {
+						subStringDescription = inputDescription.getText().substring(0,counter);
+						Message.consoleMessage("counter: " + counter);
+						Message.consoleMessage("string length: " + subStringDescription.length());
+						Message.consoleMessage("string: " + subStringDescription);
+						Message.consoleMessage("oldvalue: " + oldValue);
+						Message.consoleMessage("newvalue: " + newValue);
+						inputDescription.replaceText(0,counter,newValue);
+						Message.consoleMessage("new desc: " + inputDescription.getText());
+						break;
+					}
+				}
+				if ()
+			} else if (newValue.equals("Horizontal")) {
 				this.setOrientation(Orient.HORIZONTAL);
-			}
-			if (newValue.equals("Vertical")) {
+				String temporaryModel = inputDescription.getText();
+				inputDescription.setText("Horizontal " + temporaryModel);
+			} else if (newValue.equals("Vertical")) {
 				this.setOrientation(Orient.VERTICAL);
+				String temporaryModel = inputDescription.getText();
+				inputDescription.setText("Vertical " + temporaryModel);
+			}
+			//update model only if size is selected
+			if (this.diameter != 0) {
+				inputModel.setText(this.formattedModel(makeDiameterLengthMap()));
 			}
 		});
 		//set orientation ComboBox - if not unassigned, get orientation and set it
