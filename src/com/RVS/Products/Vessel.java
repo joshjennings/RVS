@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Created by Josh on 12/16/2015.
@@ -33,7 +34,7 @@ public abstract class Vessel extends Product {
 
 	public Vessel(String model) {
 		super(model);
-//		this.model = model;
+		this.model = model;
 		this.description = model;
 		this.orientation = Orient.UNASSIGNED;
 	}
@@ -217,32 +218,49 @@ public abstract class Vessel extends Product {
 
 		inputOrientation.getItems().addAll("Vertical", "Horizontal");
 		inputOrientation.valueProperty().addListener((observable, oldValue, newValue) -> {
+			//output to console what's happening
 			Message.consoleMessage("Changing selected property's orientation from " + oldValue + " to " + newValue + ".");
-			if (inputDescription.getText().contains(" ")) {
-				String subStringDescription = "";
-				for (int counter = 0; counter < inputDescription.getLength(); counter++) {
-					if (inputDescription.getText().charAt(counter) == ' ') {
-						subStringDescription = inputDescription.getText().substring(0,counter);
-						Message.consoleMessage("counter: " + counter);
-						Message.consoleMessage("string length: " + subStringDescription.length());
-						Message.consoleMessage("string: " + subStringDescription);
-						Message.consoleMessage("oldvalue: " + oldValue);
-						Message.consoleMessage("newvalue: " + newValue);
-						inputDescription.replaceText(0,counter,newValue);
-						Message.consoleMessage("new desc: " + inputDescription.getText());
-						break;
-					}
-				}
-				if ()
-			} else if (newValue.equals("Horizontal")) {
+
+			if (newValue.equals("Horizontal")) { //if orientation not already set and new is Horiz, go here
 				this.setOrientation(Orient.HORIZONTAL);
-				String temporaryModel = inputDescription.getText();
-				inputDescription.setText("Horizontal " + temporaryModel);
-			} else if (newValue.equals("Vertical")) {
+				//String temporaryModel = inputDescription.getText();
+				//inputDescription.setText("Horizontal " + temporaryModel);
+			} else if (newValue.equals("Vertical")) { //if orientation not already set and new is Vert, go here
 				this.setOrientation(Orient.VERTICAL);
-				String temporaryModel = inputDescription.getText();
-				inputDescription.setText("Vertical " + temporaryModel);
+				//String temporaryModel = inputDescription.getText();
+				//inputDescription.setText("Vertical " + temporaryModel);
 			}
+
+			inputDescription.setText(this.formattedDescription());
+
+//			//if the description is already set, it's going to add the new orientation separated by a space.
+//			//find this space and chop off the excess.
+//			if (inputDescription.getText().contains(" ")) {
+//				String subStringDescription = "";
+//				//iterate until space is found. //TODO: find method to find specific character!
+//				for (int counter = 0; counter < inputDescription.getLength(); counter++) {
+//					//if space is found, perform these actions
+//					if (inputDescription.getText().charAt(counter) == ' ') {
+//						subStringDescription = inputDescription.getText().substring(0,counter);
+//						Message.consoleMessage("counter: " + counter);
+//						Message.consoleMessage("string length: " + subStringDescription.length());
+//						Message.consoleMessage("string: " + subStringDescription);
+//						Message.consoleMessage("oldvalue: " + oldValue);
+//						Message.consoleMessage("newvalue: " + newValue);
+//
+//						//replace old text with new text
+//						//inputDescription.replaceText(0,counter,newValue);
+//						inputDescription.setText(this.formattedDescription());
+//
+//						//output new description
+//						Message.consoleMessage("new desc: " + inputDescription.getText());
+//
+//						//stop looping
+//						break;
+//					}
+//				}
+//			}
+
 			//update model only if size is selected
 			if (this.diameter != 0) {
 				inputModel.setText(this.formattedModel(makeDiameterLengthMap()));

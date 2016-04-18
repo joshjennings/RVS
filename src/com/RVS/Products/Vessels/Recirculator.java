@@ -23,6 +23,7 @@ public class Recirculator extends Vessel {
 	public Recirculator(String model) {
 		super(model);
 		this.model = model;
+		this.diameter = 0;
 	}
 
 	@Override
