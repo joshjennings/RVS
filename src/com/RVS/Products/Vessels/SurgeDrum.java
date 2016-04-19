@@ -3,14 +3,25 @@ package com.RVS.Products.Vessels;
 import com.Josh.Message;
 import com.RVS.Products.Vessel;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 /**
  * Created by Josh on 3/9/16.
  */
 public class SurgeDrum extends Vessel {
+	private String model, description;
+	private int diameter;
+	private BigDecimal length;
+	private Orient orientation;
+	private BigDecimal priceList;
+	private Material material;
 
-
+	public SurgeDrum(String model) {
+		super(model);
+		this.model = model;
+		this.diameter = 0;
+	}
 
 	@Override
 	public String formattedModel(HashMap<Integer,Integer> mapDiameterLength) { //this method assumes that vessel diameter is defined

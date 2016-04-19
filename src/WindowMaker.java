@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import com.Josh.Message;
 
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -33,6 +34,7 @@ public class WindowMaker extends Application {
 	HashMap<Integer, Integer> mapDiameterLength;
 	Button buttonAddProduct, buttonAddFeature, buttonDeleteItem, buttonEditItem;
 	BorderPane rootPane;
+	static Connection databaseConnection;
 
 	//centerPane
 	TreeItem<Product> root;
@@ -66,8 +68,26 @@ public class WindowMaker extends Application {
 	public void start(Stage primaryStage) {
 		//initialize everything
 		Message.consoleMessage("Initializing data.");
-		initialize();
-		Message.initialize();
+		//databaseConnection = WindowMaker.getConnection(); //SQL database connection
+		initialize(); //
+		Message.initialize(); //
+
+//		if (databaseConnection == null) {
+//			Message.consoleMessage("Connection is null.");
+//		}
+//
+//		try {
+//			Statement statement = databaseConnection.createStatement();
+//			String select = "select title, year, price from movie order by year";
+//			ResultSet rows = statement.executeQuery(select);
+//
+//			while (rows.next()) {
+//				Message.consoleMessage("SQL DATA: " + rows.getString("title"));
+//			}
+//		} catch (SQLException e) {
+//			System.out.println(e.getMessage());
+//		}
+
 
 		//notify of window creation commencing
 		Message.consoleMessage("Window initialization beginning.");
@@ -309,6 +329,12 @@ public class WindowMaker extends Application {
 			case "Recirculator":
 				newItem = new TreeItem<>(new Recirculator(title));
 				break;
+			case "Thermosyphon":
+				newItem = new TreeItem<>(new Thermosyphon(title));
+				break;
+			case "Surge Drum":
+				newItem = new TreeItem<>(new SurgeDrum(title));
+				break;
 			case "Accumulator":
 				newItem = new TreeItem<>(new Accumulator(title));
 				break;
@@ -377,12 +403,12 @@ public class WindowMaker extends Application {
 				break;
 			case "MPC":
 				Message.consoleMessage("Adding features for MPC");
-				makeTreeItem("Vessel", newProductItem);
+				makeTreeItem("Surge Drum", newProductItem);
 				makeTreeItem("Oil pot", newProductItem);
 				break;
 			case "MVI":
 				Message.consoleMessage("Adding features for MVI");
-				makeTreeItem("Vessel", newProductItem);
+				makeTreeItem("Intercooler", newProductItem);
 				makeTreeItem("Oil pot", newProductItem);
 				break;
 			case "HPR":
@@ -391,7 +417,7 @@ public class WindowMaker extends Application {
 				break;
 			case "TSR":
 				Message.consoleMessage("Adding features for TSR");
-				makeTreeItem("Vessel", newProductItem);
+				makeTreeItem("Thermosyphon", newProductItem);
 				break;
 			case "Recirculator":
 				Message.consoleMessage("Adding features for Recirculator");
@@ -509,6 +535,25 @@ public class WindowMaker extends Application {
 		public String toString() {
 			return name;
 		}
+	}
+
+	private static Connection getConnection() {
+		Message.consoleMessage("Connecting to database.");
+		Connection connection = null;
+		try {
+			Message.consoleMessage("Here1");
+			Class.forName("com.mysql");
+			Message.consoleMessage("Here2");
+			String url = "jdbc:mysql://localhost/movies";
+			Message.consoleMessage(url);
+			String user = "root";
+			String password = "JavaRocks";
+			connection = DriverManager.getConnection(url, user, password);
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+
+		return connection;
 	}
 
 }

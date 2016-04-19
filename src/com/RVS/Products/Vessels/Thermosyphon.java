@@ -2,13 +2,14 @@ package com.RVS.Products.Vessels;
 
 import com.Josh.Message;
 import com.RVS.Products.Vessel;
-import com.sun.tools.doclets.formats.html.PackageUseWriter;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 
 /**
  * Created by Josh on 3/9/16.
+ *
+ * @author Josh Jennings
  */
 public class Thermosyphon extends Vessel {
 
@@ -24,7 +25,9 @@ public class Thermosyphon extends Vessel {
 	}
 
 	public Thermosyphon(String model) {
+		super(model);
 		this.model = model;
+		this.diameter = 0;
 	}
 
 	@Override
