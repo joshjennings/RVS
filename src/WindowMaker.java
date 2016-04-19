@@ -68,7 +68,7 @@ public class WindowMaker extends Application {
 	public void start(Stage primaryStage) {
 		//initialize everything
 		Message.consoleMessage("Initializing data.");
-		//databaseConnection = WindowMaker.getConnection(); //SQL database connection
+		databaseConnection = WindowMaker.getConnection(); //SQL database connection
 		initialize(); //
 		Message.initialize(); //
 
@@ -542,7 +542,7 @@ public class WindowMaker extends Application {
 		Connection connection = null;
 		try {
 			Message.consoleMessage("Here1");
-			Class.forName("com.mysql");
+			Class.forName("com.mysql.jdbc.Driver");
 			Message.consoleMessage("Here2");
 			String url = "jdbc:mysql://localhost/movies";
 			Message.consoleMessage(url);
@@ -550,6 +550,7 @@ public class WindowMaker extends Application {
 			String password = "JavaRocks";
 			connection = DriverManager.getConnection(url, user, password);
 		} catch (ClassNotFoundException | SQLException e) {
+			Message.consoleMessage("ERROR!");
 			e.printStackTrace();
 		}
 
