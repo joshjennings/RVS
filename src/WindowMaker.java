@@ -3,6 +3,8 @@ import com.RVS.Products.Product;
 import com.RVS.Products.Vessel;
 import com.RVS.Products.Vessels.*;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -17,7 +19,9 @@ import javafx.stage.Stage;
 import com.Josh.Message;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,6 +44,7 @@ public class WindowMaker extends Application {
 	TreeItem<Product> root;
 	TableView<Product> centerPane;
 	ScrollPane genericPaneWrapper;
+	ObservableList<Product> productObservableList;
 
 	public static void main(String[] args) {
 		Message.consoleMessage("Program launch arguments: ");
@@ -120,6 +125,14 @@ public class WindowMaker extends Application {
 		productList = Product.constructListOfStandardProducts();
 		featureList = Feature.constructListOfStandardFeatures();
 		mapDiameterLength = Vessel.makeDiameterLengthMap();
+
+		List<Product> productList = new ArrayList<>();
+		productObservableList = FXCollections.observableList(productList);
+		productObservableList.addListener((ListChangeListener<Product>) c -> {
+			Message.consoleMessage("**********");
+			Message.consoleMessage("Detected a change in the Product list!");
+			Message.consoleMessage("**********");
+		});
 	}
 
 	/**
@@ -150,7 +163,6 @@ public class WindowMaker extends Application {
 	 */
 	private Node centerPane() {
 		root = new TreeItem<>(new BareVessel("root"));
-//		Message.consoleMessage(root.getValue().getModel());
 		centerPane = new TableView<>();
 
 		genericPaneWrapper = new ScrollPane();
@@ -242,10 +254,12 @@ public class WindowMaker extends Application {
 		columnListPrice.setPrefWidth(150);
 		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceListFormatted"));
 
-		//noinspection unchecked
+		//add columns to table
 		centerPane.getColumns().addAll(columnModel, columnDesc, columnListPrice);
 		centerPane.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		centerPane.setMinWidth(columnModel.getMinWidth() + columnDesc.getMinWidth() + columnListPrice.getMinWidth());
+		//add observable list to table
+		centerPane.setItems(productObservableList);
 
 		//ADD BOTH PANES TO THE SPLITPANE
 		genericPaneWrapper.setContent(centerPane);
@@ -349,11 +363,12 @@ public class WindowMaker extends Application {
 		}
 		newItem.setExpanded(true);
 		parent.getChildren().add(newItem);
-		Message.consoleMessage("TreeItem Product count: " + parent.getChildren().size());
+		if (parent != root) productObservableList.add(newItem.getValue());
 		return newItem;
 	}
 
 	private void addProduct() {
+		Message.consoleMessage("Adding a product.");
 		try {
 			TreeItem<Product> newProductItem;
 
@@ -373,6 +388,8 @@ public class WindowMaker extends Application {
 
 			//automatically add subfeatures
 			addSubFeatures(newProductItem);
+
+
 		} catch (Exception e) {
 			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
 			Message.messageBox("Please select an item in the list.", "Notification");
@@ -388,8 +405,6 @@ public class WindowMaker extends Application {
 
 	private void addSubFeatures(TreeItem<Product> newProductItem) {
 		Message.consoleMessage("Automatically adding subfeatures");
-
-
 
 		switch (newProductItem.getValue().getModel()) {
 			case "MRP":
@@ -468,6 +483,7 @@ public class WindowMaker extends Application {
 	}
 
 	private void editItem(Product product) {
+		Message.consoleMessage("Entering item edit window.");
 		//will always include "back" button. Instantiate, control, and then move on.
 		//buttons
 		Button backToTable = new Button("<- Back to Pricing Overview"); //improve on the back arrow - make an image
@@ -480,6 +496,10 @@ public class WindowMaker extends Application {
 			buttonDeleteItem.setDisable(false);
 			buttonEditItem.setDisable(false);
 			genericPaneWrapper.setContent(centerPane);
+
+			//update existing TableView items
+			centerPane.getColumns().get(1).setVisible(false);
+			centerPane.getColumns().get(1).setVisible(true);
 		});
 
 		//pre-define GridPane for all cases of the edit window
@@ -512,7 +532,9 @@ public class WindowMaker extends Application {
 		buttonDeleteItem.setDisable(true);
 		buttonEditItem.setDisable(true);
 
+		//add all elements to the edit window grid
 		VBox gridPaneVbox = new VBox(backToTable, new Separator(), productDetailPane);
+		//use element padding
 		gridPaneVbox.setPadding(new Insets(10));
 		genericPaneWrapper.setContent(gridPaneVbox);
 	}

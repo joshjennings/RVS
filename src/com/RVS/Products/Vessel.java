@@ -20,12 +20,9 @@ import java.util.Objects;
  */
 public abstract class Vessel extends Product {
 
-	private String model, description;
 	private int diameter;
 	private BigDecimal length;
 	private Orient orientation;
-	private BigDecimal priceList;
-	private Material material;
 
 	public abstract String formattedModel(HashMap<Integer,Integer> hashMap);
 	public abstract String formattedDescription();
@@ -34,15 +31,13 @@ public abstract class Vessel extends Product {
 
 	public Vessel(String model) {
 		super(model);
-		this.model = model;
-		this.description = model;
+		this.diameter = 0;
 		this.orientation = Orient.UNASSIGNED;
 	}
 
 	public int getDiameter() {
 		return this.diameter;
 	}
-
 	public void setDiameter(int diameter) {
 		this.diameter = diameter;
 	}
@@ -50,7 +45,6 @@ public abstract class Vessel extends Product {
 	public BigDecimal getLength() {
 		return this.length;
 	}
-
 	public void setLength(BigDecimal length) {
 		this.length = length;
 	}
@@ -58,7 +52,6 @@ public abstract class Vessel extends Product {
 	public Orient getOrientation() {
 		return this.orientation;
 	}
-
 	public String getOrientationString() {
 		String orientation = "null";
 		if (this.getOrientation().equals(Orient.HORIZONTAL)) {
@@ -69,7 +62,6 @@ public abstract class Vessel extends Product {
 		}
 		return orientation;
 	}
-
 	public void setOrientation(Orient orientation) {
 		this.orientation = orientation;
 	}

@@ -13,17 +13,12 @@ import java.util.HashMap;
  */
 public class Recirculator extends Vessel {
 
-	private String model, description;
-	private int diameter;
-	private BigDecimal length;
 	private Orient orientation;
 	private BigDecimal priceList;
 	private Material material;
 
 	public Recirculator(String model) {
 		super(model);
-		this.model = model;
-		this.diameter = 0;
 	}
 
 	@Override
@@ -68,11 +63,6 @@ public class Recirculator extends Vessel {
 		}
 
 		return orientation + "Recirculator";
-	}
-
-	@Override
-	public String toString() {
-		return this.getModel();
 	}
 	
 }

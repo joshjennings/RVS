@@ -5,15 +5,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 
 /**
  * Created by manufacturing9 on 2/23/2016.
+ *
+ * @author Josh Jennings
  */
 public class ControlPanel extends Product {
 	private String model;
 
 	public ControlPanel(String model) {
+		super(model);
 		this.model = model;
 	}
 

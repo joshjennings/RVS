@@ -21,33 +21,33 @@ public class Accumulator extends Vessel {
 	private Material material;
 
 	public Accumulator(String model) {
-//		super(model);
+		super(model);
 		this.model = model;
 	}
 
-	public String getModel() {
-		return this.model;
-	}
-
-	public void setModel(String model) {
-		this.model = model;
-	}
-
-	public String getDescription() {
-		return this.description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public int getDiameter() {
-		return this.diameter;
-	}
-
-	public void setDiameter(int diameter) {
-		this.diameter = diameter;
-	}
+//	public String getModel() {
+//		return this.model;
+//	}
+//
+//	public void setModel(String model) {
+//		this.model = model;
+//	}
+//
+//	public String getDescription() {
+//		return this.description;
+//	}
+//
+//	public void setDescription(String description) {
+//		this.description = description;
+//	}
+//
+//	public int getDiameter() {
+//		return this.diameter;
+//	}
+//
+//	public void setDiameter(int diameter) {
+//		this.diameter = diameter;
+//	}
 
 	public String formattedModel(HashMap<Integer,Integer> mapDiameterLength) {
 		String model, diameter, length;

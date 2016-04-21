@@ -21,6 +21,7 @@ public class Pump extends Product {
 	}
 
 	public Pump(String model) {
+		super(model);
 		this.modelRVS = model;
 	}
 
