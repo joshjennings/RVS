@@ -249,15 +249,15 @@ public class WindowMaker extends Application {
 		columnDesc.setPrefWidth(300);
 		columnDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
 		//price column
-		TableColumn<Product, String> columnListPrice = new TableColumn<>("List Price");
-		columnListPrice.setMinWidth(100);
-		columnListPrice.setPrefWidth(150);
-		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceListFormatted"));
+//		TableColumn<Product, String> columnListPrice = new TableColumn<>("List Price");
+//		columnListPrice.setMinWidth(100);
+//		columnListPrice.setPrefWidth(150);
+//		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceListFormatted"));
 
 		//add columns to table
-		centerPane.getColumns().addAll(columnModel, columnDesc, columnListPrice);
+		centerPane.getColumns().addAll(columnModel, columnDesc/*, columnListPrice*/);
 		centerPane.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		centerPane.setMinWidth(columnModel.getMinWidth() + columnDesc.getMinWidth() + columnListPrice.getMinWidth());
+		centerPane.setMinWidth(columnModel.getMinWidth() + columnDesc.getMinWidth()/* + columnListPrice.getMinWidth()*/);
 		//add observable list to table
 		centerPane.setItems(productObservableList);
 

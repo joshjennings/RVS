@@ -49,7 +49,7 @@ public class Accumulator extends Vessel {
 //		this.diameter = diameter;
 //	}
 
-	public String formattedModel(HashMap<Integer,Integer> mapDiameterLength) {
+	public String formattedModelString(HashMap<Integer, Integer> mapDiameterLength) {
 		String model, diameter, length;
 
 		Message.consoleMessage("Formatting model name");

@@ -17,7 +17,7 @@ public abstract class Product {
 
 	private String model, description;
 	private Material material;
-	private BigDecimal priceList;
+	private BigDecimal priceList, priceListFormatted;
 
 	public Product() {}
 

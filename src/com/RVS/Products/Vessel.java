@@ -1,7 +1,6 @@
 package com.RVS.Products;
 
 import com.Josh.Message;
-import com.RVS.Products.Vessels.Recirculator;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -11,7 +10,6 @@ import javafx.scene.layout.Pane;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Objects;
 
 /**
  * Created by Josh on 12/16/2015.
@@ -24,7 +22,7 @@ public abstract class Vessel extends Product {
 	private BigDecimal length;
 	private Orient orientation;
 
-	public abstract String formattedModel(HashMap<Integer,Integer> hashMap);
+	public abstract String formattedModelString(HashMap<Integer, Integer> hashMap);
 	public abstract String formattedDescription();
 
 	public Vessel() {}
@@ -110,6 +108,7 @@ public abstract class Vessel extends Product {
 
 	public Pane editWindow() {
 		Message.consoleMessage("Displaying item edit pane for item: " + this.getDescription());
+		HashMap<Integer, Integer> diameterLengthMap = makeDiameterLengthMap();
 		GridPane gridPane = new GridPane();
 		//gridPane.setPadding(new Insets(10,10,10,10));
 		gridPane.setHgap(10);
@@ -172,7 +171,8 @@ public abstract class Vessel extends Product {
 			//TODO: if value is changed, update model TextField
 			Message.consoleMessage("Changing selected property's size from " + oldValue + " to " + newValue + ".");
 			this.setDiameter(Integer.parseInt(newValue.getName())); //set instance diameter
-			inputModel.setText(this.formattedModel(makeDiameterLengthMap())); //set model
+			inputModel.setText(this.formattedModelString(diameterLengthMap)); //set model
+			this.setModel(this.formattedModelString(diameterLengthMap));
 		});
 		//if diameter of instance is already selected, fill in the ComboBox
 		if (this.diameter != 0) { //if zero, skip because it's not been instantiated yet
@@ -192,12 +192,13 @@ public abstract class Vessel extends Product {
 			//select matching size in list
 			inputSize.setValue(selectedDiameter);
 			//set model text
-			inputModel.setText(this.formattedModel(makeDiameterLengthMap()));
+			inputModel.setText(this.formattedModelString(diameterLengthMap));
+			this.setModel(this.formattedModelString(diameterLengthMap));
 
 //			if (this.getLength() == null) { //if length isn't set, don't use it
 //				Message.consoleMessage("Here");
-//				String formattedModel = this.formattedModel(makeDiameterLengthMap());
-//				inputModel.setText(formattedModel);
+//				String formattedModelString = this.formattedModelString(makeDiameterLengthMap());
+//				inputModel.setText(formattedModelString);
 ////				inputModel.setText("Vessel" + this.getDiameter()); //TODO: change "Vessel" to model
 //			} else { //if length is set, include it
 //				Message.consoleMessage("Nope. Here.");
@@ -213,49 +214,19 @@ public abstract class Vessel extends Product {
 			//output to console what's happening
 			Message.consoleMessage("Changing selected property's orientation from " + oldValue + " to " + newValue + ".");
 
-			if (newValue.equals("Horizontal")) { //if orientation not already set and new is Horiz, go here
+			if (newValue.equals("Horizontal")) { //if Horizontal is selected, set the instance property
 				this.setOrientation(Orient.HORIZONTAL);
-				//String temporaryModel = inputDescription.getText();
-				//inputDescription.setText("Horizontal " + temporaryModel);
-			} else if (newValue.equals("Vertical")) { //if orientation not already set and new is Vert, go here
+			} else if (newValue.equals("Vertical")) { //if Vertical is selected, set the instance property
 				this.setOrientation(Orient.VERTICAL);
-				//String temporaryModel = inputDescription.getText();
-				//inputDescription.setText("Vertical " + temporaryModel);
 			}
 
 			inputDescription.setText(this.formattedDescription());
-
-//			//if the description is already set, it's going to add the new orientation separated by a space.
-//			//find this space and chop off the excess.
-//			if (inputDescription.getText().contains(" ")) {
-//				String subStringDescription = "";
-//				//iterate until space is found. //TODO: find method to find specific character!
-//				for (int counter = 0; counter < inputDescription.getLength(); counter++) {
-//					//if space is found, perform these actions
-//					if (inputDescription.getText().charAt(counter) == ' ') {
-//						subStringDescription = inputDescription.getText().substring(0,counter);
-//						Message.consoleMessage("counter: " + counter);
-//						Message.consoleMessage("string length: " + subStringDescription.length());
-//						Message.consoleMessage("string: " + subStringDescription);
-//						Message.consoleMessage("oldvalue: " + oldValue);
-//						Message.consoleMessage("newvalue: " + newValue);
-//
-//						//replace old text with new text
-//						//inputDescription.replaceText(0,counter,newValue);
-//						inputDescription.setText(this.formattedDescription());
-//
-//						//output new description
-//						Message.consoleMessage("new desc: " + inputDescription.getText());
-//
-//						//stop looping
-//						break;
-//					}
-//				}
-//			}
+			this.setDescription(this.formattedDescription());
 
 			//update model only if size is selected
 			if (this.diameter != 0) {
-				inputModel.setText(this.formattedModel(makeDiameterLengthMap()));
+				inputModel.setText(this.formattedModelString(makeDiameterLengthMap()));
+				this.setModel(this.formattedModelString(diameterLengthMap));
 			}
 		});
 		//set orientation ComboBox - if not unassigned, get orientation and set it

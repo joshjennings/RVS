@@ -31,7 +31,7 @@ public class Thermosyphon extends Vessel {
 	}
 
 	@Override
-	public String formattedModel(HashMap<Integer,Integer> mapDiameterLength) { //this method assumes that vessel diameter is defined
+	public String formattedModelString(HashMap<Integer, Integer> mapDiameterLength) { //this method assumes that vessel diameter is defined
 		String model, diameter, length;
 
 		Message.consoleMessage("Formatting model name");

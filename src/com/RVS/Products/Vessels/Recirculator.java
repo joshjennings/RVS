@@ -13,16 +13,26 @@ import java.util.HashMap;
  */
 public class Recirculator extends Vessel {
 
-	private Orient orientation;
-	private BigDecimal priceList;
-	private Material material;
-
 	public Recirculator(String model) {
 		super(model);
 	}
 
+//	@Override
+//	public void setModel() {
+//		String model;
+//
+//		if (this.getDiameter() != 0) {
+//			if (this.getOrientation() == Orient.HORIZONTAL) {
+//				model = "HR" + this.getDiameter() +
+//			} else if (this.getOrientation() == Orient.VERTICAL) {
+//
+//			}
+//		}
+//		super.setModel(model);
+//	}
+
 	@Override
-	public String formattedModel(HashMap<Integer,Integer> mapDiameterLength) { //this method assumes that vessel diameter is defined
+	public String formattedModelString(HashMap<Integer, Integer> mapDiameterLength) { //this method assumes that vessel diameter is defined
 		String model, diameter, length;
 
 		Message.consoleMessage("Formatting model name");
@@ -52,7 +62,7 @@ public class Recirculator extends Vessel {
 
 	@Override
 	public String formattedDescription() {
-		String orientation;
+		String description, orientation;
 
 		if (this.getOrientation() == Orient.HORIZONTAL) {
 			orientation = "Horizontal ";
@@ -62,7 +72,12 @@ public class Recirculator extends Vessel {
 			orientation = "";
 		}
 
-		return orientation + "Recirculator";
+		description = orientation + "Recirculator";
+
+		//this.setDescription(description);
+		//instance description property should be set separately - we have getters/setters, use them!
+
+		return description;
 	}
 	
 }
