@@ -1,15 +1,13 @@
 package com.RVS.Products;
 
 import com.Josh.Message;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by Josh on 12/16/2015.
@@ -64,17 +62,16 @@ public abstract class Vessel extends Product {
 		this.orientation = orientation;
 	}
 
-//	public void setPriceList(BigDecimal priceList) {
-//		this.priceList = priceList;
-//	}
-
-//	@Override
-//	public String toString() {
-//		return this.model;
-//	}
-
 	public static HashMap<Integer, Double> makeHeadDepthMap() {
 		HashMap<Integer, Double> hashMap = new HashMap<>();
+		hashMap.put(6, 3.5);
+		hashMap.put(8, 4.0);
+		hashMap.put(10, 5.0);
+		hashMap.put(12, 5.5);
+		hashMap.put(14, 5.8125);
+		hashMap.put(16, 6.5);
+		hashMap.put(18, 6.825);
+		hashMap.put(20, 7.5);
 		hashMap.put(24,8.0);
 		hashMap.put(30,9.5);
 		hashMap.put(36,11.0);
@@ -89,6 +86,10 @@ public abstract class Vessel extends Product {
 		hashMap.put(108,29.0);
 		hashMap.put(120,32.0);
 		hashMap.put(144,38.0);
+		
+		for (Integer key : hashMap.keySet()) {
+			System.out.println(key + "," + hashMap.get(key));
+		}
 
 		return hashMap;
 	}
@@ -276,7 +277,19 @@ public abstract class Vessel extends Product {
 		}
 	}
 
-
+	//	@Override
+	public Boolean isModelComplete() {
+		return (this.getModel().startsWith("HR") || this.getModel().startsWith("VR")) && isNumeric(this.getModel().substring(this.getModel().length() - 1));
+	}
+	
+	private Boolean isNumeric(String stringToEvaulate) {
+		try {
+			Double.parseDouble(stringToEvaulate);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		return true;
+	}
 
 
 }

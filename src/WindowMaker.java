@@ -4,27 +4,28 @@ import com.RVS.Products.Vessel;
 import com.RVS.Products.Vessels.*;
 import com.RVS.WindowMakerProcessor;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import com.Josh.Message;
+import javafx.util.Callback;
 
-import java.sql.*;
+//import java.sql.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This primary (main) class instantiates a window for data entry and creation.
@@ -34,18 +35,21 @@ import java.util.Objects;
 public class WindowMaker extends Application {
 
 	Region spacer;
-	TreeView<Product> treeView;
+	//	TreeView<Product> treeView;
 	ObservableList<String> productList;
 	ObservableList<String> featureList;
 	HashMap<Integer, Integer> mapDiameterLength;
 	Button buttonAddProduct, buttonAddFeature, buttonDeleteItem, buttonEditItem;
 	BorderPane rootPane;
-	static Connection databaseConnection;
+	//	static Connection databaseConnection;
+	HashMap<String, BigDecimal> priceList;
 
 	//centerPane
 	TreeItem<Product> root;
-	TableView<Product> centerPane;
-	ScrollPane genericPaneWrapper;
+	//	TableView<Product> centerPane;
+	VBox centerPane;
+	TreeTableView<Product> treeTableView;
+	ScrollPane treeTableScrollWrapper;
 	ObservableList<Product> productObservableList;
 	HBox buttonBar;
 
@@ -107,6 +111,7 @@ public class WindowMaker extends Application {
 
 		//create scene
 		Scene scene = new Scene(rootPane);
+		//scene.getStylesheets().add("stylesheet.css");
 
 		//create stage
 		primaryStage.setScene(scene);
@@ -132,6 +137,7 @@ public class WindowMaker extends Application {
 		productList = Product.constructListOfStandardProducts();
 		featureList = Feature.constructListOfStandardFeatures();
 		mapDiameterLength = Vessel.makeDiameterLengthMap();
+		priceList = Product.constructPriceList();
 
 		List<Product> productList = new ArrayList<>();
 		productObservableList = FXCollections.observableList(productList);
@@ -165,27 +171,22 @@ public class WindowMaker extends Application {
 	 */
 	private Node centerPane() {
 		root = new TreeItem<>(new BareVessel("root"));
-		centerPane = new TableView<>();
+		treeTableView = new TreeTableView<>(root);
 
-		genericPaneWrapper = new ScrollPane();
-		//fit to containing view pane
-		genericPaneWrapper.setFitToWidth(true);
-		genericPaneWrapper.setFitToHeight(true);
+
 
 		Message.consoleMessage("Adding center pane.");
 
 		//CREATE TREEVIEW
 		root.setExpanded(true);
 
-		treeView = new TreeView<>(root);
-
-		treeView.setShowRoot(false);
-		treeView.setMinWidth(340);
-		treeView.setOnMouseClicked(event -> {
+		treeTableView.setShowRoot(false);
+		treeTableView.setMinWidth(1100);
+		treeTableView.setOnMouseClicked(event -> {
 			//if a TreeView item is selected, enable the Edit button
 			//otherwise, don't do anything (but log it on the console)
 			try {
-				if (treeView.getSelectionModel().getSelectedItem() != null) {
+				if (treeTableView.getSelectionModel().getSelectedItem() != null) {
 					buttonEditItem.setDisable(false);
 				}
 			} catch (Exception e) {
@@ -195,6 +196,7 @@ public class WindowMaker extends Application {
 
 		//buttonBar contains buttons for controlling nodes in TreeView
 		buttonBar = new HBox();
+		buttonBar.setSpacing(20);
 		buttonAddProduct = new Button("Add Product");
 		buttonAddFeature = new Button("Add Feature");
 		buttonDeleteItem = new Button("Remove Item");
@@ -216,48 +218,152 @@ public class WindowMaker extends Application {
 		buttonBar.setMaxWidth(800);
 
 		//set actions for each button
-		buttonAddProduct.setOnAction(event -> WindowMakerProcessor.addProduct(treeView, root, productObservableList, buttonBar));
-		buttonAddFeature.setOnAction(event -> WindowMakerProcessor.addFeature(treeView, featureList));
-		buttonDeleteItem.setOnAction(event -> WindowMakerProcessor.deleteItem(treeView, buttonBar));
-		buttonEditItem.setOnAction(event -> editItem(treeView.getSelectionModel().getSelectedItem().getValue()));
+		buttonAddProduct.setOnAction(event -> WindowMakerProcessor.addProduct(treeTableView, root, productObservableList, buttonBar));
+		buttonAddFeature.setOnAction(event -> WindowMakerProcessor.addFeature(treeTableView, featureList));
+		buttonDeleteItem.setOnAction(event -> WindowMakerProcessor.deleteItem(treeTableView, buttonBar));
+		buttonEditItem.setOnAction(event -> editItem(treeTableView.getSelectionModel().getSelectedItem().getValue()));
 
-		VBox leftPane = new VBox(treeView, buttonBar);
-		VBox.setVgrow(treeView, Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
 
-		//CREATE TABLEVIEW
+		//CREATE TREETABLEVIEW
 		//CREATE TABLE COLUMNS
 		//model column
-		TableColumn<Product, String> columnModel = new TableColumn<>("Model");
+		TreeTableColumn<Product, String> columnModel = new TreeTableColumn<>("Model");
 		columnModel.setMinWidth(100);
 		columnModel.setPrefWidth(150);
-		columnModel.setCellValueFactory(new PropertyValueFactory<>("model"));
+		columnModel.setCellValueFactory(new TreeItemPropertyValueFactory<>("model"));
 		//description column
-		TableColumn<Product, String> columnDesc = new TableColumn<>("Description");
+		TreeTableColumn<Product, String> columnDesc = new TreeTableColumn<>("Description");
 		columnDesc.setMinWidth(200);
 		columnDesc.setPrefWidth(300);
-		columnDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
+		columnDesc.setCellValueFactory(new TreeItemPropertyValueFactory<>("description"));
 		//price column
-//		TableColumn<Product, String> columnListPrice = new TableColumn<>("List Price");
-//		columnListPrice.setMinWidth(100);
-//		columnListPrice.setPrefWidth(150);
-//		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceListFormatted"));
+		TreeTableColumn<Product, String> columnPrice = new TreeTableColumn<>("List Price");
+		columnPrice.setMinWidth(100);
+		columnPrice.setPrefWidth(150);
+		columnPrice.setCellValueFactory(new TreeItemPropertyValueFactory<>("priceListFormatted"));
 
-		//add columns to table
 		//noinspection unchecked
-		centerPane.getColumns().addAll(columnModel, columnDesc/*, columnListPrice*/);
-		centerPane.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		centerPane.setMinWidth(columnModel.getMinWidth() + columnDesc.getMinWidth()/* + columnListPrice.getMinWidth()*/);
-		//add observable list to table
-		centerPane.setItems(productObservableList);
+		treeTableView.getColumns().addAll(columnModel, columnDesc, columnPrice);
+		treeTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
+		treeTableView.setMinWidth(columnModel.getMinWidth() + columnDesc.getMinWidth()/* + columnListPrice.getMinWidth()*/);
+		//add observable list to table??
 
-		//ADD BOTH PANES TO THE SPLITPANE
-		genericPaneWrapper.setContent(centerPane);
-		SplitPane splitPane = new SplitPane(leftPane, genericPaneWrapper);
-		splitPane.setOrientation(Orientation.HORIZONTAL);
-		splitPane.setDividerPosition(0, 0.2f);
-		SplitPane.setResizableWithParent(leftPane, false); //static method
+		treeTableScrollWrapper = new ScrollPane();
+		treeTableScrollWrapper.setContent(treeTableView);
+		treeTableScrollWrapper.setFitToWidth(true);
+		treeTableScrollWrapper.setFitToHeight(true);
 
-		return splitPane;
+		centerPane = new VBox(treeTableScrollWrapper, buttonBar);
+//		centerPaneWrapper = new Pane(centerPane);
+		VBox.setVgrow(treeTableScrollWrapper, Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
+
+//		genericPaneWrapper = new ScrollPane(centerPane);
+//		//fit to containing view pane
+//		genericPaneWrapper.setFitToWidth(true);
+//		genericPaneWrapper.setFitToHeight(true);
+
+		centerPane.setFillWidth(true);
+
+		return centerPane;
+
+
+		/*******************************************************************************/
+
+
+//		root = new TreeItem<>(new BareVessel("root"));
+//		centerPane = new TableView<>();
+//
+//		genericPaneWrapper = new ScrollPane();
+//		//fit to containing view pane
+//		genericPaneWrapper.setFitToWidth(true);
+//		genericPaneWrapper.setFitToHeight(true);
+//
+//		Message.consoleMessage("Adding center pane.");
+//
+//		//CREATE TREEVIEW
+//		root.setExpanded(true);
+//
+//		treeView = new TreeView<>(root);
+//
+//		treeView.setShowRoot(false);
+//		treeView.setMinWidth(340);
+//		treeView.setOnMouseClicked(event -> {
+//			//if a TreeView item is selected, enable the Edit button
+//			//otherwise, don't do anything (but log it on the console)
+//			try {
+//				if (treeView.getSelectionModel().getSelectedItem() != null) {
+//					buttonEditItem.setDisable(false);
+//				}
+//			} catch (Exception e) {
+//				Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
+//			}
+//		});
+//
+//		//buttonBar contains buttons for controlling nodes in TreeView
+//		buttonBar = new HBox();
+//		buttonAddProduct = new Button("Add Product");
+//		buttonAddFeature = new Button("Add Feature");
+//		buttonDeleteItem = new Button("Remove Item");
+//		buttonEditItem = new Button("Edit Item");
+//		//buttonEditItem ("Edit Item") is instantiated in the preamble
+//		buttonAddProduct.setMinWidth(95);
+//		buttonAddProduct.setPrefWidth(100);
+//		buttonAddFeature.setMinWidth(95);
+//		buttonAddFeature.setPrefWidth(100);
+//		buttonAddFeature.setDisable(true);
+//		buttonDeleteItem.setMinWidth(100);
+//		buttonDeleteItem.setPrefWidth(100);
+//		buttonDeleteItem.setDisable(true);
+//		buttonEditItem.setMinWidth(85);
+//		buttonEditItem.setPrefWidth(100);
+//		buttonEditItem.setDisable(true);
+//		buttonBar.getChildren().addAll(buttonAddProduct, buttonAddFeature, buttonDeleteItem, buttonEditItem);
+//		buttonBar.setPrefWidth(400);
+//		buttonBar.setMaxWidth(800);
+//
+//		//set actions for each button
+//		buttonAddProduct.setOnAction(event -> WindowMakerProcessor.addProduct(treeView, root, productObservableList, buttonBar));
+//		buttonAddFeature.setOnAction(event -> WindowMakerProcessor.addFeature(treeView, featureList));
+//		buttonDeleteItem.setOnAction(event -> WindowMakerProcessor.deleteItem(treeView, buttonBar));
+//		buttonEditItem.setOnAction(event -> editItem(treeView.getSelectionModel().getSelectedItem().getValue()));
+//
+//		VBox leftPane = new VBox(treeView, buttonBar);
+//		VBox.setVgrow(treeView, Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
+//
+//		//CREATE TABLEVIEW
+//		//CREATE TABLE COLUMNS
+//		//model column
+//		TableColumn<Product, String> columnModel = new TableColumn<>("Model");
+//		columnModel.setMinWidth(100);
+//		columnModel.setPrefWidth(150);
+//		columnModel.setCellValueFactory(new PropertyValueFactory<>("model"));
+//		//description column
+//		TableColumn<Product, String> columnDesc = new TableColumn<>("Description");
+//		columnDesc.setMinWidth(200);
+//		columnDesc.setPrefWidth(300);
+//		columnDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
+//		//price column
+////		TableColumn<Product, String> columnListPrice = new TableColumn<>("List Price");
+////		columnListPrice.setMinWidth(100);
+////		columnListPrice.setPrefWidth(150);
+////		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceListFormatted"));
+//
+//		//add columns to table
+//		//noinspection unchecked
+//		centerPane.getColumns().addAll(columnModel, columnDesc/*, columnListPrice*/);
+//		centerPane.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+//		centerPane.setMinWidth(columnModel.getMinWidth() + columnDesc.getMinWidth()/* + columnListPrice.getMinWidth()*/);
+//		//add observable list to table
+//		centerPane.setItems(productObservableList);
+//
+//		//ADD BOTH PANES TO THE SPLITPANE
+//		genericPaneWrapper.setContent(centerPane);
+//		SplitPane splitPane = new SplitPane(leftPane, genericPaneWrapper);
+//		splitPane.setOrientation(Orientation.HORIZONTAL);
+//		splitPane.setDividerPosition(0, 0.2f);
+//		SplitPane.setResizableWithParent(leftPane, false); //static method
+//
+//		return splitPane;
 	}
 
 	/**
@@ -311,13 +417,16 @@ public class WindowMaker extends Application {
 		//control objects
 		backToTable.setOnAction(event -> {
 			Message.consoleMessage("Returning to Product Table view");
-			treeView.setDisable(false);
+			treeTableView.setDisable(false);
 			buttonBar.setDisable(false);
-			genericPaneWrapper.setContent(centerPane);
+			centerPane.getChildren().setAll(treeTableScrollWrapper, buttonBar);
+
+			//TODO:set price on Product if model is complete
+			if isModelComplete()
 
 			//update existing TableView items
-			centerPane.getColumns().get(1).setVisible(false);
-			centerPane.getColumns().get(1).setVisible(true);
+			treeTableView.getColumns().get(1).setVisible(false);
+			treeTableView.getColumns().get(1).setVisible(true);
 			//following doesn't work
 //			treeView.setVisible(false);
 //			treeView.setVisible(true);
@@ -328,7 +437,7 @@ public class WindowMaker extends Application {
 		productDetailPane = WindowMakerProcessor.editItem(product);
 
 		//disable the TreeView to avoid selecting another TreeItem that is different than what is shown in editWindow()
-		treeView.setDisable(true);
+		treeTableView.setDisable(true);
 		buttonBar.setDisable(true);
 
 		//add all elements to the edit window grid
@@ -336,7 +445,7 @@ public class WindowMaker extends Application {
 		//use element padding
 		gridPaneVbox.setPadding(new Insets(10));
 		gridPaneVbox.setSpacing(10);
-		genericPaneWrapper.setContent(gridPaneVbox);
+		centerPane.getChildren().setAll(gridPaneVbox);
 	}
 
 	@SuppressWarnings("unused")

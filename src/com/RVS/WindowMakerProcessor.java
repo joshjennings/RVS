@@ -8,6 +8,7 @@ import com.RVS.Products.Vessels.*;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -28,7 +29,7 @@ public class WindowMakerProcessor {
 	private static TreeItem<Product> root;
 	private static ObservableList<Product> productObservableList;
 
-	public static void addProduct(TreeView<Product> treeView,
+	public static void addProduct(TreeTableView<Product> treeView,
 	                              TreeItem<Product> rootTreeItem,
 	                              ObservableList<Product> listOfProductsForTable,
 	                              HBox buttonBox) {
@@ -74,7 +75,7 @@ public class WindowMakerProcessor {
 		}
 	}
 
-	public static void addFeature(TreeView<Product> treeView, ObservableList<String> listOfFeatures) {
+	public static void addFeature(TreeTableView<Product> treeView, ObservableList<String> listOfFeatures) {
 		//attempt to collect the selected TreeItem
 		try {
 			//attempt to collect selection
@@ -219,7 +220,7 @@ public class WindowMakerProcessor {
 		return newItem;
 	}
 
-	public static void deleteItem(TreeView<Product> treeView, HBox buttonContainerToAddOrRemoveProducts) {
+	public static void deleteItem(TreeTableView<Product> treeView, HBox buttonContainerToAddOrRemoveProducts) {
 		String selectedItem = treeView.getSelectionModel().getSelectedItem().getValue().getModel();
 		Message.consoleMessage("Removing item from TreeView: " + selectedItem);
 		treeView.getSelectionModel().getSelectedItem().getParent().getChildren().remove(
