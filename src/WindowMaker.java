@@ -2,6 +2,7 @@ import com.RVS.Accessories.*;
 import com.RVS.Products.Product;
 import com.RVS.Products.Vessel;
 import com.RVS.Products.Vessels.*;
+import com.RVS.WindowMakerProcessor;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -13,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -45,6 +47,7 @@ public class WindowMaker extends Application {
 	TableView<Product> centerPane;
 	ScrollPane genericPaneWrapper;
 	ObservableList<Product> productObservableList;
+	HBox buttonBar;
 
 	public static void main(String[] args) {
 		Message.consoleMessage("Program launch arguments: ");
@@ -73,7 +76,6 @@ public class WindowMaker extends Application {
 	public void start(Stage primaryStage) {
 		//initialize everything
 		Message.consoleMessage("Initializing data.");
-		databaseConnection = WindowMaker.getConnection(); //SQL database connection
 		initialize(); //
 		Message.initialize(); //
 
@@ -114,9 +116,14 @@ public class WindowMaker extends Application {
 		Message.consoleMessage("Showing window.");
 		primaryStage.show();
 		Message.consoleMessage("Window displayed.");
+		Message.consoleMessage("--------------------------------");
+		Message.consoleMessage(" ");
 	}
 
 	private void initialize() {
+		//initiate database connection
+//		databaseConnection = WindowMakerProcessor.getConnection(); //SQL database connection
+
 		//define horizontal spacer that will grow with the window
 		spacer = new Region();
 		HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -128,11 +135,6 @@ public class WindowMaker extends Application {
 
 		List<Product> productList = new ArrayList<>();
 		productObservableList = FXCollections.observableList(productList);
-		productObservableList.addListener((ListChangeListener<Product>) c -> {
-			Message.consoleMessage("**********");
-			Message.consoleMessage("Detected a change in the Product list!");
-			Message.consoleMessage("**********");
-		});
 	}
 
 	/**
@@ -175,8 +177,6 @@ public class WindowMaker extends Application {
 		//CREATE TREEVIEW
 		root.setExpanded(true);
 
-		Message.consoleMessage(root.toString());
-
 		treeView = new TreeView<>(root);
 
 		treeView.setShowRoot(false);
@@ -194,7 +194,7 @@ public class WindowMaker extends Application {
 		});
 
 		//buttonBar contains buttons for controlling nodes in TreeView
-		HBox buttonBar = new HBox();
+		buttonBar = new HBox();
 		buttonAddProduct = new Button("Add Product");
 		buttonAddFeature = new Button("Add Feature");
 		buttonDeleteItem = new Button("Remove Item");
@@ -216,27 +216,15 @@ public class WindowMaker extends Application {
 		buttonBar.setMaxWidth(800);
 
 		//set actions for each button
-		buttonAddProduct.setOnAction(event -> addProduct());
-		buttonAddFeature.setOnAction(event -> addFeature());
-		buttonDeleteItem.setOnAction(event -> deleteItem());
+		buttonAddProduct.setOnAction(event -> WindowMakerProcessor.addProduct(treeView, root, productObservableList, buttonBar));
+		buttonAddFeature.setOnAction(event -> WindowMakerProcessor.addFeature(treeView, featureList));
+		buttonDeleteItem.setOnAction(event -> WindowMakerProcessor.deleteItem(treeView, buttonBar));
 		buttonEditItem.setOnAction(event -> editItem(treeView.getSelectionModel().getSelectedItem().getValue()));
 
 		VBox leftPane = new VBox(treeView, buttonBar);
 		VBox.setVgrow(treeView, Priority.ALWAYS); //always grow the TreeView vertically when modifying window.
 
 		//CREATE TABLEVIEW
-		//centerPane = new TableView<>();
-		//add items to the table
-//		centerPane.getItems().add(new ProductList("MRP-72V","Vertical recirculator package",new BigDecimal(43528)));
-//		centerPane.getItems().add(new ProductList("MVI-48V","Vertical intercooler package",new BigDecimal(32978)));
-//		centerPane.getItems().add(new ProductList("HOP-10","Horizontal oil pot",new BigDecimal(1823)));
-//		centerPane.getItems().add(new Product("MRP",
-//				48,
-//				171.0,
-//				Product.Orient.VERTICAL,
-//				new BigDecimal(12345),
-//				Product.Material.CARBON));
-
 		//CREATE TABLE COLUMNS
 		//model column
 		TableColumn<Product, String> columnModel = new TableColumn<>("Model");
@@ -255,6 +243,7 @@ public class WindowMaker extends Application {
 //		columnListPrice.setCellValueFactory(new PropertyValueFactory<>("priceListFormatted"));
 
 		//add columns to table
+		//noinspection unchecked
 		centerPane.getColumns().addAll(columnModel, columnDesc/*, columnListPrice*/);
 		centerPane.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		centerPane.setMinWidth(columnModel.getMinWidth() + columnDesc.getMinWidth()/* + columnListPrice.getMinWidth()*/);
@@ -310,232 +299,43 @@ public class WindowMaker extends Application {
 		return bottomPane;
 	}
 
-	/**
-	 * This class will construct new items for a TreeView.
-	 *
-	 * @param title Title of the new node/leaf item.
-	 * @param parent Parent of the new node/leaf item.
-	 * @return Returns the new TreeItem created in this method. Returned object can be used to create sub-nodes.
-	 */
-	private TreeItem<Product> makeTreeItem(String title, TreeItem<Product> parent) {
-		Message.consoleMessage("Adding TreeView item. Item: " + title + " | ChildTo: " + parent.getValue().getModel());
-
-		TreeItem<Product> newItem;
-		switch (title) {
-			case "Vessel":
-				newItem = new TreeItem<>(new BareVessel(title));
-				break;
-			case "Pumps":
-				newItem = new TreeItem<>(new Pump(title));
-				break;
-			case "Control Panel":
-				newItem = new TreeItem<>(new ControlPanel(title));
-				break;
-			case "Level Column":
-				newItem = new TreeItem<>(new LevelColumn(title));
-				break;
-			case "Liquid Feed":
-				newItem = new TreeItem<>(new LiquidFeed(title));
-				break;
-			case "Coil":
-				newItem = new TreeItem<>(new Coil(title));
-				break;
-			case "Recirculator":
-				newItem = new TreeItem<>(new Recirculator(title));
-				break;
-			case "Thermosyphon":
-				newItem = new TreeItem<>(new Thermosyphon(title));
-				break;
-			case "Surge Drum":
-				newItem = new TreeItem<>(new SurgeDrum(title));
-				break;
-			case "Accumulator":
-				newItem = new TreeItem<>(new Accumulator(title));
-				break;
-			case "HPR":
-				newItem = new TreeItem<>(new HighPressureReceiver("High Pressure Receiver"));
-				break;
-			case "Intercooler":
-				newItem = new TreeItem<>(new Intercooler(title));
-				break;
-			default:
-				newItem = new TreeItem<>(new BareVessel(title));
-		}
-		newItem.setExpanded(true);
-		parent.getChildren().add(newItem);
-		if (parent != root) productObservableList.add(newItem.getValue());
-		return newItem;
-	}
-
-	private void addProduct() {
-		Message.consoleMessage("Adding a product.");
-		try {
-			TreeItem<Product> newProductItem;
-
-			//display message box to select proper product
-			String nameProduct = Message.selectProduct("Please enter the product name.",
-					"Product Selection",
-					productList);
-
-			//if Cancel or Close pushed or null item selected -> do nothing and return
-			//if legitimate item selected and Enter click -> make the TreeItem
-			if (Objects.equals(nameProduct, "DONOTENTERanyNewPRODUCTinHERErightNOW") || Objects.equals(nameProduct, null)) {
-				Message.consoleMessage("Add Product window cancelled.");
-				return;
-			} else {
-				newProductItem = makeTreeItem(nameProduct, treeView.getRoot());
-			}
-
-			//automatically add subfeatures
-			addSubFeatures(newProductItem);
-
-
-		} catch (Exception e) {
-			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
-			Message.messageBox("Please select an item in the list.", "Notification");
-		}
-
-		//if there are no remaining TreeItems remaining, make specific buttons unavailable
-		if (!treeView.getRoot().isLeaf()) {
-			buttonAddFeature.setDisable(false);
-			buttonDeleteItem.setDisable(false);
-			buttonEditItem.setDisable(false);
-		}
-	}
-
-	private void addSubFeatures(TreeItem<Product> newProductItem) {
-		Message.consoleMessage("Automatically adding subfeatures");
-
-		switch (newProductItem.getValue().getModel()) {
-			case "MRP":
-				Message.consoleMessage("Adding features for MRP");
-				makeTreeItem("Recirculator", newProductItem);
-				makeTreeItem("Level column", newProductItem);
-				makeTreeItem("Oil pot", newProductItem);
-				makeTreeItem("Pumps", newProductItem);
-				makeTreeItem("Control Panel", newProductItem);
-				makeTreeItem("Liquid feed", newProductItem);
-				break;
-			case "MPC":
-				Message.consoleMessage("Adding features for MPC");
-				makeTreeItem("Surge Drum", newProductItem);
-				makeTreeItem("Oil pot", newProductItem);
-				break;
-			case "MVI":
-				Message.consoleMessage("Adding features for MVI");
-				makeTreeItem("Intercooler", newProductItem);
-				makeTreeItem("Oil pot", newProductItem);
-				break;
-			case "HPR":
-				Message.consoleMessage("Adding features for HPR");
-				makeTreeItem("HPR", newProductItem);
-				break;
-			case "TSR":
-				Message.consoleMessage("Adding features for TSR");
-				makeTreeItem("Thermosyphon", newProductItem);
-				break;
-			case "Recirculator":
-				Message.consoleMessage("Adding features for Recirculator");
-				makeTreeItem("Recirculator", newProductItem);
-				break;
-			case "Intercooler":
-				Message.consoleMessage("Adding features for Intercooler");
-				makeTreeItem("Intercooler", newProductItem);
-				break;
-			case "Accumulator":
-				Message.consoleMessage("Adding features for Accumulator");
-				makeTreeItem("Accumulator", newProductItem);
-				break;
-		}
-	}
-
-	private void addFeature() {
-		//attempt to collect the selected TreeItem
-		try {
-			//attempt to collect selection
-			TreeItem<Product> selectedItem = treeView.getSelectionModel().getSelectedItem();
-			//display window with Feature selection list
-			String nameOfFeature = Message.selectProduct("Please select the feature to add.",
-					"Feature Selection",
-					featureList);
-			//add Feature to selected Product
-			makeTreeItem(nameOfFeature, selectedItem);
-		} catch (Exception e) {
-			Message.consoleMessage("Exception handled on button click. No TreeView item selected.");
-			Message.messageBox("Please select an item in the list.", "Notification");
-		}
-	}
-
-	private void deleteItem() {
-		String selectedItem = treeView.getSelectionModel().getSelectedItem().getValue().getModel();
-		Message.consoleMessage("Removing item from TreeView: " + selectedItem);
-		treeView.getSelectionModel().getSelectedItem().getParent().getChildren().remove(
-				treeView.getSelectionModel().getSelectedItem());
-
-		if (treeView.getRoot().isLeaf()) {
-			Message.consoleMessage("Empty product list. Disabling Feature, Delete, and Edit buttons.");
-			buttonAddFeature.setDisable(true);
-			buttonDeleteItem.setDisable(true);
-			buttonEditItem.setDisable(true);
-		}
-
-		treeView.getSelectionModel().clearSelection();
-	}
-
 	private void editItem(Product product) {
 		Message.consoleMessage("Entering item edit window.");
 		//will always include "back" button. Instantiate, control, and then move on.
 		//buttons
-		Button backToTable = new Button("<- Back to Pricing Overview"); //improve on the back arrow - make an image
+		Image leftArrowImage = new Image(getClass().getResourceAsStream("leftArrow.png"));
+		ImageView leftArrow = new ImageView(leftArrowImage);
+		leftArrow.setFitWidth(30);
+		leftArrow.setFitHeight(30);
+		Button backToTable = new Button("Back to Pricing Overview", leftArrow); //improve on the back arrow - make an image
 		//control objects
 		backToTable.setOnAction(event -> {
 			Message.consoleMessage("Returning to Product Table view");
 			treeView.setDisable(false);
-			buttonAddProduct.setDisable(false);
-			buttonAddFeature.setDisable(false);
-			buttonDeleteItem.setDisable(false);
-			buttonEditItem.setDisable(false);
+			buttonBar.setDisable(false);
 			genericPaneWrapper.setContent(centerPane);
 
 			//update existing TableView items
 			centerPane.getColumns().get(1).setVisible(false);
 			centerPane.getColumns().get(1).setVisible(true);
+			//following doesn't work
+//			treeView.setVisible(false);
+//			treeView.setVisible(true);
 		});
 
 		//pre-define GridPane for all cases of the edit window
 		Pane productDetailPane;
-
-		//determine if there is a predefined instance method for the edit window in question
-		//each if statement must define productDetailPane so that it may be passed after all if statements
-		if (product instanceof ControlPanel) {
-			productDetailPane = ((ControlPanel) product).editWindow();
-		} else if (product instanceof Vessel) {
-			productDetailPane = ((Vessel) product).editWindow();
-		} else if (product instanceof Pump) {
-			productDetailPane = ((Pump) product).editWindow();
-		} else if (product instanceof LevelColumn) {
-			productDetailPane = ((LevelColumn) product).editWindow();
-		} else if (product instanceof LiquidFeed) {
-			productDetailPane = ((LiquidFeed) product).editWindow();
-		} else {
-			GridPane gridPane = new GridPane();
-			Message.consoleMessage("Displaying item edit pane for item: " + product.getModel());
-
-			productDetailPane = new Pane();
-			productDetailPane.getChildren().add(gridPane);
-		}
+		productDetailPane = WindowMakerProcessor.editItem(product);
 
 		//disable the TreeView to avoid selecting another TreeItem that is different than what is shown in editWindow()
 		treeView.setDisable(true);
-		buttonAddProduct.setDisable(true);
-		buttonAddFeature.setDisable(true);
-		buttonDeleteItem.setDisable(true);
-		buttonEditItem.setDisable(true);
+		buttonBar.setDisable(true);
 
 		//add all elements to the edit window grid
 		VBox gridPaneVbox = new VBox(backToTable, new Separator(), productDetailPane);
 		//use element padding
 		gridPaneVbox.setPadding(new Insets(10));
+		gridPaneVbox.setSpacing(10);
 		genericPaneWrapper.setContent(gridPaneVbox);
 	}
 
@@ -559,24 +359,6 @@ public class WindowMaker extends Application {
 		}
 	}
 
-	private static Connection getConnection() {
-		Message.consoleMessage("Connecting to database.");
-		Connection connection = null;
-		try {
-			Message.consoleMessage("Here1");
-			Class.forName("com.mysql.jdbc.Driver");
-			Message.consoleMessage("Here2");
-			String url = "jdbc:mysql://localhost/movies";
-			Message.consoleMessage(url);
-			String user = "root";
-			String password = "JavaRocks";
-			connection = DriverManager.getConnection(url, user, password);
-		} catch (ClassNotFoundException | SQLException e) {
-			Message.consoleMessage("ERROR!");
-			e.printStackTrace();
-		}
 
-		return connection;
-	}
 
 }

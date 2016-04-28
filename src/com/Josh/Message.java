@@ -146,7 +146,6 @@ public class Message {
 	}
 
 	private static void buttonEnterClicked(String text) {
-		Message.consoleMessage(text);
 		stage.close();
 		input = text;
 	}
@@ -158,8 +157,6 @@ public class Message {
 
 	public static String selectProduct(String message, String title, ObservableList<String> list) {
 		//TODO: employ this list model:http://stackoverflow.com/questions/26873045/how-do-you-add-labels-to-the-options-in-combobox-and-list
-
-		consoleMessage("New product selection window opened.");
 
 		//initializes to ensure no old values are carried over in subsequent method calls
 		input = null;
