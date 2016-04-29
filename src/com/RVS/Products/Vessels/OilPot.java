@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class OilPot extends Vessel {
 
 	public OilPot(String model) {
-		super(model);
+		super(model, Orient.HORIZONTAL);
 	}
 
 	@Override
@@ -60,5 +60,19 @@ public class OilPot extends Vessel {
 		description = orientation + "Oil Pot";
 
 		return description;
+	}
+
+	@Override
+	public HashMap<Integer, Integer> makeDiameterLengthMap() {
+		HashMap<Integer, Integer> hashMap = new HashMap<>();
+
+		HashMap<Integer, Double> mapHeadDepth = makeHeadDepthMap();
+
+		mapHeadDepth.forEach((k, v) -> {
+			hashMap.put(k, (int) Math.round(119.0 + (2.0 * v)));
+			//Message.consoleMessage(k.toString() + " : " + hashMap.get(k).toString());
+		});
+
+		return hashMap;
 	}
 }

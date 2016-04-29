@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
-import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -125,7 +124,7 @@ public class WindowMakerProcessor {
 				makeTreeItem("Level column", newProductItem);
 				makeTreeItem("Oil pot", newProductItem);
 				makeTreeItem("Pumps", newProductItem);
-				makeTreeItem("Control Panel", newProductItem);
+				makeTreeItem("Control panel", newProductItem);
 				makeTreeItem("Liquid feed", newProductItem);
 				break;
 			case "MPC":
@@ -179,13 +178,13 @@ public class WindowMakerProcessor {
 			case "Pumps":
 				newItem = new TreeItem<>(new Pump(title));
 				break;
-			case "Control Panel":
+			case "Control panel":
 				newItem = new TreeItem<>(new ControlPanel(title));
 				break;
-			case "Level Column":
+			case "Level column":
 				newItem = new TreeItem<>(new LevelColumn(title));
 				break;
-			case "Liquid Feed":
+			case "Liquid feed":
 				newItem = new TreeItem<>(new LiquidFeed(title));
 				break;
 			case "Coil":
@@ -241,6 +240,7 @@ public class WindowMakerProcessor {
 		treeView.getSelectionModel().clearSelection();
 	}
 
+	@SuppressWarnings("unused")
 	public static Connection getConnection() {
 		Message.consoleMessage("Connecting to database.");
 		Connection connection = null;

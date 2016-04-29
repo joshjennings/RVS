@@ -12,17 +12,8 @@ import javafx.scene.layout.Pane;
  * @author Josh Jennings
  */
 public class ControlPanel extends Product {
-	private String model;
 
-	public ControlPanel(String model) {
-		super(model);
-		this.model = model;
-	}
-
-	@Override
-	public String toString() {
-		return this.model;
-	}
+	public ControlPanel(String model) { super(model); }
 
 	public Pane editWindow() {
 		GridPane controlPanelEditPane = new GridPane();
@@ -31,7 +22,7 @@ public class ControlPanel extends Product {
 		Label lblModel = new Label("Model");
 
 		//Controls
-		TextField inputModel = new TextField(this.model);
+		TextField inputModel = new TextField(this.getModel());
 
 		controlPanelEditPane.addRow(0, lblModel, inputModel);
 

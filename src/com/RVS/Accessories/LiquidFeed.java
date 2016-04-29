@@ -12,15 +12,9 @@ import javafx.scene.layout.Pane;
  * @author Josh Jennings
  */
 public class LiquidFeed extends Product {
-	private String model;
 
 	public LiquidFeed(String model) {
-		this.model = model;
-	}
-
-	@Override
-	public String toString() {
-		return this.model;
+		super(model);
 	}
 
 	public Pane editWindow() { //TODO: edit this to display correct window
@@ -30,7 +24,7 @@ public class LiquidFeed extends Product {
 		Label lblModel = new Label("Model");
 
 		//Controls
-		TextField inputModel = new TextField(this.model);
+		TextField inputModel = new TextField(this.getModel());
 
 		controlPanelEditPane.addRow(0, lblModel, inputModel);
 

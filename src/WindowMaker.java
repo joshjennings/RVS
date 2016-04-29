@@ -132,7 +132,17 @@ public class WindowMaker extends Application {
 		//populate data lists
 		productList = Product.constructListOfStandardProducts();
 		featureList = Feature.constructListOfStandardFeatures();
-		mapDiameterLength = Vessel.makeDiameterLengthMap();
+		Vessel vessel = new Vessel() { //created solely for the next method call after instantiation
+			@Override
+			public String formattedModelString(HashMap<Integer, Integer> hashMap) {
+				return null;
+			}
+			@Override
+			public String formattedDescription() {
+				return null;
+			}
+		};
+		mapDiameterLength = vessel.makeDiameterLengthMap();
 		priceList = Product.constructPriceList();
 
 		List<Product> productList = new ArrayList<>();
@@ -403,14 +413,12 @@ public class WindowMaker extends Application {
 
 	private void editItem(Product product) {
 		Message.consoleMessage("Entering item edit window.");
-		//will always include "back" button. Instantiate, control, and then move on.
-		//buttons
+
 		Image leftArrowImage = new Image(getClass().getResourceAsStream("leftArrow.png"));
 		ImageView leftArrow = new ImageView(leftArrowImage);
 		leftArrow.setFitWidth(30);
 		leftArrow.setFitHeight(30);
-		Button backToTable = new Button("Back to Pricing Overview", leftArrow); //improve on the back arrow - make an image
-		//control objects
+		Button backToTable = new Button("Back to Pricing Overview", leftArrow);
 		backToTable.setOnAction(event -> {
 			Message.consoleMessage("Returning to Product Table view");
 			treeTableView.setDisable(false);

@@ -8,7 +8,6 @@ import javafx.scene.layout.Pane;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  * Created by Josh on 12/16/2015.
@@ -30,6 +29,12 @@ public abstract class Vessel extends Product {
 		super(model);
 		this.diameter = 0;
 		this.orientation = Orient.UNASSIGNED;
+	}
+
+	public Vessel(String model, Orient orientation) {
+		super(model);
+		this.diameter = 0;
+		this.orientation = orientation;
 	}
 
 	public int getDiameter() {
@@ -63,7 +68,7 @@ public abstract class Vessel extends Product {
 		this.orientation = orientation;
 	}
 
-	public static HashMap<Integer, Double> makeHeadDepthMap() {
+	protected static HashMap<Integer, Double> makeHeadDepthMap() {
 		HashMap<Integer, Double> hashMap = new HashMap<>();
 		hashMap.put(6, 3.5);
 		hashMap.put(8, 4.0);
@@ -95,14 +100,13 @@ public abstract class Vessel extends Product {
 		return hashMap;
 	}
 
-	public static HashMap<Integer, Integer> makeDiameterLengthMap() {
+	public HashMap<Integer, Integer> makeDiameterLengthMap() {
 		HashMap<Integer, Integer> hashMap = new HashMap<>();
 
 		HashMap<Integer, Double> mapHeadDepth = makeHeadDepthMap();
 
 		mapHeadDepth.forEach((k,v) -> {
 			hashMap.put(k, (int) Math.round(119.0 + (2.0*v)));
-			//Message.consoleMessage(k.toString() + " : " + hashMap.get(k).toString());
 		});
 
 		return hashMap;
