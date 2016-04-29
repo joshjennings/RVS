@@ -20,10 +20,9 @@ public abstract class Product {
 
 	private String model, description;
 	private Material material;
-	private BigDecimal priceList, priceListFormatted;
-//	private Boolean modelComplete;
+	private BigDecimal priceList;
 
-//	public abstract Boolean isModelComplete();
+	public abstract Boolean isModelComplete();
 
 	public Product() {}
 
@@ -91,10 +90,7 @@ public abstract class Product {
 		//Set locale and number formatter object
 		Locale currentLocale = new Locale("en", "US");
 		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(currentLocale);
-		//output to console
-		Message.consoleMessage("Collecting product price: " + currencyFormatter.format(this.priceList));
 		//return formatted price
-		Message.consoleMessage(currencyFormatter.format(this.priceList));
 		return currencyFormatter.format(this.priceList);
 	}
 

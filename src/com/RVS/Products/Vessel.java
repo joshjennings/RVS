@@ -1,6 +1,7 @@
 package com.RVS.Products;
 
 import com.Josh.Message;
+import com.RVS.Products.Vessels.OilPot;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -86,10 +87,10 @@ public abstract class Vessel extends Product {
 		hashMap.put(108,29.0);
 		hashMap.put(120,32.0);
 		hashMap.put(144,38.0);
-		
-		for (Integer key : hashMap.keySet()) {
-			System.out.println(key + "," + hashMap.get(key));
-		}
+
+//		for (Integer key : hashMap.keySet()) {
+//			System.out.println(key + "," + hashMap.get(key));
+//		}
 
 		return hashMap;
 	}
@@ -187,14 +188,18 @@ public abstract class Vessel extends Product {
 						break;
 					}
 				} catch (Exception e) {
-					Message.consoleMessage("Skipping an entry during iteration.");
+					//Message.consoleMessage("Skipping an entry during iteration.");
 				} //if Exception caught, do nothing
 			}
 			//select matching size in list
 			inputSize.setValue(selectedDiameter);
 			//set model text
+			Message.consoleMessage("Setting model...");
 			inputModel.setText(this.formattedModelString(diameterLengthMap));
 			this.setModel(this.formattedModelString(diameterLengthMap));
+			if (this instanceof OilPot) {
+				Message.consoleMessage("It's an Oil Pot!");
+			}
 
 //			if (this.getLength() == null) { //if length isn't set, don't use it
 //				Message.consoleMessage("Here");
@@ -277,12 +282,12 @@ public abstract class Vessel extends Product {
 		}
 	}
 
-	//	@Override
+	@Override
 	public Boolean isModelComplete() {
-		return (this.getModel().startsWith("HR") || this.getModel().startsWith("VR")) && isNumeric(this.getModel().substring(this.getModel().length() - 1));
+		return false;
 	}
 	
-	private Boolean isNumeric(String stringToEvaulate) {
+	protected static Boolean isNumeric(String stringToEvaulate) {
 		try {
 			Double.parseDouble(stringToEvaulate);
 		} catch (NumberFormatException e) {

@@ -36,4 +36,9 @@ public class LevelColumn extends Product {
 
 		return controlPanelEditPane;
 	}
+
+	@Override
+	public Boolean isModelComplete() {
+		return false;
+	}
 }

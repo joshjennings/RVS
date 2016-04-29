@@ -1,5 +1,3 @@
-package com.RVS;
-
 import com.Josh.Message;
 import com.RVS.Accessories.*;
 import com.RVS.Products.Product;
@@ -210,6 +208,9 @@ public class WindowMakerProcessor {
 				break;
 			case "Intercooler":
 				newItem = new TreeItem<>(new Intercooler(title));
+				break;
+			case "Oil pot":
+				newItem = new TreeItem<>(new OilPot(title));
 				break;
 			default:
 				newItem = new TreeItem<>(new BareVessel(title));

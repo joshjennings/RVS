@@ -48,4 +48,9 @@ public class Pump extends Product {
 
 		return controlPanelEditPane;
 	}
+
+	@Override
+	public Boolean isModelComplete() {
+		return false;
+	}
 }

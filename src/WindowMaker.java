@@ -2,10 +2,7 @@ import com.RVS.Accessories.*;
 import com.RVS.Products.Product;
 import com.RVS.Products.Vessel;
 import com.RVS.Products.Vessels.*;
-import com.RVS.WindowMakerProcessor;
 import javafx.application.Application;
-import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -19,7 +16,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import com.Josh.Message;
-import javafx.util.Callback;
 
 //import java.sql.*;
 import java.math.BigDecimal;
@@ -422,7 +418,13 @@ public class WindowMaker extends Application {
 			centerPane.getChildren().setAll(treeTableScrollWrapper, buttonBar);
 
 			//TODO:set price on Product if model is complete
-			if isModelComplete()
+			if (product.isModelComplete()) {
+//				Message.consoleMessage("Model is complete.");
+//				Message.consoleMessage("Dia:   " + ((Vessel) product).getDiameter());
+//				Message.consoleMessage("Model: " + product.getModel());
+//				Message.consoleMessage("Price: " + priceList.get(product.getModel()));
+				product.setPriceList(priceList.get(product.getModel()));
+			}
 
 			//update existing TableView items
 			treeTableView.getColumns().get(1).setVisible(false);

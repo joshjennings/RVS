@@ -3,17 +3,16 @@ package com.RVS.Products.Vessels;
 import com.Josh.Message;
 import com.RVS.Products.Vessel;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 
 /**
- * Created by Josh on 3/9/16.
+ * Created by manufacturing9 on 4/29/2016.
  *
  * @author Josh Jennings
  */
-public class Recirculator extends Vessel {
+public class OilPot extends Vessel {
 
-	public Recirculator(String model) {
+	public OilPot(String model) {
 		super(model);
 	}
 
@@ -21,23 +20,23 @@ public class Recirculator extends Vessel {
 	public String formattedModelString(HashMap<Integer, Integer> mapDiameterLength) { //this method assumes that vessel diameter is defined
 		String model, diameter, length;
 
-		Message.consoleMessage("Formatting model name");
+		Message.consoleMessage("Formatting model name for oil pot");
 
 		diameter = String.valueOf(this.getDiameter());
 		length = mapDiameterLength.get(this.getDiameter()).toString();
 
 		if (this.getOrientation().equals(Orient.HORIZONTAL)) {
-			model = "HR";
+			model = "HOP";
 			if (length.equals("")) {
 				return model + diameter;
 			}
 		} else if (this.getOrientation().equals(Orient.VERTICAL)) {
-			model = "VR";
+			model = "VOP";
 			if (length.equals("")) {
 				return model + diameter;
 			}
 		} else {
-			model = "Recirculator";
+			model = "Oil Pot";
 			if (length.equals("")) {
 				return model + " " + diameter;
 			}
@@ -58,14 +57,8 @@ public class Recirculator extends Vessel {
 			orientation = "";
 		}
 
-		description = orientation + "Recirculator";
+		description = orientation + "Oil Pot";
 
 		return description;
 	}
-
-	@Override
-	public Boolean isModelComplete() {
-		return (this.getModel().startsWith("HR") || this.getModel().startsWith("VR")) && isNumeric(this.getModel().substring(this.getModel().length() - 1));
-	}
-	
 }

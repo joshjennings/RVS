@@ -37,4 +37,9 @@ public class ControlPanel extends Product {
 
 		return controlPanelEditPane;
 	}
+
+	@Override
+	public Boolean isModelComplete() {
+		return false;
+	}
 }

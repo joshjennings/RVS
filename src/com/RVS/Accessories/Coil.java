@@ -36,4 +36,9 @@ public class Coil extends Product {
 
 		return controlPanelEditPane;
 	}
+
+	@Override
+	public Boolean isModelComplete() {
+		return false;
+	}
 }
