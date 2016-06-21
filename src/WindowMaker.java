@@ -1,4 +1,5 @@
 import com.RVS.Accessories.*;
+import com.RVS.Documentation.PDFMaker;
 import com.RVS.Products.Product;
 import com.RVS.Products.Vessel;
 import com.RVS.Products.Vessels.*;
@@ -16,8 +17,10 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import com.Josh.Message;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 //import java.sql.*;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +55,7 @@ public class WindowMaker extends Application {
 	public static void main(String[] args) {
 		Message.consoleMessage("Program launch arguments: ");
 		if (args.length == 0) {
-			Message.consoleMessage("   <None>");
+			Message.consoleMessage("-->   <None>");
 		} else {
 			for (int counter = 0; counter < args.length; counter++) {
 				Message.consoleMessage("   " + (counter + 1) + ".) " + args[counter]);
@@ -78,6 +81,13 @@ public class WindowMaker extends Application {
 		Message.consoleMessage("Initializing data.");
 		initialize(); //
 		Message.initialize(); //
+
+		//TODO: MOVE THIS TO THE "CREATE QUOTE" BUTTON
+		try {
+			PDFMaker.createPDF();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 //		if (databaseConnection == null) {
 //			Message.consoleMessage("Connection is null.");
