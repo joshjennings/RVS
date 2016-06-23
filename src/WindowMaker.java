@@ -111,9 +111,9 @@ public class WindowMaker extends Application {
 
 		//create BorderPane (root)
 		rootPane = new BorderPane();
-		rootPane.setTop(topPane());
-		rootPane.setCenter(centerPane());
-		rootPane.setBottom(bottomPane());
+//		rootPane.setTop(topPane());
+//		rootPane.setCenter(centerPane());
+//		rootPane.setBottom(bottomPane());
 
 		//create scene
 		Scene scene = new Scene(rootPane);
