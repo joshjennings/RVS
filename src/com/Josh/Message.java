@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -49,13 +51,13 @@ public class Message {
 		stage.setTitle(title);
 		stage.setMinWidth(250);
 
-//		Image warning = new Image("../images/warning.png",50,50,true,true);
-//		ImageView imageView = new ImageView(warning);
+		Image warning = new Image("images/warning.png",50,50,true,true);
+		ImageView imageView = new ImageView(warning);
 
 		Label lbl = new Label();
 		lbl.setText(message);
 
-		HBox information = new HBox(/*imageView,*/lbl);
+		HBox information = new HBox(imageView,lbl);
 		//TODO: figure out how to properly space the following text. Currently too crowded.
 		information.setSpacing(20);
 		information.setPadding(new Insets(100));

@@ -17,7 +17,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import com.Josh.Message;
-import org.apache.pdfbox.pdmodel.PDDocument;
 
 //import java.sql.*;
 import java.io.IOException;
@@ -58,7 +57,7 @@ public class WindowMaker extends Application {
 			Message.consoleMessage("-->   <None>");
 		} else {
 			for (int counter = 0; counter < args.length; counter++) {
-				Message.consoleMessage("   " + (counter + 1) + ".) " + args[counter]);
+				Message.consoleMessage("-->   " + (counter + 1) + ".) " + args[counter]);
 			}
 		}
 		//TODO: add new method to create splash screen
@@ -89,6 +88,7 @@ public class WindowMaker extends Application {
 			e.printStackTrace();
 		}
 
+		//TODO: Create SQL connection
 //		if (databaseConnection == null) {
 //			Message.consoleMessage("Connection is null.");
 //		}
@@ -111,9 +111,9 @@ public class WindowMaker extends Application {
 
 		//create BorderPane (root)
 		rootPane = new BorderPane();
-//		rootPane.setTop(topPane());
-//		rootPane.setCenter(centerPane());
-//		rootPane.setBottom(bottomPane());
+		rootPane.setTop(topPane());
+		rootPane.setCenter(centerPane());
+		rootPane.setBottom(bottomPane());
 
 		//create scene
 		Scene scene = new Scene(rootPane);
@@ -122,7 +122,14 @@ public class WindowMaker extends Application {
 		//create stage
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("RVS Pricing Program");
-		primaryStage.getIcons().add(new Image("java.png"));
+		Image image = null;
+		try {
+			image = new Image("java.png");
+			primaryStage.getIcons().add(image);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+
 		primaryStage.setMinWidth(1100.0);
 		Message.consoleMessage("Showing window.");
 		primaryStage.show();

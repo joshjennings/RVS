@@ -112,7 +112,7 @@ public class PDFMaker {
 				false);
 
 		// Add image
-		BufferedImage logo = ImageIO.read( new File( "/Users/Josh/IdeaProjects/RVS/src/planeLogo.png" ) );
+		BufferedImage logo = ImageIO.read( new File( "images/planeLogo.png" ) );
 		PDImageXObject image = LosslessFactory.createFromImage(document, logo);
 		//PDPageContentStream contentStream = new PDPageContentStream(document, new PDPage(), true, false);
 		contentStream.drawImage(image, logoX, logoY, logo.getWidth() / 2, logo.getHeight() / 2);
