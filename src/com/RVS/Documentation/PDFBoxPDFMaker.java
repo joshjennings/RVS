@@ -21,7 +21,7 @@ import java.io.IOException;
  *
  * @author Josh Jennings
  */
-public class PDFMaker {
+public class PDFBoxPDFMaker {
 
 	static public void createPDF() throws IOException {
 		int pageWidth = 612;
@@ -74,11 +74,6 @@ public class PDFMaker {
 		PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
 		// Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
-//		contentStream.beginText();
-//		contentStream.setFont(font, 12);
-//		contentStream.moveTextPositionByAmount(100, 700);
-//		contentStream.drawString("Hello World");
-//		contentStream.endText();
 		drawText(contentStream,customerNameX,customerNameY,"Aerospace Incorporated");
 		drawText(contentStream,customerStreetX,customerStreetY,"123 Anywhere Street");
 		drawText(contentStream,customerCityX,customerCityY,"Willmar, MN 12345");
@@ -114,18 +109,17 @@ public class PDFMaker {
 		// Add image
 		BufferedImage logo = ImageIO.read( new File( "images/planeLogo.png" ) );
 		PDImageXObject image = LosslessFactory.createFromImage(document, logo);
-		//PDPageContentStream contentStream = new PDPageContentStream(document, new PDPage(), true, false);
 		contentStream.drawImage(image, logoX, logoY, logo.getWidth() / 2, logo.getHeight() / 2);
 
 		// Make sure that the content stream is closed:
 		contentStream.close();
 
 		// Save the results and ensure that the document is properly closed:
-		document.save("Hello World.pdf");
+		document.save("RVS Quote.pdf");
 		document.close();
 	}
 
-	static void drawRect(PDPageContentStream content, Color color, Rectangle rect, boolean fill) {
+	private static void drawRect(PDPageContentStream content, Color color, Rectangle rect, boolean fill) {
 		try {
 			content.addRect(rect.x, rect.y, rect.width, rect.height);
 			if (fill) {
@@ -142,17 +136,12 @@ public class PDFMaker {
 
 	}
 
-	static void drawText(PDPageContentStream contentStream, float locX, float locY, String textToAdd) {
+	private static void drawText(PDPageContentStream contentStream, float locX, float locY, String textToAdd) {
 		try {
-//			contentStream.moveTo(locX, locY);
-
 			contentStream.beginText();
 			contentStream.moveTextPositionByAmount(locX, locY);
-//			contentStream.moveTo(locX, locY);
 			contentStream.setFont(PDType1Font.HELVETICA, 12);
-//			contentStream.moveTextPositionByAmount(100, 700);
 			contentStream.drawString(textToAdd);
-//			contentStream.
 			contentStream.endText();
 
 		} catch (IOException e) {
@@ -160,7 +149,7 @@ public class PDFMaker {
 		}
 	}
 
-//	static void addImage() {
+//	private static void addImage() {
 //		PDJpeg jpg = new PDJpeg
 //	}
 	

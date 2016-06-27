@@ -1,8 +1,10 @@
 import com.RVS.Accessories.*;
-import com.RVS.Documentation.PDFMaker;
+import com.RVS.Documentation.PDFBoxPDFMaker;
+import com.RVS.Documentation.iTextPDFMaker;
 import com.RVS.Products.Product;
 import com.RVS.Products.Vessel;
 import com.RVS.Products.Vessels.*;
+import com.itextpdf.text.DocumentException;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -82,9 +84,14 @@ public class WindowMaker extends Application {
 		Message.initialize(); //
 
 		//TODO: MOVE THIS TO THE "CREATE QUOTE" BUTTON
+//		try {
+//			PDFBoxPDFMaker.createPDF();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		try {
-			PDFMaker.createPDF();
-		} catch (IOException e) {
+			iTextPDFMaker.createPDF("output.pdf");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
