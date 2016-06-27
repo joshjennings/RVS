@@ -84,16 +84,16 @@ public class WindowMaker extends Application {
 		Message.initialize(); //
 
 		//TODO: MOVE THIS TO THE "CREATE QUOTE" BUTTON
-//		try {
-//			PDFBoxPDFMaker.createPDF();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 		try {
-			iTextPDFMaker.createPDF("output.pdf");
-		} catch (Exception e) {
+			PDFBoxPDFMaker.createPDF();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+//		try {
+//			iTextPDFMaker.createPDF("output.pdf");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
 		//TODO: Create SQL connection
 //		if (databaseConnection == null) {

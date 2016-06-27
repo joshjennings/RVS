@@ -2,6 +2,7 @@ package com.RVS.Documentation;
 
 //import javafx.scene.paint.Color;
 //import javafx.scene.shape.Rectangle;
+import com.Josh.Message;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -24,6 +25,7 @@ import java.io.IOException;
 public class PDFBoxPDFMaker {
 
 	static public void createPDF() throws IOException {
+		// Calculate dimension constants
 		int pageWidth = 612;
 		int pageHeight = 792;
 		int margin = 20;
@@ -31,7 +33,7 @@ public class PDFBoxPDFMaker {
 		int pageHalfWidth = pageWidth/2;
 		int centerMargin = 20;
 
-		int logoX = 10;
+		int logoX = 20;
 		int logoY = 670;
 
 		int customerAddressBoxX = margin;
@@ -61,6 +63,14 @@ public class PDFBoxPDFMaker {
 		int companyStreetY = companyNameY - textHeight - spaceBetweenText;
 		int companyCityX = companyNameX;
 		int companyCityY = companyStreetY - textHeight - spaceBetweenText;
+
+		// Prepare company logo
+		BufferedImage image = ImageIO.read( new File( "images/rvsLogo.png" ) );
+		float logoWidth = 200;
+		float scale = logoWidth/((float) image.getWidth());
+		float logoHeight = scale * image.getHeight();
+
+		Message.consoleMessage("Scale: " + scale);
 
 		// Create a document and add a page to it
 		PDDocument document = new PDDocument();
@@ -106,10 +116,10 @@ public class PDFBoxPDFMaker {
 						500),
 				false);
 
-		// Add image
-		BufferedImage logo = ImageIO.read( new File( "images/planeLogo.png" ) );
-		PDImageXObject image = LosslessFactory.createFromImage(document, logo);
-		contentStream.drawImage(image, logoX, logoY, logo.getWidth() / 2, logo.getHeight() / 2);
+		// Add logo
+		//BufferedImage logo = ImageIO.read( new File( "images/planeLogo.png" ) );
+		PDImageXObject logo = LosslessFactory.createFromImage(document, image);
+		contentStream.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
 
 		// Make sure that the content stream is closed:
 		contentStream.close();
