@@ -1,5 +1,6 @@
 package com.RVS.Documentation;
 
+import com.RVS.Quote;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -23,9 +24,9 @@ public class iTextPDFMaker {
 
 //	public static final String RESULT = "results/output.pdf";
 
-	public static void createPDF(String filename) throws DocumentException, IOException {
+	public static void createPDF(Quote quote) throws DocumentException, IOException {
 		Document document = new Document(PageSize.LETTER);
-		PdfWriter.getInstance(document,new FileOutputStream(filename));
+		PdfWriter.getInstance(document,new FileOutputStream("RVS Quote iText.pdf"));
 
 		document.open();
 //		document.add(new Paragraph("Hello World!"));

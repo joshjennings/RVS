@@ -4,7 +4,7 @@ import com.RVS.Documentation.iTextPDFMaker;
 import com.RVS.Products.Product;
 import com.RVS.Products.Vessel;
 import com.RVS.Products.Vessels.*;
-import com.itextpdf.text.DocumentException;
+import com.RVS.Quote;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,7 +21,6 @@ import javafx.stage.Stage;
 import com.Josh.Message;
 
 //import java.sql.*;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +42,9 @@ public class WindowMaker extends Application {
 	BorderPane rootPane;
 	//	static Connection databaseConnection;
 	HashMap<String, BigDecimal> priceList;
+
+	//topPane
+	TextField salesPerson;
 
 	//centerPane
 	TreeItem<Product> root;
@@ -84,13 +86,14 @@ public class WindowMaker extends Application {
 		Message.initialize(); //
 
 		//TODO: MOVE THIS TO THE "CREATE QUOTE" BUTTON
-		try {
-			PDFBoxPDFMaker.createPDF();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 //		try {
-//			iTextPDFMaker.createPDF("output.pdf");
+//			PDFBoxPDFMaker.createPDF();
+//			iTextPDFMaker.createPDF();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		try {
+//			iTextPDFMaker.createPDF("RVS com.RVS.Quote iText.pdf");
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}
@@ -181,7 +184,7 @@ public class WindowMaker extends Application {
 	private Node topPane() {
 		Message.consoleMessage("Adding top pane.");
 
-		TextField salesPerson = new TextField();
+		salesPerson = new TextField();
 		salesPerson.setEditable(true);
 		salesPerson.setMaxWidth(400);
 		salesPerson.setMinWidth(100);
@@ -404,12 +407,27 @@ public class WindowMaker extends Application {
 	private Node bottomPane() {
 		Message.consoleMessage("Adding bottom pane.");
 		//create control buttons
-		Button buttonOK = new Button("OK");
+		Button buttonCompile = new Button("Create Quote");
 		Button buttonClose = new Button("Close");
 
 		//set button actions
+		buttonCompile.setOnAction(event -> {
+			Message.consoleMessage("Compiling quotation document.");
+
+			// Collect quotation data
+			Quote quote = new Quote();
+			quote.setSalesperson(salesPerson.getText());
+			quote.setQuoteNumber("JJ1234");
+
+			try {
+				iTextPDFMaker.createPDF(quote);
+				PDFBoxPDFMaker.createPDF(quote);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 		buttonClose.setOnAction(event -> {
-			Message.consoleMessage("Closing program");
+			Message.consoleMessage("Closing program...");
 			Stage stageToClose = (Stage) buttonClose.getScene().getWindow();
 			stageToClose.close();
 		});
@@ -429,7 +447,7 @@ public class WindowMaker extends Application {
 		dropDownBox.setCollapsible(true);
 
 		//create bottom pane
-		HBox bottomPane = new HBox(10, spacer, buttonOK, buttonClose);
+		HBox bottomPane = new HBox(10, spacer, buttonCompile, buttonClose);
 		bottomPane.setPadding(new Insets(10));
 
 		return bottomPane;

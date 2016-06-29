@@ -1,12 +1,9 @@
 package com.RVS.Documentation;
 
-//import javafx.scene.paint.Color;
-//import javafx.scene.shape.Rectangle;
-import com.Josh.Message;
+import com.RVS.Quote;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -24,7 +21,7 @@ import java.io.IOException;
  */
 public class PDFBoxPDFMaker {
 
-	static public void createPDF() throws IOException {
+	static public void createPDF(Quote quote) throws IOException {
 		// Calculate dimension constants
 		int pageWidth = 612;
 		int pageHeight = 792;
@@ -33,14 +30,11 @@ public class PDFBoxPDFMaker {
 		int pageHalfWidth = pageWidth/2;
 		int centerMargin = 20;
 
-		int logoX = 20;
-		int logoY = 670;
-
 		int customerAddressBoxX = margin;
 		int customerAddressBoxY = 550;
 		int customerAddressBoxW = pageHalfWidth-margin-(centerMargin/2);
 		int customerAddressBoxH = 100;
-		int customerAddressBoxMargin = 5;
+		int customerAddressBoxMargin = 0; //5
 
 		int companyAddressBoxX = pageHalfWidth + centerMargin/2;
 		int companyAddressBoxY = customerAddressBoxY;
@@ -64,13 +58,20 @@ public class PDFBoxPDFMaker {
 		int companyCityX = companyNameX;
 		int companyCityY = companyStreetY - textHeight - spaceBetweenText;
 
+		float quotationDetailsW = 150;
+		float quotationNumberX = pageWidth - margin - quotationDetailsW;
+		float quotationNumberY = pageHeight - margin - 100;
+		float salespersonX = pageWidth - margin - quotationDetailsW;
+		float salespersonY = quotationNumberY - textHeight - spaceBetweenText;
+
 		// Prepare company logo
 		BufferedImage image = ImageIO.read( new File( "images/rvsLogo.png" ) );
 		float logoWidth = 200;
 		float scale = logoWidth/((float) image.getWidth());
 		float logoHeight = scale * image.getHeight();
 
-		Message.consoleMessage("Scale: " + scale);
+		float logoX = 20;
+		float logoY = pageHeight - margin - logoHeight;
 
 		// Create a document and add a page to it
 		PDDocument document = new PDDocument();
@@ -78,36 +79,43 @@ public class PDFBoxPDFMaker {
 		document.addPage(page);
 
 		// Create a new font object selecting one of the PDF base fonts
-		PDFont font = PDType1Font.HELVETICA_BOLD;
+//		PDFont font = PDType1Font.HELVETICA_BOLD;
 
 		// Start a new content stream which will "hold" the to be created content
 		PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
-		// Define a text content stream using the selected font, moving the cursor and drawing the text "Hello World"
+		// Add company address
+		drawText(contentStream,logoX,logoY-textHeight-spaceBetweenText,"1520 Crosswind Dr.  Bryan, TX 77808");
+		drawText(contentStream,logoX,logoY-2*textHeight-2*spaceBetweenText,"Phone: (979) 778-0095");
+
+		// Add customer data
 		drawText(contentStream,customerNameX,customerNameY,"Aerospace Incorporated");
 		drawText(contentStream,customerStreetX,customerStreetY,"123 Anywhere Street");
 		drawText(contentStream,customerCityX,customerCityY,"Willmar, MN 12345");
 
-		drawText(contentStream,companyNameX,companyNameY,"RVS");
-		drawText(contentStream,companyStreetX,companyStreetY,"987 Somewhere Street");
-		drawText(contentStream,companyCityX,companyCityY,"Bryan, TX 54321");
+		// Add our company data
+//		drawText(contentStream,companyNameX,companyNameY,"RVS");
+//		drawText(contentStream,companyStreetX,companyStreetY,"987 Somewhere Street");
+//		drawText(contentStream,companyCityX,companyCityY,"Bryan, TX 54321");
+		drawText(contentStream,quotationNumberX,quotationNumberY,"Quotation: " + quote.getQuoteNumber());
+		drawText(contentStream,salespersonX,salespersonY,"Prepared by: " + quote.getSalesperson());
 
 		// Draw a rectangle
 		// Draw client/company boxes
-		drawRect(contentStream,
-				Color.black,
-				new Rectangle(customerAddressBoxX,
-						customerAddressBoxY,
-						customerAddressBoxW,
-						customerAddressBoxH),
-				false);
-		drawRect(contentStream,
-				Color.black,
-				new Rectangle(companyAddressBoxX,
-						companyAddressBoxY,
-						companyAddressBoxW,
-						companyAddressBoxH),
-				false);
+//		drawRect(contentStream,
+//				Color.black,
+//				new Rectangle(customerAddressBoxX,
+//						customerAddressBoxY,
+//						customerAddressBoxW,
+//						customerAddressBoxH),
+//				false);
+//		drawRect(contentStream,
+//				Color.black,
+//				new Rectangle(companyAddressBoxX,
+//						companyAddressBoxY,
+//						companyAddressBoxW,
+//						companyAddressBoxH),
+//				false);
 		drawRect(contentStream,
 				Color.black,
 				new Rectangle(margin,
@@ -125,7 +133,7 @@ public class PDFBoxPDFMaker {
 		contentStream.close();
 
 		// Save the results and ensure that the document is properly closed:
-		document.save("RVS Quote.pdf");
+		document.save("RVS Quote PDFBox.pdf");
 		document.close();
 	}
 
